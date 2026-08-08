@@ -207,52 +207,22 @@ public class AdminDashboard extends VBox {
             }
         };
 
-    @SuppressWarnings("unchecked")
-    private Node buildAccountsTab() {
-        accountsTable =
-                new TableView<>();
+        roleBox.setOnAction(e -> refreshExtraField.run());
+        refreshExtraField.run();
 
-        accountsTable.setPlaceholder(
-                new Label(
-                        "No accounts yet."
-                )
-        );
+        Label error = new Label();
+        error.getStyleClass().add("login-error");
+        error.setManaged(false);
+        error.setVisible(false);
 
-        TableColumn<User, String> nameCol =
-                new TableColumn<>("Name");
+        Button cancel = UI.secondaryButton("Cancel");
+        Button submit = UI.primaryButton("Create Account");
+        cancel.setOnAction(e -> dialog.close());
 
-        nameCol.setCellValueFactory(
-                cd ->
-                        new SimpleStringProperty(
-                                cd.getValue()
-                                        .getName()
-                        )
-        );
-
-        TableColumn<User, String> roleCol =
-                new TableColumn<>("Role");
-
-        roleCol.setCellValueFactory(
-                cd ->
-                        new SimpleStringProperty(
-                                roleDetail(
-                                        cd.getValue()
-                                )
-                        )
-        );
-
-        TableColumn<User, String> usernameCol =
-                new TableColumn<>(
-                        "Username"
-                );
-
-        usernameCol.setCellValueFactory(
-                cd ->
-                        new SimpleStringProperty(
-                                cd.getValue()
-                                        .getUsername()
-                        )
-        );
+        submit.setOnAction(e -> {
+            String name = nameField.getText().trim();
+            String username = usernameField.getText().trim();
+            String password = passwordField.getText();
 
         accountsTable
                 .getColumns()
