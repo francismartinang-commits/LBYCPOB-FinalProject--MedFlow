@@ -146,27 +146,18 @@ public class AdminDashboard extends VBox {
             }
         });
 
-        private Node buildOverviewTab() {
-        overviewStats =
-                new VBox(16);
+        accountsTable.getColumns().addAll(List.of(nameCol, roleCol, usernameCol, statusCol));
+        accountsTable.setItems(FXCollections.observableArrayList(store.getAllUsers()));
+        accountsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        VBox.setVgrow(accountsTable, Priority.ALWAYS);
 
-        refreshOverview();
+        Button addButton = UI.primaryButton("+ Add Staff Account");
+        addButton.setOnAction(e -> openAddAccountDialog());
 
-        VBox wrapper =
-                new VBox(
-                        16,
-                        overviewStats
-                );
+        HBox toolbar = new HBox(10, (Node) UI.hSpacer(), addButton);
 
-        wrapper.setPadding(
-                new Insets(
-                        16,
-                        0,
-                        0,
-                        0
-                )
-        );
-
+        VBox wrapper = new VBox(12, toolbar, accountsTable);
+        wrapper.setPadding(new Insets(16, 0, 0, 0));
         return wrapper;
     }
 
