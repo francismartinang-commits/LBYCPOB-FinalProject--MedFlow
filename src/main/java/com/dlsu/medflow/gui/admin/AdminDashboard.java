@@ -191,81 +191,21 @@ public class AdminDashboard extends VBox {
         ComboBox<String> specializationBox = new ComboBox<>(FXCollections.observableArrayList(store.getDoctorCategories()));
         ComboBox<String> sectionBox = new ComboBox<>(FXCollections.observableArrayList(store.getLabSections()));
 
-
-        HBox statsRow =
-                new HBox(
-                        16,
-                        UI.statCard(
-                                String.valueOf(patients),
-                                "Registered Patients"
-                        ),
-                        UI.statCard(
-                                String.valueOf(doctors),
-                                "Doctors"
-                        ),
-                        UI.statCard(
-                                String.valueOf(staff),
-                                "Nurses & Lab Staff"
-                        ),
-                        UI.statCard(
-                                String.valueOf(activeVisits),
-                                "Active Visits"
-                        )
-                );
-
-        List<Node> breakdownNodes =
-                new java.util.ArrayList<>();
-
-        breakdownNodes.add(
-                UI.sectionTitle(
-                        "Visits by Stage"
-                )
-        );
-
-        for (VisitStatus status :
-                VisitStatus.values()) {
-
-            long count =
-                    store.getAllVisits()
-                            .stream()
-                            .filter(
-                                    v -> v.getStatus()
-                                            == status
-                            )
-                            .count();
-
-            HBox row =
-                    new HBox(
-                            10,
-                            UI.body(
-                                    status.getStageNumber()
-                                            + ". "
-                                            + status.getLabel()
-                            ),
-                            (Node) UI.hSpacer(),
-                            UI.muted(
-                                    String.valueOf(count)
-                            )
-                    );
-
-            row.setAlignment(
-                    Pos.CENTER_LEFT
-            );
-
-            breakdownNodes.add(row);
-        }
-
-        overviewStats
-                .getChildren()
-                .addAll(
-                        statsRow,
-                        UI.card(
-                                breakdownNodes.toArray(
-                                        new Node[0]
-                                )
-                        )
-                );
-    }
+        VBox extraFieldContainer = new VBox(6);
+        Runnable refreshExtraField = () -> {
+            extraFieldContainer.getChildren().clear();
+            if (roleBox.getValue() == Role.DOCTOR) {
+                if (!specializationBox.getItems().isEmpty()) {
+                    specializationBox.getSelectionModel().selectFirst();
+                }
+                extraFieldContainer.getChildren().add(UI.fieldGroup("Specialization", specializationBox));
+            } else if (roleBox.getValue() == Role.LAB_STAFF) {
+                if (!sectionBox.getItems().isEmpty()) {
+                    sectionBox.getSelectionModel().selectFirst();
+                }
+                extraFieldContainer.getChildren().add(UI.fieldGroup("Laboratory Section", sectionBox));
+            }
+        };
 
     @SuppressWarnings("unchecked")
     private Node buildAccountsTab() {
@@ -375,7 +315,4 @@ public class AdminDashboard extends VBox {
                 .getRole()
                 .getDisplayName();
     }
-}
-
-void main() {
 }
