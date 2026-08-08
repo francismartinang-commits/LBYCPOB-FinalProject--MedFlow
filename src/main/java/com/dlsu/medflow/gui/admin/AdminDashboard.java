@@ -161,48 +161,19 @@ public class AdminDashboard extends VBox {
         return wrapper;
     }
 
-    private void refreshOverview() {
-        overviewStats
-                .getChildren()
-                .clear();
+    private String roleDetail(User user) {
+        if (user instanceof Doctor) {
+            return "Doctor - " + ((Doctor) user).getSpecialization();
+        }
+        if (user instanceof LabStaff) {
+            return "Lab Staff - " + ((LabStaff) user).getSection();
+        }
+        return user.getRole().getDisplayName();
+    }
 
-        long patients =
-                store.getAllUsers()
-                        .stream()
-                        .filter(
-                                u -> u.getRole()
-                                        == Role.PATIENT
-                        )
-                        .count();
-
-        long doctors =
-                store.getAllUsers()
-                        .stream()
-                        .filter(
-                                u -> u.getRole()
-                                        == Role.DOCTOR
-                        )
-                        .count();
-
-        long staff =
-                store.getAllUsers()
-                        .stream()
-                        .filter(
-                                u -> u.getRole()
-                                        == Role.NURSE_STAFF
-                                        || u.getRole()
-                                        == Role.LAB_STAFF
-                        )
-                        .count();
-
-        long activeVisits =
-                store.getAllVisits()
-                        .stream()
-                        .filter(
-                                v -> v.getStatus()
-                                        != VisitStatus.RELEASED_TO_PATIENT
-                        )
-                        .count();
+    private void refreshAccountsTable() {
+        accountsTable.setItems(FXCollections.observableArrayList(store.getAllUsers()));
+    }
 
         HBox statsRow =
                 new HBox(
