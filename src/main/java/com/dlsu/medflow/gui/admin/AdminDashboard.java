@@ -67,36 +67,31 @@ public class AdminDashboard extends VBox {
         return wrapper;
     }
 
-        accountsTab.setClosable(false);
-        categoriesTab.setClosable(false);
-        sectionsTab.setClosable(false);
+    private void refreshOverview() {
+        overviewStats.getChildren().clear();
 
-        TabPane tabPane =
-                new TabPane(
-                        overviewTab,
-                        accountsTab,
-                        categoriesTab,
-                        sectionsTab
-                );
+        long patients = store.getAllUsers().stream().filter(u -> u.getRole() == Role.PATIENT).count();
+        long doctors = store.getAllUsers().stream().filter(u -> u.getRole() == Role.DOCTOR).count();
+        long staff = store.getAllUsers().stream()
+                .filter(u -> u.getRole() == Role.NURSE_STAFF || u.getRole() == Role.LAB_STAFF).count();
+        long activeVisits = store.getAllVisits().stream()
+                .filter(v -> v.getStatus() != VisitStatus.RELEASED_TO_PATIENT).count();
 
-        tabPane.setTabClosingPolicy(
-                TabPane.TabClosingPolicy.UNAVAILABLE
-        );
+        HBox statsRow = new HBox(16,
+                UI.statCard(String.valueOf(patients), "Registered Patients"),
+                UI.statCard(String.valueOf(doctors), "Doctors"),
+                UI.statCard(String.valueOf(staff), "Nurses & Lab Staff"),
+                UI.statCard(String.valueOf(activeVisits), "Active Visits"));
 
-        VBox.setVgrow(
-                tabPane,
-                Priority.ALWAYS
-        );
-
-        getChildren().addAll(
-                new VBox(
-                        4,
-                        title,
-                        subtitle
-                ),
-                tabPane
-        );
-    }
+        List<Node> breakdownNodes = new java.util.ArrayList<>();
+        breakdownNodes.add(UI.sectionTitle("Visits by Stage"));
+        for (VisitStatus status : VisitStatus.values()) {
+            long count = store.getAllVisits().stream().filter(v -> v.getStatus() == status).count();
+            HBox row = new HBox(10, UI.body(status.getStageNumber() + ". " + status.getLabel()),
+                    (Node) UI.hSpacer(), UI.muted(String.valueOf(count)));
+            row.setAlignment(Pos.CENTER_LEFT);
+            breakdownNodes.add(row);
+        }
 
     private Node buildOverviewTab() {
         overviewStats =
