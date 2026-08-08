@@ -37,30 +37,23 @@ public class AdminDashboard extends VBox {
     }
 
     private void build() {
-        Label title =
-                UI.pageTitle("Admin Dashboard");
+        Label title = UI.pageTitle("Admin Dashboard");
+        Label subtitle = UI.pageSubtitle("Manage accounts, doctor categories, and laboratory sections.");
 
-        Label subtitle =
-                UI.pageSubtitle(
-                        "Manage accounts, doctor categories, and laboratory sections."
-                );
+        Tab overviewTab = new Tab("Overview", buildOverviewTab());
+        Tab accountsTab = new Tab("Manage Accounts", buildAccountsTab());
+        Tab categoriesTab = new Tab("Doctor Categories", buildCategoriesTab());
+        Tab sectionsTab = new Tab("Laboratory Sections", buildSectionsTab());
+        for (Tab t : List.of(overviewTab, accountsTab, categoriesTab, sectionsTab)) {
+            t.setClosable(false);
+        }
 
-        Tab overviewTab =
-                new Tab(
-                        "Overview",
-                        buildOverviewTab()
-                );
+        TabPane tabPane = new TabPane(overviewTab, accountsTab, categoriesTab, sectionsTab);
+        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+        VBox.setVgrow(tabPane, Priority.ALWAYS);
 
-        Tab accountsTab =
-                new Tab(
-                        "Manage Accounts",
-                        buildAccountsTab()
-                );
-        Tab categoriesTab =
-                new Tab(
-                        "Doctor Categories",
-                        new Label("Doctor category management")
-                );
+        getChildren().addAll(new VBox(4, title, subtitle), tabPane);
+    }
 
         Tab sectionsTab =
                 new Tab(
