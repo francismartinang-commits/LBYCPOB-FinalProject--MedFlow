@@ -1,4 +1,4 @@
-package ph.edu.dlsu.lbycpob.medflow.admin;
+package com.dlsu.medflow.gui.admin;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

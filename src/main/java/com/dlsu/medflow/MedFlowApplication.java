@@ -1,4 +1,4 @@
-package ph.edu.dlsu.lbycpob.medflow;
+package com.dlsu.medflow;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

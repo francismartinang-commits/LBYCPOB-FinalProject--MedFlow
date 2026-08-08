@@ -1,28 +1,23 @@
-package ph.edu.dlsu.lbycpob.medflow.admin;
+package com.dlsu.medflow.gui.admin;
 
-import ph.edu.dlsu.lbycpob.medflow.gui.components.UI;
-import ph.edu.dlsu.lbycpob.medflow.model.Admin;
-import ph.edu.dlsu.lbycpob.medflow.service.HospitalDataStore;
-
-
-import javafx.geometry.Insets;
-import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.Node;
-import javafx.scene.layout.HBox;
-import javafx.geometry.Pos;
+import com.dlsu.medflow.gui.components.UI;
+import com.dlsu.medflow.model.*;
+import com.dlsu.medflow.service.HospitalDataStore;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.util.List;
-
-private VBox overviewStats;
-private TableView<User> accountsTable;
 
 public class AdminDashboard extends VBox {
 
@@ -353,4 +348,7 @@ public class AdminDashboard extends VBox {
                 .getRole()
                 .getDisplayName();
     }
+}
+
+void main() {
 }
