@@ -236,36 +236,35 @@ public class AdminDashboard extends VBox {
                 showError(error, "That username is already taken.");
                 return;
             }
-
-        wrapper.setPadding(
-                new Insets(
-                        16,
-                        0,
-                        0,
-                        0
-                )
-        );
-
-        return wrapper;
-    }
-
-    private String roleDetail(
-            User user) {
-
-        if (user instanceof Doctor) {
-            return "Doctor - "
-                    + ((Doctor) user)
-                    .getSpecialization();
-        }
-
-        if (user instanceof LabStaff) {
-            return "Lab Staff - "
-                    + ((LabStaff) user)
-                    .getSection();
-        }
-
-        return user
-                .getRole()
-                .getDisplayName();
+            Role role = roleBox.getValue();
+            User newUser;
+            switch (role) {
+                case DOCTOR:
+                    String specialization = specializationBox.getValue();
+                    if (specialization == null) {
+                        showError(error, "Please choose a specialization.");
+                        return;
+                    }
+                    newUser = new Doctor(store.generateUserId("DR"), name, username, password, specialization);
+                    break;
+                case LAB_STAFF:
+                    String section = sectionBox.getValue();
+                    if (section == null) {
+                        showError(error, "Please choose a laboratory section.");
+                        return;
+                    }
+                    newUser = new LabStaff(store.generateUserId("LB"), name, username, password, section);
+                    break;
+                case ADMIN:
+                    newUser = new Admin(store.generateUserId("AD"), name, username, password);
+                    break;
+                default:
+                    newUser = new Nurse(store.generateUserId("NS"), name, username, password);
+            }
+            store.addUser(newUser);
+            store.save();
+            refreshAccountsTable();
+            dialog.close();
+        });
     }
 }
