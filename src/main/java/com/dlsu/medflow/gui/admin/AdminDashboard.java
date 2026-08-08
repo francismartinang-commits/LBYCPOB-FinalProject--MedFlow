@@ -131,6 +131,21 @@ public class AdminDashboard extends VBox {
                 });
             }
 
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                    return;
+                }
+                User user = getTableView().getItems().get(getIndex());
+                toggle.setText(user.isActive() ? "Deactivate" : "Activate");
+                toggle.getStyleClass().setAll(user.isActive() ? "btn-danger" : "btn-success");
+                toggle.setDisable(user == admin);
+                setGraphic(toggle);
+            }
+        });
+
         private Node buildOverviewTab() {
         overviewStats =
                 new VBox(16);
