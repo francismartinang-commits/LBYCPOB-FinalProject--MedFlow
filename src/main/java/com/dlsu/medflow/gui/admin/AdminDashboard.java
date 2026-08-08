@@ -279,5 +279,10 @@ public class AdminDashboard extends VBox {
                 buttons);
         root.setPadding(new Insets(24));
         root.getStyleClass().add("root-bg");
+
+        Scene scene = new Scene(root, 460, 560);
+        scene.getStylesheets().add(getClass().getResource("/com/dlsu/medflow/styles.css").toExternalForm());
+        dialog.setScene(scene);
+        dialog.showAndWait();
     }
 }
