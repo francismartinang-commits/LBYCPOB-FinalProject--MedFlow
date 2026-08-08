@@ -115,6 +115,22 @@ public class AdminDashboard extends VBox {
         TableColumn<User, String> usernameCol = new TableColumn<>("Username");
         usernameCol.setCellValueFactory(cd -> new SimpleStringProperty(cd.getValue().getUsername()));
 
+        TableColumn<User, Void> statusCol = new TableColumn<>("Status");
+        statusCol.setCellFactory(col -> new TableCell<User, Void>() {
+            private final Button toggle = new Button();
+
+            {
+                toggle.setOnAction(e -> {
+                    User user = getTableView().getItems().get(getIndex());
+                    if (user == admin) {
+                        return;
+                    }
+                    user.setActive(!user.isActive());
+                    store.save();
+                    getTableView().refresh();
+                });
+            }
+
         private Node buildOverviewTab() {
         overviewStats =
                 new VBox(16);
