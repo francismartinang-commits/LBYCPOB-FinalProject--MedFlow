@@ -55,13 +55,18 @@ public class AdminDashboard extends VBox {
         getChildren().addAll(new VBox(4, title, subtitle), tabPane);
     }
 
-        Tab sectionsTab =
-                new Tab(
-                        "Laboratory Sections",
-                        new Label("Laboratory section management")
-                );
+    // -------------------------------------------------------------------
+    // Overview
+    // -------------------------------------------------------------------
 
-        overviewTab.setClosable(false);
+    private Node buildOverviewTab() {
+        overviewStats = new VBox(16);
+        refreshOverview();
+        VBox wrapper = new VBox(16, overviewStats);
+        wrapper.setPadding(new Insets(16, 0, 0, 0));
+        return wrapper;
+    }
+
         accountsTab.setClosable(false);
         categoriesTab.setClosable(false);
         sectionsTab.setClosable(false);
