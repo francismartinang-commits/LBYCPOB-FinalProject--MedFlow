@@ -1,4 +1,4 @@
-package ph.edu.dlsu.lbycpob.project;
+package ph.edu.dlsu.lbycpob.medflow;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
