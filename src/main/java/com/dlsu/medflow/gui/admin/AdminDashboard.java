@@ -93,7 +93,29 @@ public class AdminDashboard extends VBox {
             breakdownNodes.add(row);
         }
 
-    private Node buildOverviewTab() {
+
+        overviewStats.getChildren().addAll(statsRow, UI.card(breakdownNodes.toArray(new Node[0])));
+    }
+
+    // -------------------------------------------------------------------
+    // Accounts
+    // -------------------------------------------------------------------
+
+    @SuppressWarnings("unchecked")
+    private Node buildAccountsTab() {
+        accountsTable = new TableView<>();
+        accountsTable.setPlaceholder(new Label("No accounts yet."));
+
+        TableColumn<User, String> nameCol = new TableColumn<>("Name");
+        nameCol.setCellValueFactory(cd -> new SimpleStringProperty(cd.getValue().getName()));
+
+        TableColumn<User, String> roleCol = new TableColumn<>("Role");
+        roleCol.setCellValueFactory(cd -> new SimpleStringProperty(roleDetail(cd.getValue())));
+
+        TableColumn<User, String> usernameCol = new TableColumn<>("Username");
+        usernameCol.setCellValueFactory(cd -> new SimpleStringProperty(cd.getValue().getUsername()));
+
+        private Node buildOverviewTab() {
         overviewStats =
                 new VBox(16);
 
