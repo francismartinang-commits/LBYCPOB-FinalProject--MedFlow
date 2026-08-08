@@ -1,11 +1,16 @@
-package com.dlsu.medflow.gui.admin;
+package ph.edu.dlsu.lbycpob.medflow.admin;
 
-import com.dlsu.medflow.gui.components.UI;
-import com.dlsu.medflow.model.Admin;
-import com.dlsu.medflow.service.HospitalDataStore;
+import ph.edu.dlsu.lbycpob.medflow.gui.components.UI;
+import ph.edu.dlsu.lbycpob.medflow.model.Admin;
+import ph.edu.dlsu.lbycpob.medflow.service.HospitalDataStore;
+
+
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.layout.Priority;
 
 public class AdminDashboard extends VBox {
 
@@ -31,12 +36,59 @@ public class AdminDashboard extends VBox {
                         "Manage accounts, doctor categories, and laboratory sections."
                 );
 
-        getChildren().add(
+        Tab overviewTab =
+                new Tab(
+                        "Overview",
+                        new Label("Admin overview")
+                );
+
+        Tab accountsTab =
+                new Tab(
+                        "Manage Accounts",
+                        new Label("Account management")
+                );
+
+        Tab categoriesTab =
+                new Tab(
+                        "Doctor Categories",
+                        new Label("Doctor category management")
+                );
+
+        Tab sectionsTab =
+                new Tab(
+                        "Laboratory Sections",
+                        new Label("Laboratory section management")
+                );
+
+        overviewTab.setClosable(false);
+        accountsTab.setClosable(false);
+        categoriesTab.setClosable(false);
+        sectionsTab.setClosable(false);
+
+        TabPane tabPane =
+                new TabPane(
+                        overviewTab,
+                        accountsTab,
+                        categoriesTab,
+                        sectionsTab
+                );
+
+        tabPane.setTabClosingPolicy(
+                TabPane.TabClosingPolicy.UNAVAILABLE
+        );
+
+        VBox.setVgrow(
+                tabPane,
+                Priority.ALWAYS
+        );
+
+        getChildren().addAll(
                 new VBox(
                         4,
                         title,
                         subtitle
-                )
+                ),
+                tabPane
         );
     }
 }
