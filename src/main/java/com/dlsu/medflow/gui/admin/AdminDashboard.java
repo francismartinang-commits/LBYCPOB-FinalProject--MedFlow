@@ -23,14 +23,16 @@ public class AdminDashboard extends VBox {
 
     private final Admin admin;
     private final HospitalDataStore store;
+    private TableView<User> accountsTable;
+    private VBox overviewStats;
+    private ListView<String> categoriesList;
+    private ListView<String> sectionsList;
 
     public AdminDashboard(Admin admin, HospitalDataStore store) {
         this.admin = admin;
         this.store = store;
-
         setSpacing(20);
         setPadding(new Insets(28));
-
         build();
     }
 
