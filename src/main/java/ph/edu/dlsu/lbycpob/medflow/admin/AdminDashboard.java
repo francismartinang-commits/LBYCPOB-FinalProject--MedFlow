@@ -13,6 +13,9 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
+import javafx.geometry.Pos;
+
+import java.util.List;
 
 private VBox overviewStats;
 
@@ -184,8 +187,57 @@ public class AdminDashboard extends VBox {
                         )
                 );
 
+        List<Node> breakdownNodes =
+                new java.util.ArrayList<>();
+
+        breakdownNodes.add(
+                UI.sectionTitle(
+                        "Visits by Stage"
+                )
+        );
+
+        for (VisitStatus status :
+                VisitStatus.values()) {
+
+            long count =
+                    store.getAllVisits()
+                            .stream()
+                            .filter(
+                                    v -> v.getStatus()
+                                            == status
+                            )
+                            .count();
+
+            HBox row =
+                    new HBox(
+                            10,
+                            UI.body(
+                                    status.getStageNumber()
+                                            + ". "
+                                            + status.getLabel()
+                            ),
+                            (Node) UI.hSpacer(),
+                            UI.muted(
+                                    String.valueOf(count)
+                            )
+                    );
+
+            row.setAlignment(
+                    Pos.CENTER_LEFT
+            );
+
+            breakdownNodes.add(row);
+        }
+
         overviewStats
                 .getChildren()
-                .add(statsRow);
+                .addAll(
+                        statsRow,
+                        UI.card(
+                                breakdownNodes.toArray(
+                                        new Node[0]
+                                )
+                        )
+                );
     }
 }
