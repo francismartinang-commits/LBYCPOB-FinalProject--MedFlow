@@ -175,6 +175,23 @@ public class AdminDashboard extends VBox {
         accountsTable.setItems(FXCollections.observableArrayList(store.getAllUsers()));
     }
 
+    private void openAddAccountDialog() {
+        Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.setTitle("Add Staff Account");
+
+        ComboBox<Role> roleBox = new ComboBox<>();
+        roleBox.getItems().addAll(Role.DOCTOR, Role.NURSE_STAFF, Role.LAB_STAFF, Role.ADMIN);
+        roleBox.getSelectionModel().selectFirst();
+
+        TextField nameField = new TextField();
+        TextField usernameField = new TextField();
+        PasswordField passwordField = new PasswordField();
+
+        ComboBox<String> specializationBox = new ComboBox<>(FXCollections.observableArrayList(store.getDoctorCategories()));
+        ComboBox<String> sectionBox = new ComboBox<>(FXCollections.observableArrayList(store.getLabSections()));
+
+
         HBox statsRow =
                 new HBox(
                         16,
