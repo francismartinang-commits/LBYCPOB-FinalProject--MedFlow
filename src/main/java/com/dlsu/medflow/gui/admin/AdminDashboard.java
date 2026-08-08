@@ -266,5 +266,18 @@ public class AdminDashboard extends VBox {
             refreshAccountsTable();
             dialog.close();
         });
+
+        HBox buttons = new HBox(10, (Node) UI.hSpacer(), cancel, submit);
+        VBox root = new VBox(14,
+                UI.pageTitle("Add Staff Account"),
+                UI.fieldGroup("Role", roleBox),
+                UI.fieldGroup("Full Name", nameField),
+                UI.fieldGroup("Username", usernameField),
+                UI.fieldGroup("Password", passwordField),
+                extraFieldContainer,
+                error,
+                buttons);
+        root.setPadding(new Insets(24));
+        root.getStyleClass().add("root-bg");
     }
 }
