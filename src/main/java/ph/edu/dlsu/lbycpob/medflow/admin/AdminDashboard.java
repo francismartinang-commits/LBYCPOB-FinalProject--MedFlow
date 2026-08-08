@@ -14,10 +14,15 @@ import javafx.scene.layout.Priority;
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
 import javafx.geometry.Pos;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 
 import java.util.List;
 
 private VBox overviewStats;
+private TableView<User> accountsTable;
 
 public class AdminDashboard extends VBox {
 
@@ -52,9 +57,8 @@ public class AdminDashboard extends VBox {
         Tab accountsTab =
                 new Tab(
                         "Manage Accounts",
-                        new Label("Account management")
+                        buildAccountsTab()
                 );
-
         Tab categoriesTab =
                 new Tab(
                         "Doctor Categories",
@@ -239,5 +243,114 @@ public class AdminDashboard extends VBox {
                                 )
                         )
                 );
+    }
+
+    @SuppressWarnings("unchecked")
+    private Node buildAccountsTab() {
+        accountsTable =
+                new TableView<>();
+
+        accountsTable.setPlaceholder(
+                new Label(
+                        "No accounts yet."
+                )
+        );
+
+        TableColumn<User, String> nameCol =
+                new TableColumn<>("Name");
+
+        nameCol.setCellValueFactory(
+                cd ->
+                        new SimpleStringProperty(
+                                cd.getValue()
+                                        .getName()
+                        )
+        );
+
+        TableColumn<User, String> roleCol =
+                new TableColumn<>("Role");
+
+        roleCol.setCellValueFactory(
+                cd ->
+                        new SimpleStringProperty(
+                                roleDetail(
+                                        cd.getValue()
+                                )
+                        )
+        );
+
+        TableColumn<User, String> usernameCol =
+                new TableColumn<>(
+                        "Username"
+                );
+
+        usernameCol.setCellValueFactory(
+                cd ->
+                        new SimpleStringProperty(
+                                cd.getValue()
+                                        .getUsername()
+                        )
+        );
+
+        accountsTable
+                .getColumns()
+                .addAll(
+                        nameCol,
+                        roleCol,
+                        usernameCol
+                );
+
+        accountsTable.setItems(
+                FXCollections.observableArrayList(
+                        store.getAllUsers()
+                )
+        );
+
+        accountsTable
+                .setColumnResizePolicy(
+                        TableView.CONSTRAINED_RESIZE_POLICY
+                );
+
+        VBox.setVgrow(
+                accountsTable,
+                Priority.ALWAYS
+        );
+
+        VBox wrapper =
+                new VBox(
+                        12,
+                        accountsTable
+                );
+
+        wrapper.setPadding(
+                new Insets(
+                        16,
+                        0,
+                        0,
+                        0
+                )
+        );
+
+        return wrapper;
+    }
+
+    private String roleDetail(
+            User user) {
+
+        if (user instanceof Doctor) {
+            return "Doctor - "
+                    + ((Doctor) user)
+                    .getSpecialization();
+        }
+
+        if (user instanceof LabStaff) {
+            return "Lab Staff - "
+                    + ((LabStaff) user)
+                    .getSection();
+        }
+
+        return user
+                .getRole()
+                .getDisplayName();
     }
 }
