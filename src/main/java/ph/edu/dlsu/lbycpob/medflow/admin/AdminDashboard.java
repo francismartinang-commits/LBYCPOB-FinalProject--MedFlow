@@ -11,6 +11,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.Priority;
+import javafx.scene.Node;
+import javafx.scene.layout.HBox;
+
+private VBox overviewStats;
 
 public class AdminDashboard extends VBox {
 
@@ -39,7 +43,7 @@ public class AdminDashboard extends VBox {
         Tab overviewTab =
                 new Tab(
                         "Overview",
-                        new Label("Admin overview")
+                        buildOverviewTab()
                 );
 
         Tab accountsTab =
@@ -90,5 +94,98 @@ public class AdminDashboard extends VBox {
                 ),
                 tabPane
         );
+    }
+
+    private Node buildOverviewTab() {
+        overviewStats =
+                new VBox(16);
+
+        refreshOverview();
+
+        VBox wrapper =
+                new VBox(
+                        16,
+                        overviewStats
+                );
+
+        wrapper.setPadding(
+                new Insets(
+                        16,
+                        0,
+                        0,
+                        0
+                )
+        );
+
+        return wrapper;
+    }
+
+    private void refreshOverview() {
+        overviewStats
+                .getChildren()
+                .clear();
+
+        long patients =
+                store.getAllUsers()
+                        .stream()
+                        .filter(
+                                u -> u.getRole()
+                                        == Role.PATIENT
+                        )
+                        .count();
+
+        long doctors =
+                store.getAllUsers()
+                        .stream()
+                        .filter(
+                                u -> u.getRole()
+                                        == Role.DOCTOR
+                        )
+                        .count();
+
+        long staff =
+                store.getAllUsers()
+                        .stream()
+                        .filter(
+                                u -> u.getRole()
+                                        == Role.NURSE_STAFF
+                                        || u.getRole()
+                                        == Role.LAB_STAFF
+                        )
+                        .count();
+
+        long activeVisits =
+                store.getAllVisits()
+                        .stream()
+                        .filter(
+                                v -> v.getStatus()
+                                        != VisitStatus.RELEASED_TO_PATIENT
+                        )
+                        .count();
+
+        HBox statsRow =
+                new HBox(
+                        16,
+                        UI.statCard(
+                                String.valueOf(patients),
+                                "Registered Patients"
+                        ),
+                        UI.statCard(
+                                String.valueOf(doctors),
+                                "Doctors"
+                        ),
+                        UI.statCard(
+                                String.valueOf(staff),
+                                "Nurses & Lab Staff"
+                        ),
+                        UI.statCard(
+                                String.valueOf(activeVisits),
+                                "Active Visits"
+                        )
+                );
+
+        overviewStats
+                .getChildren()
+                .add(statsRow);
     }
 }
