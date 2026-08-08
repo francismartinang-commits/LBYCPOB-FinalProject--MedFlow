@@ -224,35 +224,18 @@ public class AdminDashboard extends VBox {
             String username = usernameField.getText().trim();
             String password = passwordField.getText();
 
-        accountsTable
-                .getColumns()
-                .addAll(
-                        nameCol,
-                        roleCol,
-                        usernameCol
-                );
-
-        accountsTable.setItems(
-                FXCollections.observableArrayList(
-                        store.getAllUsers()
-                )
-        );
-
-        accountsTable
-                .setColumnResizePolicy(
-                        TableView.CONSTRAINED_RESIZE_POLICY
-                );
-
-        VBox.setVgrow(
-                accountsTable,
-                Priority.ALWAYS
-        );
-
-        VBox wrapper =
-                new VBox(
-                        12,
-                        accountsTable
-                );
+            if (name.isEmpty() || username.isEmpty() || password.isEmpty()) {
+                showError(error, "Please fill in every field.");
+                return;
+            }
+            if (password.length() < 4) {
+                showError(error, "Password must be at least 4 characters long.");
+                return;
+            }
+            if (store.usernameTaken(username)) {
+                showError(error, "That username is already taken.");
+                return;
+            }
 
         wrapper.setPadding(
                 new Insets(
