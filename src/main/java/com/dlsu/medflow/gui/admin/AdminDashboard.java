@@ -363,4 +363,28 @@ public class AdminDashboard extends VBox {
     private void refreshSectionsList() {
         sectionsList.setItems(FXCollections.observableArrayList(store.getLabSections()));
     }
+
+    // -------------------------------------------------------------------
+    // Shared: a list row with a small "remove" button
+    // -------------------------------------------------------------------
+
+    private ListCell<String> removableCell(java.util.function.Consumer<String> onRemove) {
+        return new ListCell<String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setGraphic(null);
+                    setText(null);
+                    return;
+                }
+                Label label = UI.body(item);
+                Button remove = UI.linkButton("Remove");
+                remove.setOnAction(e -> onRemove.accept(item));
+                HBox row = new HBox(10, label, (Node) UI.hSpacer(), remove);
+                row.setAlignment(Pos.CENTER_LEFT);
+                setGraphic(row);
+            }
+        };
+    }
 }
