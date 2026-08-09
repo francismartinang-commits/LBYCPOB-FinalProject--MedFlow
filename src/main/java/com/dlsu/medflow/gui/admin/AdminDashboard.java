@@ -322,4 +322,35 @@ public class AdminDashboard extends VBox {
         VBox wrapper = new VBox(12, UI.muted("Used by the automatic Doctor Recommendation engine."), categoriesList, addRow);
         wrapper.setPadding(new Insets(16, 0, 0, 0));
         return wrapper;
+    }
+
+    private void refreshCategoriesList() {
+        categoriesList.setItems(FXCollections.observableArrayList(store.getDoctorCategories()));
+    }
+
+    // -------------------------------------------------------------------
+    // Laboratory sections
+    // -------------------------------------------------------------------
+
+    private Node buildSectionsTab() {
+        sectionsList = new ListView<>(FXCollections.observableArrayList(store.getLabSections()));
+        sectionsList.setCellFactory(lv -> removableCell(text -> {
+            store.removeLabSection(text);
+            store.save();
+            refreshSectionsList();
+        }));
+        VBox.setVgrow(sectionsList, Priority.ALWAYS);
+
+        TextField newSectionField = new TextField();
+        newSectionField.setPromptText("New section, e.g., Molecular Diagnostics");
+        Button addButton = UI.primaryButton("Add Section");
+        addButton.setOnAction(e -> {
+            String value = newSectionField.getText().trim();
+            if (!value.isEmpty()) {
+                store.addLabSection(value);
+                store.save();
+                newSectionField.clear();
+                refreshSectionsList();
+            }
+        });
 }
