@@ -317,4 +317,9 @@ public class AdminDashboard extends VBox {
                 refreshCategoriesList();
             }
         });
+
+        HBox addRow = new HBox(10, newCategoryField, addButton);
+        VBox wrapper = new VBox(12, UI.muted("Used by the automatic Doctor Recommendation engine."), categoriesList, addRow);
+        wrapper.setPadding(new Insets(16, 0, 0, 0));
+        return wrapper;
 }
