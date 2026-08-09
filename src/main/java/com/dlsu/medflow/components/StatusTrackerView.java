@@ -94,5 +94,10 @@ public class StatusTrackerView extends VBox {
             HBox.setHgrow(textColumn, Priority.ALWAYS);
             textColumn.setPadding(new Insets(0, 0, last ? 0 : 18, 0));
 
+            HBox row = new HBox(14, dotColumn, textColumn);
+            row.setAlignment(Pos.TOP_LEFT);
+            return row;
+        }
+    }
 
-}
+
