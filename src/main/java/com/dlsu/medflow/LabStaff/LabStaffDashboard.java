@@ -13,3 +13,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.util.List;
+
+public class LabStaffDashboard extends VBox {
+
+    private final LabStaff labStaff;
+    private final HospitalDataStore store;
+    private VBox queueContainer;
+}
