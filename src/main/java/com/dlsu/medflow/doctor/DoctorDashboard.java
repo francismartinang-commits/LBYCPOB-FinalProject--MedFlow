@@ -58,4 +58,55 @@ public class DoctorDashboard extends VBox {
 
         getChildren().addAll(headerText, stats, UI.sectionTitle("Assigned Patients"), visitListContainer);
     }
+
+    private void refreshVisitList() {
+        visitListContainer.getChildren().clear();
+        List<Visit> visits = store.getVisitsForDoctor(doctor);
+        if (visits.isEmpty()) {
+            visitListContainer.getChildren().add(UI.card(UI.body("No patients have been assigned to you yet.")));
+            return;
+        }
+        visits.sort((a, b) -> Boolean.compare(
+                a.getStatus() == VisitStatus.RELEASED_TO_PATIENT,
+                b.getStatus() == VisitStatus.RELEASED_TO_PATIENT));
+
+        for (Visit visit : visits) {
+            visitListContainer.getChildren().add(buildVisitCard(visit));
+        }
+    }
+
+    private VBox buildVisitCard(Visit visit) {
+        Label patientName = UI.sectionTitle(visit.getPatient().getName());
+        Label reason = UI.muted(visit.getReasonForVisit());
+        Label statusBadge = UI.statusBadge(visit.getStatus());
+
+        Button openButton = UI.primaryButton(actionLabelFor(visit.getStatus()));
+        openButton.setOnAction(e -> openWorkspace(visit));
+
+        HBox topRow = new HBox(12, patientName, (Node) UI.hSpacer(), statusBadge);
+        topRow.setAlignment(Pos.CENTER_LEFT);
+
+        return UI.card(topRow, reason, openButton);
+    }
+
+    private String actionLabelFor(VisitStatus status) {
+        switch (status) {
+            case ASSIGNED_TO_DOCTOR:
+                return "Begin Assessment";
+            case FINDINGS_SENT_TO_DOCTOR:
+                return "Review Findings";
+            case DOCTOR_REVIEWED:
+                return "Release to Patient";
+            case RELEASED_TO_PATIENT:
+                return "View Record";
+            default:
+                return "Open";
+        }
+    }
+
+    private String lastNameOnly(String fullName) {
+        String withoutTitle = fullName.replace("Dr. ", "");
+        String[] parts = withoutTitle.split(" ");
+        return parts[parts.length - 1];
+    }
 }
