@@ -19,4 +19,12 @@ public class LabStaffDashboard extends VBox {
     private final LabStaff labStaff;
     private final HospitalDataStore store;
     private VBox queueContainer;
+
+    public LabStaffDashboard(LabStaff labStaff, HospitalDataStore store) {
+        this.labStaff = labStaff;
+        this.store = store;
+        setSpacing(20);
+        setPadding(new Insets(28));
+        build();
+    }
 }
