@@ -107,4 +107,38 @@ public final class UI {
         label.getStyleClass().addAll("badge", "badge-" + tone);
         return label;
     }
+
+    public static Label statusBadge(VisitStatus status) {
+        String tone;
+        switch (status) {
+            case RELEASED_TO_PATIENT:
+                tone = "success";
+                break;
+            case REGISTERED:
+                tone = "neutral";
+                break;
+            case DOCTOR_REVIEWED:
+            case FINDINGS_SENT_TO_DOCTOR:
+                tone = "info";
+                break;
+            default:
+                tone = "warning";
+        }
+        return badge(status.getLabel(), tone);
+    }
+
+    public static Label priorityBadge(Priority priority) {
+        String tone;
+        switch (priority) {
+            case STAT:
+                tone = "danger";
+                break;
+            case URGENT:
+                tone = "warning";
+                break;
+            default:
+                tone = "neutral";
+        }
+        return badge(priority.getLabel(), tone);
+    }
 }
