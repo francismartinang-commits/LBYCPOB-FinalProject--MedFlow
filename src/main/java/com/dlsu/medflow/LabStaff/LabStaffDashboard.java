@@ -35,4 +35,10 @@ public class LabStaffDashboard extends VBox {
         List<HospitalDataStore.LabQueueItem> pendingNow = store.getPendingLabRequests(labStaff.getSection());
         HBox stats = new HBox(16,
                 UI.statCard(String.valueOf(pendingNow.size()), "Pending in Your Section"));
+
+        queueContainer = new VBox(14);
+        refreshQueue();
+
+        getChildren().addAll(new VBox(4, title, subtitle), stats, UI.sectionTitle("Pending Requests"), queueContainer);
+    }
 }
