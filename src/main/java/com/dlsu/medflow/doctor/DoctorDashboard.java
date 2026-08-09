@@ -304,4 +304,17 @@ public class DoctorDashboard extends VBox {
 
         return UI.card(UI.sectionTitle("Review Laboratory Findings"), diagnosisArea, error, confirm);
     }
+
+    private Node buildReleaseBox(Visit visit) {
+        Button release = UI.successButton("Release Results to Patient");
+        release.setOnAction(e -> {
+            doctor.updateStatus(visit, VisitStatus.RELEASED_TO_PATIENT);
+            store.save();
+            release.setDisable(true);
+            release.setText("Released");
+        });
+        return UI.card(UI.sectionTitle("Ready to release?"),
+                UI.body("The patient will immediately be able to see the diagnosis and laboratory findings."),
+                release);
+    }
 }
