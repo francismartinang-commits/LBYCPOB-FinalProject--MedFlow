@@ -208,4 +208,70 @@ public class DoctorDashboard extends VBox {
         });
         return UI.card(UI.sectionTitle("Ready to see this patient?"), begin);
     }
+
+    private Node buildAssessmentBox(Visit visit) {
+        TextArea notesArea = new TextArea(visit.getMedicalRecord().getDoctorNotes(doctor));
+        notesArea.setPromptText("Clinical assessment notes...");
+        notesArea.setPrefRowCount(3);
+        notesArea.setWrapText(true);
+
+        Button saveNotes = UI.secondaryButton("Save Notes");
+        Label savedTag = UI.muted("");
+        saveNotes.setOnAction(e -> {
+            visit.getMedicalRecord().setDoctorNotes(doctor, notesArea.getText().trim());
+            store.save();
+            savedTag.setText("Saved.");
+        });
+
+        TextField singleTestField = new TextField();
+        singleTestField.setPromptText("e.g., CBC (Complete Blood Count)");
+        Button addSingle = UI.secondaryButton("Add Single Test");
+        Label singleStatus = UI.muted("");
+        addSingle.setOnAction(e -> {
+            String testName = singleTestField.getText().trim();
+            if (testName.isEmpty()) {
+                singleStatus.setText("Enter a test name first.");
+                return;
+            }
+            doctor.createRequest(visit, testName);
+            store.save();
+            singleStatus.setText("Added and routed automatically.");
+            singleTestField.clear();
+        });
+
+        TextField batchTestsField = new TextField();
+        batchTestsField.setPromptText("e.g., CBC, Urinalysis, X-ray Chest");
+        ComboBox<Priority> priorityBox = new ComboBox<>();
+        priorityBox.getItems().addAll(Priority.values());
+        priorityBox.getSelectionModel().select(Priority.ROUTINE);
+        Button addBatch = UI.secondaryButton("Add Batch");
+        Label batchStatus = UI.muted("");
+        addBatch.setOnAction(e -> {
+            String raw = batchTestsField.getText().trim();
+            if (raw.isEmpty()) {
+                batchStatus.setText("Enter at least one test name.");
+                return;
+            }
+            String[] testNames = raw.split(",");
+            doctor.createRequest(visit, testNames, priorityBox.getValue().name());
+            store.save();
+            batchStatus.setText("Batch added and routed automatically.");
+            batchTestsField.clear();
+        });
+
+        VBox singleRow = new VBox(6, UI.fieldGroup("Single Test (createRequest(String))", singleTestField),
+                new HBox(10, addSingle, singleStatus));
+        VBox batchRow = new VBox(6,
+                UI.fieldGroup("Batch Tests, comma-separated (createRequest(String[], String))", batchTestsField),
+                new HBox(10, priorityBox, addBatch, batchStatus));
+
+        return UI.card(
+                UI.sectionTitle("Assessment"),
+                notesArea,
+                new HBox(10, saveNotes, savedTag),
+                new Separator(),
+                UI.sectionTitle("Create Laboratory Request"),
+                singleRow,
+                batchRow);
+    }
 }
