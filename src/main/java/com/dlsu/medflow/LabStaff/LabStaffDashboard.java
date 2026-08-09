@@ -75,4 +75,21 @@ public class LabStaffDashboard extends VBox {
         error.getStyleClass().add("login-error");
         error.setManaged(false);
         error.setVisible(false);
+
+        Button submit = UI.primaryButton("Submit Findings");
+        submit.setOnAction(e -> {
+            String text = findingsArea.getText().trim();
+            if (text.isEmpty()) {
+                error.setText("Please enter findings before submitting.");
+                error.setManaged(true);
+                error.setVisible(true);
+                return;
+            }
+            request.encodeFindings(text);
+            if (visit.allFindingsEncoded()) {
+                labStaff.updateStatus(visit, VisitStatus.FINDINGS_SENT_TO_DOCTOR);
+            }
+            store.save();
+            refreshQueue();
+        });
 }
