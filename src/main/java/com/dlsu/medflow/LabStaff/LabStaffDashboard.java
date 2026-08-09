@@ -92,4 +92,7 @@ public class LabStaffDashboard extends VBox {
             store.save();
             refreshQueue();
         });
+
+        return UI.card(topRow, patientLine, doctorLine, findingsArea, error, submit);
+    }
 }
