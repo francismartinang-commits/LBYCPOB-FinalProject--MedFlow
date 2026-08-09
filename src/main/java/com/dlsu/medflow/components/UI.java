@@ -33,4 +33,23 @@ public final class UI {
         label.setWrapText(true);
         return label;
     }
+
+    public static Label sectionTitle(String text) {
+        Label label = new Label(text);
+        label.getStyleClass().add("section-title");
+        return label;
+    }
+
+    public static Label muted(String text) {
+        Label label = new Label(text);
+        label.getStyleClass().add("muted-text");
+        return label;
+    }
+
+    public static Label body(String text) {
+        Label label = new Label(text);
+        label.getStyleClass().add("body-text");
+        label.setWrapText(true);
+        return label;
+    }
 }
