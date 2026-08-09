@@ -197,4 +197,15 @@ public class DoctorDashboard extends VBox {
 
         return section;
     }
+
+    private Node buildBeginAssessmentBox(Visit visit) {
+        Button begin = UI.primaryButton("Begin Assessment");
+        begin.setOnAction(e -> {
+            doctor.updateStatus(visit, VisitStatus.UNDER_DOCTOR_ASSESSMENT);
+            store.save();
+            begin.setDisable(true);
+            begin.setText("Assessment Started - reopen to continue");
+        });
+        return UI.card(UI.sectionTitle("Ready to see this patient?"), begin);
+    }
 }
