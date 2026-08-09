@@ -27,4 +27,12 @@ public class LabStaffDashboard extends VBox {
         setPadding(new Insets(28));
         build();
     }
+
+    private void build() {
+        Label title = UI.pageTitle(labStaff.getSection() + " Queue");
+        Label subtitle = UI.pageSubtitle("Requests routed to your section, waiting to be encoded.");
+
+        List<HospitalDataStore.LabQueueItem> pendingNow = store.getPendingLabRequests(labStaff.getSection());
+        HBox stats = new HBox(16,
+                UI.statCard(String.valueOf(pendingNow.size()), "Pending in Your Section"));
 }
