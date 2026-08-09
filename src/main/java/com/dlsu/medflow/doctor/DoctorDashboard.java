@@ -144,4 +144,35 @@ public class DoctorDashboard extends VBox {
         dialog.showAndWait();
         refreshVisitList();
     }
+
+    private Node buildActionSection(Visit visit, Stage dialog) {
+        VBox section = new VBox(14);
+
+        boolean hasNotes = !visit.getMedicalRecord().getDoctorNotes(doctor).isBlank();
+        if (hasNotes) {
+            section.getChildren().add(UI.card(
+                    UI.sectionTitle("Clinical Notes"),
+                    UI.body(visit.getMedicalRecord().getDoctorNotes(doctor))));
+        }
+
+        if (!visit.getLabRequests().isEmpty()) {
+            VBox labBox = new VBox(6);
+            labBox.getChildren().add(UI.sectionTitle("Laboratory Requests"));
+            for (LabRequest request : visit.getLabRequests()) {
+                HBox row = new HBox(10,
+                        UI.body(request.getTestName()),
+                        UI.priorityBadge(request.getPriority()),
+                        UI.muted("-> " + request.getAssignedSection()));
+                row.setAlignment(Pos.CENTER_LEFT);
+                labBox.getChildren().add(row);
+                if (request.isFindingsEncoded()) {
+                    Label findings = UI.body("Findings: " + request.getFindings());
+                    labBox.getChildren().add(findings);
+                }
+            }
+            javafx.scene.Node[] labNodes = labBox.getChildren().toArray(new javafx.scene.Node[0]);
+            // relocate into its own card without double-parenting
+            labBox.getChildren().clear();
+            section.getChildren().add(UI.card(labNodes));
+        }
 }
