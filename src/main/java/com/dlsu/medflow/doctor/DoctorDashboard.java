@@ -175,4 +175,26 @@ public class DoctorDashboard extends VBox {
             labBox.getChildren().clear();
             section.getChildren().add(UI.card(labNodes));
         }
+
+        switch (visit.getStatus()) {
+            case ASSIGNED_TO_DOCTOR:
+                section.getChildren().add(buildBeginAssessmentBox(visit));
+                break;
+            case UNDER_DOCTOR_ASSESSMENT:
+                section.getChildren().add(buildAssessmentBox(visit));
+                break;
+            case FINDINGS_SENT_TO_DOCTOR:
+                section.getChildren().add(buildReviewBox(visit));
+                break;
+            case DOCTOR_REVIEWED:
+                section.getChildren().add(buildReleaseBox(visit));
+                break;
+            default:
+                // LABORATORY_REQUESTED / SAMPLE_COLLECTED / SENT_TO_LABORATORY / UNDER_LABORATORY_ANALYSIS /
+                // RELEASED_TO_PATIENT: nothing further for the doctor to action right now.
+                break;
+        }
+
+        return section;
+    }
 }
