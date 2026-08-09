@@ -66,5 +66,17 @@ public class StatusTrackerView extends VBox {
 
             javafx.scene.layout.StackPane dot = new javafx.scene.layout.StackPane(circle, dotLabel);
 
+            Line connector = new Line(0, 0, 0, 34);
+            connector.setStroke(completed ? Color.web("#2E9E6B") : Color.web("#D6DEE2"));
+            connector.setStrokeWidth(2);
+            VBox connectorBox = new VBox(connector);
+            connectorBox.setAlignment(Pos.TOP_CENTER);
+            connectorBox.setMinWidth(22);
+            connectorBox.setPrefWidth(22);
+
+            VBox dotColumn = new VBox(dot, last ? new Region() : connectorBox);
+            dotColumn.setAlignment(Pos.TOP_CENTER);
+            dotColumn.setMinWidth(22);
+
 
 }
