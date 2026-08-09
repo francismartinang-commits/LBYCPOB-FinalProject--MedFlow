@@ -274,4 +274,34 @@ public class DoctorDashboard extends VBox {
                 singleRow,
                 batchRow);
     }
+
+    private Node buildReviewBox(Visit visit) {
+        TextArea diagnosisArea = new TextArea();
+        diagnosisArea.setPromptText("Final diagnosis and advice for the patient...");
+        diagnosisArea.setPrefRowCount(3);
+        diagnosisArea.setWrapText(true);
+
+        Label error = new Label();
+        error.getStyleClass().add("login-error");
+        error.setManaged(false);
+        error.setVisible(false);
+
+        Button confirm = UI.primaryButton("Confirm Review");
+        confirm.setOnAction(e -> {
+            String diagnosisText = diagnosisArea.getText().trim();
+            if (diagnosisText.isEmpty()) {
+                error.setText("Please write a diagnosis before confirming.");
+                error.setManaged(true);
+                error.setVisible(true);
+                return;
+            }
+            visit.getMedicalRecord().setDiagnosis(doctor, diagnosisText);
+            doctor.updateStatus(visit, VisitStatus.DOCTOR_REVIEWED);
+            store.save();
+            confirm.setDisable(true);
+            confirm.setText("Reviewed - reopen to release");
+        });
+
+        return UI.card(UI.sectionTitle("Review Laboratory Findings"), diagnosisArea, error, confirm);
+    }
 }
