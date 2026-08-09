@@ -65,4 +65,14 @@ public class LabStaffDashboard extends VBox {
 
         Label patientLine = UI.muted("Patient: " + visit.getPatient().getName() + "  ·  Visit " + visit.getVisitId());
         Label doctorLine = UI.muted("Ordered by " + (visit.getAssignedDoctor() != null ? visit.getAssignedDoctor().getName() : "-"));
+
+        TextArea findingsArea = new TextArea();
+        findingsArea.setPromptText("Enter laboratory findings...");
+        findingsArea.setPrefRowCount(3);
+        findingsArea.setWrapText(true);
+
+        Label error = new Label();
+        error.getStyleClass().add("login-error");
+        error.setManaged(false);
+        error.setVisible(false);
 }
