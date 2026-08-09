@@ -353,4 +353,14 @@ public class AdminDashboard extends VBox {
                 refreshSectionsList();
             }
         });
+
+        HBox addRow = new HBox(10, newSectionField, addButton);
+        VBox wrapper = new VBox(12, UI.muted("Used by the automatic Lab Request Routing engine."), sectionsList, addRow);
+        wrapper.setPadding(new Insets(16, 0, 0, 0));
+        return wrapper;
+    }
+
+    private void refreshSectionsList() {
+        sectionsList.setItems(FXCollections.observableArrayList(store.getLabSections()));
+    }
 }
