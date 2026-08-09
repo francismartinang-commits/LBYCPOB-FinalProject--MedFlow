@@ -83,4 +83,22 @@ public final class UI {
         button.getStyleClass().add("btn-secondary");
         return button;
     }
+
+    public static Button successButton(String text) {
+        Button button = new Button(text);
+        button.getStyleClass().add("btn-success");
+        return button;
+    }
+
+    public static Button dangerButton(String text) {
+        Button button = new Button(text);
+        button.getStyleClass().add("btn-danger");
+        return button;
+    }
+
+    public static Button linkButton(String text) {
+        Button button = new Button(text);
+        button.getStyleClass().add("btn-link");
+        return button;
+    }
 }
