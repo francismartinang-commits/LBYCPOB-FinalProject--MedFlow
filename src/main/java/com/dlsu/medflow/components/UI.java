@@ -71,4 +71,16 @@ public final class UI {
         box.setMinWidth(150);
         return box;
     }
+
+    public static Button primaryButton(String text) {
+        Button button = new Button(text);
+        button.getStyleClass().add("btn-primary");
+        return button;
+    }
+
+    public static Button secondaryButton(String text) {
+        Button button = new Button(text);
+        button.getStyleClass().add("btn-secondary");
+        return button;
+    }
 }
