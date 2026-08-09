@@ -43,5 +43,28 @@ public class StatusTrackerView extends VBox {
         }
         return null;
 
+        private HBox buildRow(VisitStatus stage, boolean completed, boolean current, boolean last, String timestamp) {
+            Color dotColor;
+            String dotText;
+            if (completed) {
+                dotColor = Color.web("#2E9E6B");
+                dotText = "\u2713";
+            } else if (current) {
+                dotColor = Color.web("#106E8A");
+                dotText = String.valueOf(stage.getStageNumber());
+            } else {
+                dotColor = Color.web("#D6DEE2");
+                dotText = String.valueOf(stage.getStageNumber());
+            }
+
+            Circle circle = new Circle(11, dotColor);
+            Label dotLabel = new Label(dotText);
+            dotLabel.setStyle("-fx-text-fill: white; -fx-font-size: 10px; -fx-font-weight: bold;");
+            if (!completed && !current) {
+                dotLabel.setStyle("-fx-text-fill: #7C8C94; -fx-font-size: 10px; -fx-font-weight: bold;");
+            }
+
+            javafx.scene.layout.StackPane dot = new javafx.scene.layout.StackPane(circle, dotLabel);
+
 
 }
