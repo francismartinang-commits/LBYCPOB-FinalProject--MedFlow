@@ -52,4 +52,23 @@ public final class UI {
         label.setWrapText(true);
         return label;
     }
+
+    public static VBox card(Node... children) {
+        VBox box = new VBox(10, children);
+        box.getStyleClass().add("card");
+        box.setPadding(new Insets(18));
+        return box;
+    }
+
+    public static VBox statCard(String value, String label) {
+        Label valueLabel = new Label(value);
+        valueLabel.getStyleClass().add("stat-card-value");
+        Label captionLabel = new Label(label);
+        captionLabel.getStyleClass().add("stat-card-label");
+        VBox box = new VBox(4, valueLabel, captionLabel);
+        box.getStyleClass().add("stat-card");
+        box.setPadding(new Insets(16));
+        box.setMinWidth(150);
+        return box;
+    }
 }
