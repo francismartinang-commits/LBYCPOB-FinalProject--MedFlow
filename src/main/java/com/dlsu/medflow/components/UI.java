@@ -20,4 +20,17 @@ public final class UI {
 
     private UI() {
     }
+
+    public static Label pageTitle(String text) {
+        Label label = new Label(text);
+        label.getStyleClass().add("page-title");
+        return label;
+    }
+
+    public static Label pageSubtitle(String text) {
+        Label label = new Label(text);
+        label.getStyleClass().add("page-subtitle");
+        label.setWrapText(true);
+        return label;
+    }
 }
