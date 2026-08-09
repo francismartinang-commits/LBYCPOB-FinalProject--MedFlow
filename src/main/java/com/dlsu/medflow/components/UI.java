@@ -151,4 +151,17 @@ public final class UI {
         VBox box = new VBox(4, label, control);
         return box;
     }
+
+    public static HBox spacedRow(double spacing, Node... children) {
+        HBox row = new HBox(spacing, children);
+        row.setAlignment(Pos.CENTER_LEFT);
+        return row;
+    }
+
+    public static Node hSpacer() {
+        HBox spacer = new HBox();
+        HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
+        return spacer;
+    }
+}
 }
