@@ -141,4 +141,14 @@ public final class UI {
         }
         return badge(priority.getLabel(), tone);
     }
+
+    public static VBox fieldGroup(String labelText, Control control) {
+        Label label = new Label(labelText);
+        label.getStyleClass().add("field-label");
+        if (control.getPrefWidth() < 1) {
+            control.setPrefWidth(260);
+        }
+        VBox box = new VBox(4, label, control);
+        return box;
+    }
 }
