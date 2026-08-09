@@ -18,4 +18,6 @@ import java.util.List;
 
 public class StatusTrackerView extends VBox {
 
+    private static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("MMM d, h:mm a");
+
 }
