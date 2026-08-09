@@ -34,4 +34,14 @@ public class StatusTrackerView extends VBox {
             getChildren().add(buildRow(stage, completed, current, last, findTimestamp(visit, stage)));
         }
     }
+
+    private String findTimestamp(Visit visit, VisitStatus stage) {
+        for (Visit.StatusLogEntry entry : visit.getHistory()) {
+            if (entry.getStatus() == stage) {
+                return entry.getTimestamp().format(TIME_FORMAT);
+            }
+        }
+        return null;
+
+
 }
