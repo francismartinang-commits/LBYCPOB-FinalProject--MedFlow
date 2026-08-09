@@ -78,5 +78,12 @@ public class StatusTrackerView extends VBox {
             dotColumn.setAlignment(Pos.TOP_CENTER);
             dotColumn.setMinWidth(22);
 
+            Label title = new Label(stage.getStageNumber() + ". " + stage.getLabel());
+            title.getStyleClass().add(current || completed ? "tracker-step-title" : "tracker-step-title-pending");
+
+            Label desc = new Label(stage.getDescription());
+            desc.getStyleClass().add("tracker-step-desc");
+            desc.setWrapText(true);
+
 
 }
