@@ -41,4 +41,16 @@ public class LabStaffDashboard extends VBox {
 
         getChildren().addAll(new VBox(4, title, subtitle), stats, UI.sectionTitle("Pending Requests"), queueContainer);
     }
+
+    private void refreshQueue() {
+        queueContainer.getChildren().clear();
+        List<HospitalDataStore.LabQueueItem> items = store.getPendingLabRequests(labStaff.getSection());
+        if (items.isEmpty()) {
+            queueContainer.getChildren().add(UI.card(UI.body("No pending requests for " + labStaff.getSection() + " right now.")));
+            return;
+        }
+        for (HospitalDataStore.LabQueueItem item : items) {
+            queueContainer.getChildren().add(buildQueueCard(item));
+        }
+    }
 }
