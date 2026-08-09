@@ -109,4 +109,39 @@ public class DoctorDashboard extends VBox {
         String[] parts = withoutTitle.split(" ");
         return parts[parts.length - 1];
     }
+
+    // -------------------------------------------------------------------
+    // Visit workspace dialog
+    // -------------------------------------------------------------------
+
+    private void openWorkspace(Visit visit) {
+        Stage dialog = new Stage();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.setTitle(visit.getPatient().getName() + " - " + visit.getVisitId());
+
+        VBox content = new VBox(18);
+        content.setPadding(new Insets(24));
+
+        content.getChildren().add(UI.pageTitle(visit.getPatient().getName()));
+        content.getChildren().add(UI.muted("Reason for visit: " + visit.getReasonForVisit()));
+        content.getChildren().add(UI.muted("Patient contact: " + visit.getPatient().getContactNumber()
+                + "  ·  Age " + visit.getPatient().getAge() + "  ·  " + visit.getPatient().getGender()));
+
+        content.getChildren().add(buildActionSection(visit, dialog));
+        content.getChildren().add(UI.sectionTitle("Status Timeline"));
+        content.getChildren().add(new StatusTrackerView(visit));
+
+        ScrollPane scrollPane = new ScrollPane(content);
+        scrollPane.setFitToWidth(true);
+        scrollPane.getStyleClass().add("edge-to-edge");
+
+        javafx.scene.layout.BorderPane root = new javafx.scene.layout.BorderPane(scrollPane);
+        root.getStyleClass().add("root-bg");
+
+        Scene scene = new Scene(root, 620, 720);
+        scene.getStylesheets().add(getClass().getResource("/com/dlsu.medflow/styles.css").toExternalForm());
+        dialog.setScene(scene);
+        dialog.showAndWait();
+        refreshVisitList();
+    }
 }
