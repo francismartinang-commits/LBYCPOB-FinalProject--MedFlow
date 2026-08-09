@@ -285,4 +285,10 @@ public class AdminDashboard extends VBox {
         dialog.setScene(scene);
         dialog.showAndWait();
     }
+
+    private void showError(Label error, String message) {
+        error.setText(message);
+        error.setManaged(true);
+        error.setVisible(true);
+    }
 }
