@@ -85,5 +85,14 @@ public class StatusTrackerView extends VBox {
             desc.getStyleClass().add("tracker-step-desc");
             desc.setWrapText(true);
 
+            VBox textColumn = new VBox(2, title, desc);
+            if (timestamp != null) {
+                Label time = new Label(timestamp);
+                time.getStyleClass().add("tracker-step-time");
+                textColumn.getChildren().add(time);
+            }
+            HBox.setHgrow(textColumn, Priority.ALWAYS);
+            textColumn.setPadding(new Insets(0, 0, last ? 0 : 18, 0));
+
 
 }
