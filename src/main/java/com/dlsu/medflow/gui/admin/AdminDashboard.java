@@ -291,4 +291,30 @@ public class AdminDashboard extends VBox {
         error.setManaged(true);
         error.setVisible(true);
     }
+
+    // -------------------------------------------------------------------
+    // Doctor categories
+    // -------------------------------------------------------------------
+
+    private Node buildCategoriesTab() {
+        categoriesList = new ListView<>(FXCollections.observableArrayList(store.getDoctorCategories()));
+        categoriesList.setCellFactory(lv -> removableCell(text -> {
+            store.removeDoctorCategory(text);
+            store.save();
+            refreshCategoriesList();
+        }));
+        VBox.setVgrow(categoriesList, Priority.ALWAYS);
+
+        TextField newCategoryField = new TextField();
+        newCategoryField.setPromptText("New specialization, e.g., Endocrinology");
+        Button addButton = UI.primaryButton("Add Category");
+        addButton.setOnAction(e -> {
+            String value = newCategoryField.getText().trim();
+            if (!value.isEmpty()) {
+                store.addDoctorCategory(value);
+                store.save();
+                newCategoryField.clear();
+                refreshCategoriesList();
+            }
+        });
 }
