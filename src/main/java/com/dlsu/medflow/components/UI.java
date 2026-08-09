@@ -101,4 +101,10 @@ public final class UI {
         button.getStyleClass().add("btn-link");
         return button;
     }
+
+    public static Label badge(String text, String tone) {
+        Label label = new Label(text);
+        label.getStyleClass().addAll("badge", "badge-" + tone);
+        return label;
+    }
 }
