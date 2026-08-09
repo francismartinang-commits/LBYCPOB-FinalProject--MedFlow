@@ -53,4 +53,16 @@ public class LabStaffDashboard extends VBox {
             queueContainer.getChildren().add(buildQueueCard(item));
         }
     }
+
+    private VBox buildQueueCard(HospitalDataStore.LabQueueItem item) {
+        Visit visit = item.getVisit();
+        LabRequest request = item.getLabRequest();
+
+        Label testName = UI.sectionTitle(request.getTestName());
+        Label priority = UI.priorityBadge(request.getPriority());
+        HBox topRow = new HBox(10, testName, (Node) UI.hSpacer(), priority);
+        topRow.setAlignment(Pos.CENTER_LEFT);
+
+        Label patientLine = UI.muted("Patient: " + visit.getPatient().getName() + "  ·  Visit " + visit.getVisitId());
+        Label doctorLine = UI.muted("Ordered by " + (visit.getAssignedDoctor() != null ? visit.getAssignedDoctor().getName() : "-"));
 }
