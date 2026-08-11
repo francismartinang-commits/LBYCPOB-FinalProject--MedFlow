@@ -54,3 +54,22 @@ public class LoginView extends BorderPane {
         StackPane.setAlignment(content, Pos.CENTER_LEFT);
         return hero;
     }
+
+    private Polyline buildPulseIcon() {
+        Polyline line = new Polyline(
+                0, 20,
+                40, 20,
+                55, 0,
+                70, 40,
+                85, 20,
+                100, 20,
+                115, 5,
+                130, 35,
+                145, 20,
+                200, 20
+        );
+        line.setStroke(Color.WHITE);
+        line.setStrokeWidth(3);
+        line.setFill(null);
+        return line;
+    }
