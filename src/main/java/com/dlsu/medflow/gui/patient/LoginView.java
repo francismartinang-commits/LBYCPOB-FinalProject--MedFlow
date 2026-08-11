@@ -73,3 +73,23 @@ public class LoginView extends BorderPane {
         line.setFill(null);
         return line;
     }
+
+    private Node buildFormPanel(HospitalDataStore store, Consumer<User> onLoginSuccess) {
+        Label welcome = new Label("Welcome back");
+        welcome.getStyleClass().add("login-form-title");
+
+        Label instructions = UI.muted("Sign in with your MedFlow account to continue.");
+
+        TextField usernameField = new TextField();
+        usernameField.setPromptText("Username");
+        PasswordField passwordField = new PasswordField();
+        passwordField.setPromptText("Password");
+
+        Label error = new Label();
+        error.getStyleClass().add("login-error");
+        error.setManaged(false);
+        error.setVisible(false);
+
+        Button loginButton = UI.primaryButton("Log In");
+        loginButton.setMaxWidth(Double.MAX_VALUE);
+        loginButton.setDefaultButton(true);
