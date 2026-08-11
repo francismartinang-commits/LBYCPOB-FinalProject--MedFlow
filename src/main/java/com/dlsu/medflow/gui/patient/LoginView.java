@@ -133,3 +133,19 @@ public class LoginView extends BorderPane {
                 error,
                 loginButton,
                 registerLink);
+
+        VBox formCard = UI.card(welcome, instructions, new Separator(), formFields);
+        formCard.setMaxWidth(360);
+        formCard.setPrefWidth(360);
+
+        TitledPane demoPane = buildDemoAccountsPane(usernameField, passwordField, error);
+        demoPane.setMaxWidth(360);
+
+        VBox centerStack = new VBox(20, formCard, demoPane);
+        centerStack.setAlignment(Pos.CENTER);
+        centerStack.setPadding(new Insets(50));
+
+        StackPane wrapper = new StackPane(centerStack);
+        StackPane.setAlignment(centerStack, Pos.CENTER);
+        return wrapper;
+    }
