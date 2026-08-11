@@ -164,3 +164,26 @@ public class LoginView extends BorderPane {
                 {"Laboratory Staff - Ella Manalo (Chemistry)", "lab.manalo", "lab123"},
                 {"Patient - Juan Dela Cruz", "patient.juan", "patient123"},
         };
+
+        for (String[] demo : demos) {
+            Label roleLabel = UI.muted(demo[0]);
+            Label credsLabel = new Label(demo[1] + " / " + demo[2]);
+            credsLabel.setStyle("-fx-font-size: 11.5px; -fx-font-family: monospace;");
+            Button fill = UI.linkButton("Use");
+            fill.setOnAction(e -> {
+                usernameField.setText(demo[1]);
+                passwordField.setText(demo[2]);
+                error.setManaged(false);
+                error.setVisible(false);
+            });
+            HBox row = new HBox(8, credsLabel, UI.hSpacer(), fill);
+            row.setAlignment(Pos.CENTER_LEFT);
+            VBox pair = new VBox(1, roleLabel, row);
+            rows.getChildren().add(pair);
+        }
+
+        TitledPane pane = new TitledPane("Demo accounts (for quick testing)", rows);
+        pane.setExpanded(false);
+        return pane;
+    }
+}
