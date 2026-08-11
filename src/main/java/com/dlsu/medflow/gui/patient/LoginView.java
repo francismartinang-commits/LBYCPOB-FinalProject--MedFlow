@@ -93,3 +93,23 @@ public class LoginView extends BorderPane {
         Button loginButton = UI.primaryButton("Log In");
         loginButton.setMaxWidth(Double.MAX_VALUE);
         loginButton.setDefaultButton(true);
+
+        Runnable attemptLogin = () -> {
+            String username = usernameField.getText().trim();
+            String password = passwordField.getText();
+            if (username.isEmpty() || password.isEmpty()) {
+                error.setText("Please enter both your username and password.");
+                error.setManaged(true);
+                error.setVisible(true);
+                return;
+            }
+            User user = store.authenticate(username, password);
+            if (user == null) {
+                error.setText("Incorrect username or password. Please try again.");
+                error.setManaged(true);
+                error.setVisible(true);
+                return;
+            }
+            onLoginSuccess.accept(user);
+        };
+        loginButton.setOnAction(e -> attemptLogin.run());
