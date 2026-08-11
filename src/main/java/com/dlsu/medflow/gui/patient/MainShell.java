@@ -18,5 +18,23 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
-public class MainShell {
-}
+/**
+ * The shell every signed-in user sees: a slim identity/branding sidebar
+ * that never changes, wrapped around whichever dashboard
+ * {@link User#displayDashboard(HospitalDataStore)} polymorphically returns
+ * for the current user's role.
+ */
+public class MainShell extends BorderPane {
+
+    public MainShell(User user, HospitalDataStore store, Runnable onLogout) {
+        setLeft(buildSidebar(user, onLogout));
+
+        Node dashboard = user.displayDashboard(store);
+        ScrollPane scrollPane = new ScrollPane(dashboard);
+        scrollPane.setFitToWidth(true);
+        scrollPane.getStyleClass().add("edge-to-edge");
+        setCenter(scrollPane);
+
+        getStyleClass().add("root-bg");
+    }
+
