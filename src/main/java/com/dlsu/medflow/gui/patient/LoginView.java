@@ -149,3 +149,18 @@ public class LoginView extends BorderPane {
         StackPane.setAlignment(centerStack, Pos.CENTER);
         return wrapper;
     }
+
+    private TitledPane buildDemoAccountsPane(TextField usernameField, PasswordField passwordField, Label error) {
+        VBox rows = new VBox(6);
+        rows.setPadding(new Insets(8));
+        rows.getStyleClass().add("demo-creds-box");
+
+        String[][] demos = {
+                {"Admin", "admin", "admin123"},
+                {"Doctor - Dr. Ana Reyes (General Medicine)", "dr.reyes", "doctor123"},
+                {"Doctor - Dr. Miguel Santos (Cardiology)", "dr.santos", "doctor123"},
+                {"Nurse / Staff - Liza Ramos", "nurse.ramos", "nurse123"},
+                {"Laboratory Staff - Jun Dizon (Hematology)", "lab.dizon", "lab123"},
+                {"Laboratory Staff - Ella Manalo (Chemistry)", "lab.manalo", "lab123"},
+                {"Patient - Juan Dela Cruz", "patient.juan", "patient123"},
+        };
