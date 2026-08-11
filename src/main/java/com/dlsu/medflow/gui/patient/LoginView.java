@@ -26,3 +26,31 @@ public class LoginView extends BorderPane {
         setCenter(buildFormPanel(store, onLoginSuccess));
         getStyleClass().add("root-bg");
     }
+
+    private Node buildHeroPanel() {
+        Label badge = new Label("DE LA SALLE UNIVERSITY  ·  LBYCPOB PROJECT");
+        badge.getStyleClass().add("login-hero-badge");
+
+        Label title = new Label("MedFlow");
+        title.getStyleClass().add("login-hero-title");
+
+        Label subtitle = new Label(
+                "Hospital & Laboratory Information System\n\n"
+                        + "Follow every patient from registration to released results - with role-based "
+                        + "access for Patients, Doctors, Nurses/Staff, Laboratory Staff, and Admins.");
+        subtitle.getStyleClass().add("login-hero-subtitle");
+        subtitle.setMaxWidth(320);
+
+        Polyline pulse = buildPulseIcon();
+
+        VBox content = new VBox(18, badge, pulse, title, subtitle);
+        content.setAlignment(Pos.CENTER_LEFT);
+        content.setPadding(new Insets(50));
+        content.setMaxWidth(420);
+
+        StackPane hero = new StackPane(content);
+        hero.getStyleClass().add("login-hero");
+        hero.setPrefWidth(440);
+        StackPane.setAlignment(content, Pos.CENTER_LEFT);
+        return hero;
+    }
