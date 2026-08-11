@@ -113,3 +113,16 @@ public class LoginView extends BorderPane {
             onLoginSuccess.accept(user);
         };
         loginButton.setOnAction(e -> attemptLogin.run());
+
+        Button registerLink = UI.linkButton("New patient? Register here");
+        registerLink.setOnAction(e -> {
+            PatientRegistrationDialog dialog = new PatientRegistrationDialog(store);
+            dialog.showAndWait().ifPresent(username -> {
+                usernameField.setText(username);
+                error.setText("Registration successful! Enter your password to log in.");
+                error.getStyleClass().remove("login-error");
+                error.setStyle("-fx-text-fill: #1E7A4C;");
+                error.setManaged(true);
+                error.setVisible(true);
+            });
+        });
