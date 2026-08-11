@@ -126,3 +126,10 @@ public class LoginView extends BorderPane {
                 error.setVisible(true);
             });
         });
+
+        VBox formFields = new VBox(12,
+                UI.fieldGroup("Username", usernameField),
+                UI.fieldGroup("Password", passwordField),
+                error,
+                loginButton,
+                registerLink);
