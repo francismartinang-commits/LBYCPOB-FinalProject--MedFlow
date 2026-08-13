@@ -46,3 +46,16 @@ public class Doctor extends User {
         }
         visit.advance(this, newStatus);
     }
+
+    // ---- POLYMORPHISM: method overloading ----
+
+    /**
+     * "createRequest(String testName) - processes a single, standard
+     * laboratory request." Always uses ROUTINE priority.
+     */
+    public LabRequest createRequest(Visit visit, String testName) {
+        LabRequest request = buildRequest(testName, Priority.ROUTINE);
+        visit.addLabRequest(request);
+        advanceToRequested(visit);
+        return request;
+    }
