@@ -51,3 +51,18 @@ public class MainShell extends BorderPane {
         nameLabel.getStyleClass().add("sidebar-user-name");
         nameLabel.setWrapText(true);
         nameLabel.setMaxWidth(180);
+
+        Label roleLabel = new Label(user.getRole().getDisplayName().toUpperCase());
+        roleLabel.getStyleClass().add("sidebar-role-tag");
+
+        VBox identity = new VBox(10, avatarStack, nameLabel, roleLabel);
+        identity.setAlignment(Pos.CENTER_LEFT);
+
+        Separator separator = new Separator();
+
+        Region spacer = new Region();
+        VBox.setVgrow(spacer, Priority.ALWAYS);
+
+        Button logout = new Button("Log Out");
+        logout.getStyleClass().add("sidebar-logout");
+        logout.setOnAction(e -> onLogout.run());
