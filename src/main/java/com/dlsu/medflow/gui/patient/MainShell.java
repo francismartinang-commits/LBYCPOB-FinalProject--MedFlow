@@ -66,3 +66,11 @@ public class MainShell extends BorderPane {
         Button logout = new Button("Log Out");
         logout.getStyleClass().add("sidebar-logout");
         logout.setOnAction(e -> onLogout.run());
+
+        VBox sidebar = new VBox(24, brand, separator, identity, spacer, logout);
+        sidebar.getStyleClass().add("sidebar");
+        sidebar.setPadding(new Insets(24, 18, 24, 18));
+        sidebar.setPrefWidth(210);
+        sidebar.setMinWidth(210);
+        return sidebar;
+    }
