@@ -38,4 +38,16 @@ public class MainShell extends BorderPane {
         getStyleClass().add("root-bg");
     }
 
-    //Currently Ongoing
+    private Node buildSidebar(User user, Runnable onLogout) {
+        Label brand = new Label("MedFlow");
+        brand.getStyleClass().add("sidebar-brand");
+
+        Circle avatar = new Circle(26, Color.web("#1FA6A0"));
+        Label initials = new Label(initialsOf(user.getName()));
+        initials.setStyle("-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;");
+        StackPane avatarStack = new StackPane(avatar, initials);
+
+        Label nameLabel = new Label(user.getName());
+        nameLabel.getStyleClass().add("sidebar-user-name");
+        nameLabel.setWrapText(true);
+        nameLabel.setMaxWidth(180);
