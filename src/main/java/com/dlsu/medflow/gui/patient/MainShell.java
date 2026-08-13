@@ -74,3 +74,18 @@ public class MainShell extends BorderPane {
         sidebar.setMinWidth(210);
         return sidebar;
     }
+
+    private String initialsOf(String name) {
+        String[] parts = name.trim().split("\\s+");
+        StringBuilder sb = new StringBuilder();
+        for (String part : parts) {
+            if (!part.isEmpty()) {
+                sb.append(Character.toUpperCase(part.charAt(0)));
+            }
+            if (sb.length() >= 2) {
+                break;
+            }
+        }
+        return sb.length() > 0 ? sb.toString() : "?";
+    }
+}
