@@ -9,5 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Doctor {
-}
+public class Doctor extends User {
+
+    private String specialization;
+
+    public Doctor(String userId, String name, String username, String password, String specialization) {
+        super(userId, name, username, password, Role.DOCTOR);
+        this.specialization = specialization;
+    }
