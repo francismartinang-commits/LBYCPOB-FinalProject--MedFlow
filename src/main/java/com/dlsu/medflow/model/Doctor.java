@@ -17,3 +17,16 @@ public class Doctor extends User {
         super(userId, name, username, password, Role.DOCTOR);
         this.specialization = specialization;
     }
+
+    public String getSpecialization() {
+        return specialization;
+    }
+
+    public void setSpecialization(String specialization) {
+        this.specialization = specialization;
+    }
+
+    @Override
+    public Parent displayDashboard(HospitalDataStore store) {
+        return new DoctorDashboard(this, store);
+    }
