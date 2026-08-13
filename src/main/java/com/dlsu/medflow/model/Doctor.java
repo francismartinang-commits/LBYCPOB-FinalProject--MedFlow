@@ -86,3 +86,16 @@ public class Doctor extends User {
         advanceToRequested(visit);
         return batch;
     }
+
+    private LabRequest buildRequest(String testName, Priority priority) {
+        LabRequest request = new LabRequest(UUID.randomUUID().toString().substring(0, 8), testName, priority);
+        request.setAssignedSection(LabRoutingEngine.routeTest(testName));
+        return request;
+    }
+
+    private void advanceToRequested(Visit visit) {
+        if (visit.getStatus() == VisitStatus.UNDER_DOCTOR_ASSESSMENT) {
+            updateStatus(visit, VisitStatus.LABORATORY_REQUESTED);
+        }
+    }
+}
