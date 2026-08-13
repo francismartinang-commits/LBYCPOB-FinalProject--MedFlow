@@ -59,3 +59,30 @@ public class Doctor extends User {
         advanceToRequested(visit);
         return request;
     }
+
+    /**
+     * "createRequest(String[] testNames, String priority) - processes a
+     * bundled batch of tests flagged with a specific priority level (e.g.,
+     * Urgent/Stat)." Same method name, different parameters - a second,
+     * distinct laboratory-request pathway rather than a duplicate of the
+     * single-test method above.
+     */
+    public List<LabRequest> createRequest(Visit visit, String[] testNames, String priority) {
+        Priority parsedPriority;
+        try {
+            parsedPriority = Priority.valueOf(priority.trim().toUpperCase());
+        } catch (IllegalArgumentException ex) {
+            parsedPriority = Priority.ROUTINE;
+        }
+        List<LabRequest> batch = new ArrayList<>();
+        for (String testName : testNames) {
+            if (testName == null || testName.isBlank()) {
+                continue;
+            }
+            LabRequest request = buildRequest(testName.trim(), parsedPriority);
+            visit.addLabRequest(request);
+            batch.add(request);
+        }
+        advanceToRequested(visit);
+        return batch;
+    }
