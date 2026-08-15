@@ -3,15 +3,27 @@ package com.dlsu.medflow.model;
 import com.dlsu.medflow.gui.doctor.DoctorDashboard;
 import com.dlsu.medflow.service.HospitalDataStore;
 import com.dlsu.medflow.service.LabRoutingEngine;
+import jakarta.persistence.Entity;
 import javafx.scene.Parent;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * INHERITANCE: child class of {@link User}. "Doctor - can view assigned
+ * patients, add notes, and request lab tests" (System Framework).
+ */
+@Entity
 public class Doctor extends User {
 
     private String specialization;
+
+    // UNDERSTAND:
+    // JPA requires a no-argument constructor when loading
+    // Doctor objects from the database.
+    protected Doctor() {
+    }
 
     public Doctor(String userId, String name, String username, String password, String specialization) {
         super(userId, name, username, password, Role.DOCTOR);
@@ -47,7 +59,7 @@ public class Doctor extends User {
         visit.advance(this, newStatus);
     }
 
-    // ---- POLYMORPHISM: method overloading ----
+    // ---- POLYMORPHISM: method overloading -----------------------------------
 
     /**
      * "createRequest(String testName) - processes a single, standard
