@@ -17,5 +17,7 @@ import java.util.Map;
  * in the proposal without pretending to be real clinical decision support.</p>
  */
 
-public class DoctorReccomendationEngine {
+public final class DoctorRecommendationEngine {
+
+
 }
