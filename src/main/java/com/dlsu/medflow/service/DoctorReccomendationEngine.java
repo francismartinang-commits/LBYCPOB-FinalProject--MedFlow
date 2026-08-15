@@ -19,5 +19,13 @@ import java.util.Map;
 
 public final class DoctorRecommendationEngine {
 
-
+    static {
+        CATEGORY_KEYWORDS.put("Cardiology",
+                new String[]{"heart", "chest pain", "palpitation", "hypertension", "blood pressure"});
+        CATEGORY_KEYWORDS.put("Pediatrics",
+                new String[]{"child", "baby", "infant", "toddler", "kid"});
+        CATEGORY_KEYWORDS.put("Dermatology",
+                new String[]{"skin", "rash", "itch", "acne", "eczema"});
+        CATEGORY_KEYWORDS.put("Orthopedics",
+                new String[]{"bone", "fracture", "joint", "sprain", "back pain", "knee", "shoulder"});
 }
