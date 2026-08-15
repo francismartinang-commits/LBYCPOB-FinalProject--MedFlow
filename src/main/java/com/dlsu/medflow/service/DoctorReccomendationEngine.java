@@ -52,5 +52,17 @@ public final class DoctorRecommendationEngine {
             return DEFAULT_CATEGORY;
 
 
+        }
+        String text = reasonForVisit.toLowerCase();
+        for (Map.Entry<String, String[]> entry : CATEGORY_KEYWORDS.entrySet()) {
+            for (String keyword : entry.getValue()) {
+                if (text.contains(keyword)) {
+                    return entry.getKey();
+                }
+            }
+        }
+        return DEFAULT_CATEGORY;
+    }
+}
 
 }
