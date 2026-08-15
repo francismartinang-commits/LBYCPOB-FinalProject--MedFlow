@@ -5,64 +5,65 @@
 <body>
 
 <!-- UNDERSTAND:
-     This fragment replaces the JavaFX StatusTrackerView.
-     It displays every visit stage in order. -->
-<div th:fragment="statusTracker(visit, stages, timestamps)"
+     This replaces the JavaFX StatusTrackerView and displays
+     every stage of a patient's visit. -->
+<div th:fragment="statusTracker(visit)"
      class="status-tracker">
 
-    <div th:each="stage, stat : ${stages}"
+    <div th:each="stage, stat : ${T(com.dlsu.medflow.model.VisitStatus).values()}"
          class="tracker-row">
 
-        <!-- UNDERSTAND:
-             A stage before the current stage is completed,
-             the matching stage is current, and the rest are pending. -->
         <div class="tracker-marker">
 
-            <div th:if="${stage.ordinal() < visit.status.ordinal()}"
-                 class="tracker-dot tracker-completed">
+            <!-- UNDERSTAND:
+                 A stage before the current status is already completed. -->
+            <span th:if="${stage.ordinal() < visit.status.ordinal()}"
+                  class="tracker-dot tracker-completed">
                 ✓
-            </div>
+            </span>
 
-            <div th:if="${stage.ordinal() == visit.status.ordinal()}"
-                 class="tracker-dot tracker-current"
-                 th:text="${stage.stageNumber}">
+            <!-- UNDERSTAND:
+                 The current stage displays its stage number. -->
+            <span th:if="${stage.ordinal() == visit.status.ordinal()}"
+                  class="tracker-dot tracker-current"
+                  th:text="${stage.stageNumber}">
                 1
-            </div>
+            </span>
 
-            <div th:if="${stage.ordinal() > visit.status.ordinal()}"
-                 class="tracker-dot tracker-pending"
-                 th:text="${stage.stageNumber}">
+            <!-- UNDERSTAND:
+                 Future stages are displayed as pending. -->
+            <span th:if="${stage.ordinal() > visit.status.ordinal()}"
+                  class="tracker-dot tracker-pending"
+                  th:text="${stage.stageNumber}">
                 1
-            </div>
+            </span>
 
             <!-- DECISION:
-                 The connector is not shown after the last visit stage. -->
+                 The connector is not displayed after the final stage. -->
             <div th:unless="${stat.last}"
                  class="tracker-line"
                  th:classappend="${stage.ordinal() < visit.status.ordinal()}
-                     ? ' tracker-line-completed'
-                     : ' tracker-line-pending'">
+                    ? ' tracker-line-completed'
+                    : ' tracker-line-pending'">
             </div>
 
         </div>
 
         <div class="tracker-content">
 
-            <strong th:text="${stage.stageNumber + '. ' + stage.label}">
-                1. Stage
+            <strong th:class="${stage.ordinal() <= visit.status.ordinal()}
+                        ? 'tracker-step-title'
+                        : 'tracker-step-title-pending'">
+
+                <span th:text="${stage.stageNumber}">1</span>.
+                <span th:text="${stage.label}">Stage</span>
+
             </strong>
 
-            <p th:text="${stage.description}">
+            <p class="tracker-step-desc"
+               th:text="${stage.description}">
                 Stage description
             </p>
-
-            <!-- UNDERSTAND:
-                 A timestamp is displayed only when the visit has already
-                 reached that stage. -->
-            <small th:if="${timestamps[stage] != null}"
-                   th:text="${timestamps[stage]}">
-                Aug 16, 12:00 AM
-            </small>
 
         </div>
 
