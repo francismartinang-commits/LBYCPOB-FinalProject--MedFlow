@@ -21,3 +21,11 @@ import java.util.List;
  public class HospitalDataStore implements Serializable {
     private static final String DATA_DIR = System.getProperty("user.home") + File.separator + ".medflow";
     private static final String DATA_FILE = DATA_DIR + File.separator + "medflow_data.ser";
+
+    private final List<User> users = new ArrayList<>();
+    private final List<Visit> visits = new ArrayList<>();
+    private final List<String> doctorCategories = new ArrayList<>();
+    private final List<String> labSections = new ArrayList<>();
+
+    private int userSequence = 0;
+    private int visitSequence = 0;
