@@ -38,11 +38,14 @@
 
 <h2>Visits by Stage</h2>
 
+<!-- UNDERSTAND:
+     Thymeleaf goes through each VisitStatus and displays its count. -->
 <div th:each="entry : ${visitsByStage}">
     <span th:text="${entry.key.stageNumber}">1</span>.
     <span th:text="${entry.key.label}">Stage</span>:
     <span th:text="${entry.value}">0</span>
 </div>
+
 <hr>
 
 <h2>Manage Accounts</h2>
@@ -70,7 +73,9 @@
             Name
         </td>
 
-        <td th:text="${user.role.displayName}">
+        <!-- UNDERSTAND:
+             The detailed role description is prepared by AdminController. -->
+        <td th:text="${roleDetails[user.username]}">
             Role
         </td>
 
@@ -104,8 +109,12 @@
 
 <br>
 
+<!-- AI-CHECK:
+     The button is displayed first before its account creation logic
+     is transferred from the JavaFX dialog. -->
 <button type="button">
     + Add Staff Account
 </button>
+
 </body>
 </html>

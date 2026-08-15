@@ -1,6 +1,9 @@
 package com.dlsu.medflow.gui.admin;
 
+import com.dlsu.medflow.model.Doctor;
+import com.dlsu.medflow.model.LabStaff;
 import com.dlsu.medflow.model.Role;
+import com.dlsu.medflow.model.User;
 import com.dlsu.medflow.model.VisitStatus;
 import com.dlsu.medflow.service.HospitalDataStore;
 import org.springframework.stereotype.Controller;
@@ -100,9 +103,39 @@ public class AdminController {
         // so they can be displayed inside the accounts table.
         model.addAttribute("users", store.getAllUsers());
 
+        // UNDERSTAND:
+        // Each account is given a more detailed role description before
+        // it is displayed in the dashboard.
+        Map<String, String> roleDetails = new LinkedHashMap<>();
+
+        for (User user : store.getAllUsers()) {
+            roleDetails.put(user.getUsername(), roleDetail(user));
+        }
+
+        model.addAttribute("roleDetails", roleDetails);
+
         // AI-CHECK:
-        // The overview and account display logic from the JavaFX AdminDashboard
-        // is now handled through the Spring Boot controller and Thymeleaf page.
+        // The overview and account display data from the JavaFX
+        // AdminDashboard is now prepared by the Spring Boot controller
+        // and displayed through Thymeleaf.
         return "AdminDashboard";
+    }
+
+    // UNDERSTAND:
+    // Doctors and laboratory staff have extra information connected
+    // to their role.
+    private String roleDetail(User user) {
+
+        if (user instanceof Doctor doctor) {
+            return "Doctor - " + doctor.getSpecialization();
+        }
+
+        if (user instanceof LabStaff labStaff) {
+            return "Lab Staff - " + labStaff.getSection();
+        }
+
+        // DECISION:
+        // Other users only need the normal display name from Role.
+        return user.getRole().getDisplayName();
     }
 }
