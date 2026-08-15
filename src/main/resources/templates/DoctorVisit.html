@@ -47,6 +47,80 @@
 
     <hr>
 
+    <!-- UNDERSTAND:
+         Existing doctor notes are displayed when available. -->
+    <div th:if="${clinicalNotes != null && !clinicalNotes.isBlank()}"
+         class="card p-3 mb-3">
+
+        <h2>Clinical Notes</h2>
+
+        <p th:text="${clinicalNotes}">
+            Clinical notes
+        </p>
+
+    </div>
+
+    <!-- UNDERSTAND:
+         This replaces the JavaFX laboratory request list. -->
+    <div th:if="${labRequests != null && !labRequests.isEmpty()}"
+         class="card p-3 mb-3">
+
+        <h2>Laboratory Requests</h2>
+
+        <div th:each="request : ${labRequests}"
+             class="mb-3">
+
+            <strong th:text="${request.testName}">
+                Test
+            </strong>
+
+            <span th:class="${T(com.dlsu.medflow.gui.components.UI)
+                    .priorityBadgeClass(request.priority)}"
+                  th:text="${request.priority.label}">
+                Priority
+            </span>
+
+            <span class="text-muted"
+                  th:text="${'→ ' + request.assignedSection}">
+                Section
+            </span>
+
+            <p th:if="${request.findingsEncoded}"
+               class="mb-0"
+               th:text="${'Findings: ' + request.findings}">
+                Findings
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- UNDERSTAND:
+         This replaces the JavaFX Begin Assessment button. -->
+    <div th:if="${visit.status ==
+            T(com.dlsu.medflow.model.VisitStatus).ASSIGNED_TO_DOCTOR}"
+         class="card p-3 mb-3">
+
+        <h2>Ready to see this patient?</h2>
+
+        <form th:action="@{/doctor/visit/begin}"
+              method="post">
+
+            <input type="hidden"
+                   name="visitId"
+                   th:value="${visit.visitId}">
+
+            <button type="submit"
+                    class="btn btn-primary">
+                Begin Assessment
+            </button>
+
+        </form>
+
+    </div>
+
+    <hr>
+
     <h2>Status Timeline</h2>
 
     <div class="card p-3">
