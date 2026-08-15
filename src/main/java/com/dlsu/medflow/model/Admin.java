@@ -1,10 +1,19 @@
 package com.dlsu.medflow.model;
 
+import jakarta.persistence.Entity;
+
 /**
  * INHERITANCE:
  * Admin is a specialized type of User.
  */
+@Entity
 public class Admin extends User {
+
+    // UNDERSTAND:
+    // JPA requires a no-argument constructor when loading
+    // Admin objects from the database.
+    protected Admin() {
+    }
 
     // UNDERSTAND:
     // The constructor sends the common account information to User
