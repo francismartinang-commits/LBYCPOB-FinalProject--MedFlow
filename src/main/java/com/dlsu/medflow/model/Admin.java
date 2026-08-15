@@ -1,25 +1,40 @@
 package com.dlsu.medflow.model;
 
-import com.dlsu.medflow.gui.admin.AdminDashboard;
-import com.dlsu.medflow.service.HospitalDataStore;
-import javafx.scene.Parent;
-
+/**
+ * INHERITANCE:
+ * Admin is a specialized type of User.
+ */
 public class Admin extends User {
 
-    public Admin(String userId, String name, String username, String password) {
-        super(userId, name, username, password, Role.ADMIN);
+    // UNDERSTAND:
+    // The constructor sends the common account information to User
+    // while automatically assigning the ADMIN role.
+    public Admin(
+            String userId,
+            String name,
+            String username,
+            String password) {
+
+        super(
+                userId,
+                name,
+                username,
+                password,
+                Role.ADMIN
+        );
     }
 
+    // UNDERSTAND:
+    // Admin overrides updateStatus because administrators are allowed
+    // to correct a visit regardless of its current stage.
     @Override
-    public Parent displayDashboard(HospitalDataStore store) {
-        return new AdminDashboard(this, store);
-    }
+    public void updateStatus(
+            Visit visit,
+            VisitStatus newStatus) {
 
-    @Override
-    public void updateStatus(Visit visit, VisitStatus newStatus) {
-        // Unlike every other role, an Admin may correct a visit to ANY stage.
-        // This is a deliberate, distinct override: administrative privilege
-        // means no workflow restriction applies, only an audit trail entry.
+        // DECISION:
+        // Administrative users are not restricted by the normal
+        // hospital workflow transitions.
         visit.advance(this, newStatus);
     }
 }
