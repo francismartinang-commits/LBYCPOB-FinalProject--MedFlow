@@ -1,8 +1,9 @@
 package com.dlsu.medflow.service;
 
-import java.util.Collection;
+import com.dlsu.medflow.model.*;
 
-public class HospitalDataStore {
-    public Collection<Object> getAllUsers() {
-    }
-}
+import java.io.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
