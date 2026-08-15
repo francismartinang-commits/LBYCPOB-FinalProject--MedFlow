@@ -9,6 +9,8 @@ import com.dlsu.medflow.service.HospitalDataStore;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -71,16 +73,14 @@ public class AdminController {
                         visit.getStatus() != VisitStatus.RELEASED_TO_PATIENT)
                 .count();
 
-        // UNDERSTAND:
-        // These values are passed to the Thymeleaf page through Model.
         model.addAttribute("patientCount", patientCount);
         model.addAttribute("doctorCount", doctorCount);
         model.addAttribute("staffCount", staffCount);
         model.addAttribute("activeVisitCount", activeVisitCount);
 
         // UNDERSTAND:
-        // This goes through every VisitStatus and counts how many visits
-        // are currently in each stage.
+        // This counts how many visits are currently under each
+        // VisitStatus.
         Map<VisitStatus, Long> visitsByStage = new LinkedHashMap<>();
 
         for (VisitStatus status : VisitStatus.values()) {
@@ -94,18 +94,16 @@ public class AdminController {
         }
 
         // DECISION:
-        // LinkedHashMap is used so the visit stages stay in the same order
-        // as they are declared inside VisitStatus.
+        // LinkedHashMap keeps the stages in their proper workflow order.
         model.addAttribute("visitsByStage", visitsByStage);
 
         // UNDERSTAND:
-        // This sends all registered users to AdminDashboard.html
-        // so they can be displayed inside the accounts table.
+        // Send all registered users to the accounts table.
         model.addAttribute("users", store.getAllUsers());
 
         // UNDERSTAND:
-        // Each account is given a more detailed role description before
-        // it is displayed in the dashboard.
+        // Give Doctor and Lab Staff accounts a more detailed role
+        // description.
         Map<String, String> roleDetails = new LinkedHashMap<>();
 
         for (User user : store.getAllUsers()) {
@@ -115,15 +113,47 @@ public class AdminController {
         model.addAttribute("roleDetails", roleDetails);
 
         // AI-CHECK:
-        // The overview and account display data from the JavaFX
-        // AdminDashboard is now prepared by the Spring Boot controller
-        // and displayed through Thymeleaf.
+        // The JavaFX AdminDashboard logic is being separated between
+        // AdminController and AdminDashboard.html for Spring Boot.
         return "AdminDashboard";
     }
 
     // UNDERSTAND:
-    // Doctors and laboratory staff have extra information connected
-    // to their role.
+    // This method handles the Activate or Deactivate button from
+    // AdminDashboard.html.
+    @PostMapping("/admin/accounts/toggle")
+    public String toggleAccount(@RequestParam String username) {
+
+        User user = store.getAllUsers()
+                .stream()
+                .filter(account ->
+                        account.getUsername().equals(username))
+                .findFirst()
+                .orElse(null);
+
+        // DECISION:
+        // Only change the account if it actually exists.
+        if (user != null) {
+
+            // DECISION:
+            // Admin accounts are protected for now because authentication
+            // has not yet been converted and the controller cannot identify
+            // which admin is currently logged in.
+            if (user.getRole() != Role.ADMIN) {
+                user.setActive(!user.isActive());
+                store.save();
+            }
+        }
+
+        // UNDERSTAND:
+        // Redirect back to /admin after changing the account so the
+        // refreshed account status is displayed.
+        return "redirect:/admin";
+    }
+
+    // UNDERSTAND:
+    // Doctors and laboratory staff contain additional information
+    // connected to their role.
     private String roleDetail(User user) {
 
         if (user instanceof Doctor doctor) {
@@ -134,8 +164,6 @@ public class AdminController {
             return "Lab Staff - " + labStaff.getSection();
         }
 
-        // DECISION:
-        // Other users only need the normal display name from Role.
         return user.getRole().getDisplayName();
     }
 }

@@ -51,7 +51,7 @@
 <h2>Manage Accounts</h2>
 
 <!-- DECISION:
-     The JavaFX TableView is replaced with a normal HTML table. -->
+     The JavaFX TableView is replaced with an HTML table. -->
 <table border="1">
 
     <thead>
@@ -66,15 +66,13 @@
     <tbody>
 
     <!-- UNDERSTAND:
-         Thymeleaf repeats this row once for every User sent by AdminController. -->
+         Thymeleaf repeats this row for every User sent by AdminController. -->
     <tr th:each="user : ${users}">
 
         <td th:text="${user.name}">
             Name
         </td>
 
-        <!-- UNDERSTAND:
-             The detailed role description is prepared by AdminController. -->
         <td th:text="${roleDetails[user.username]}">
             Role
         </td>
@@ -84,6 +82,10 @@
         </td>
 
         <td>
+
+            <!-- UNDERSTAND:
+                 The current state of the account is shown before the
+                 Activate or Deactivate button. -->
             <span th:if="${user.active}">
                 Active
             </span>
@@ -91,12 +93,37 @@
             <span th:unless="${user.active}">
                 Inactive
             </span>
+
+            <!-- DECISION:
+                 POST is used because activating or deactivating an account
+                 changes stored MedFlow data. -->
+            <form th:if="${user.role != T(com.dlsu.medflow.model.Role).ADMIN}"
+                  th:action="@{/admin/accounts/toggle}"
+                  method="post"
+                  style="display: inline;">
+
+                <input type="hidden"
+                       name="username"
+                       th:value="${user.username}">
+
+                <button type="submit"
+                        th:text="${user.active ? 'Deactivate' : 'Activate'}">
+                    Deactivate
+                </button>
+
+            </form>
+
+            <!-- AI-CHECK:
+                 Admin accounts cannot be toggled yet because the converted
+                 web application does not have login/session tracking yet. -->
+            <span th:if="${user.role == T(com.dlsu.medflow.model.Role).ADMIN}">
+                Protected
+            </span>
+
         </td>
 
     </tr>
 
-    <!-- UNDERSTAND:
-         This message appears if MedFlow currently has no user accounts. -->
     <tr th:if="${users == null || users.isEmpty()}">
         <td colspan="4">
             No accounts yet.
@@ -109,9 +136,6 @@
 
 <br>
 
-<!-- AI-CHECK:
-     The button is displayed first before its account creation logic
-     is transferred from the JavaFX dialog. -->
 <button type="button">
     + Add Staff Account
 </button>
