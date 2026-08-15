@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+<!-- UNDERSTAND:
+     This fragment replaces the JavaFX StatusTrackerView.
+     It displays every visit stage in order. -->
+<div th:fragment="statusTracker(visit, stages, timestamps)"
+     class="status-tracker">
+
+    <div th:each="stage, stat : ${stages}"
+         class="tracker-row">
+
+        <!-- UNDERSTAND:
+             A stage before the current stage is completed,
+             the matching stage is current, and the rest are pending. -->
+        <div class="tracker-marker">
+
+            <div th:if="${stage.ordinal() < visit.status.ordinal()}"
+                 class="tracker-dot tracker-completed">
+                ✓
+            </div>
+
+            <div th:if="${stage.ordinal() == visit.status.ordinal()}"
+                 class="tracker-dot tracker-current"
+                 th:text="${stage.stageNumber}">
+                1
+            </div>
+
+            <div th:if="${stage.ordinal() > visit.status.ordinal()}"
+                 class="tracker-dot tracker-pending"
+                 th:text="${stage.stageNumber}">
+                1
+            </div>
+
+            <!-- DECISION:
+                 The connector is not shown after the last visit stage. -->
+            <div th:unless="${stat.last}"
+                 class="tracker-line"
+                 th:classappend="${stage.ordinal() < visit.status.ordinal()}
+                     ? ' tracker-line-completed'
+                     : ' tracker-line-pending'">
+            </div>
+
+        </div>
+
+        <div class="tracker-content">
+
+            <strong th:text="${stage.stageNumber + '. ' + stage.label}">
+                1. Stage
+            </strong>
+
+            <p th:text="${stage.description}">
+                Stage description
+            </p>
+
+            <!-- UNDERSTAND:
+                 A timestamp is displayed only when the visit has already
+                 reached that stage. -->
+            <small th:if="${timestamps[stage] != null}"
+                   th:text="${timestamps[stage]}">
+                Aug 16, 12:00 AM
+            </small>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
