@@ -317,8 +317,37 @@ public class DoctorDashboard {
 
         store.save();
 
+        return "redirect:/doctor/visit?visitId=" + visitId;
+    }
+
+    @PostMapping("/doctor/visit/release")
+    public String releaseToPatient(
+            @RequestParam String visitId) {
+
+        Visit visit = store.getAllVisits().stream()
+                .filter(v -> v.getVisitId().equals(visitId))
+                .findFirst()
+                .orElse(null);
+
+        if (visit != null
+                && visit.getStatus()
+                == VisitStatus.DOCTOR_REVIEWED) {
+
+            Doctor doctor = visit.getAssignedDoctor();
+
+            // UNDERSTAND:
+            // This replaces the JavaFX Release Results to Patient button.
+            doctor.updateStatus(
+                    visit,
+                    VisitStatus.RELEASED_TO_PATIENT
+            );
+
+            store.save();
+        }
+
         // DECISION:
-        // Spring reloads the visit page after the review is completed.
+        // Spring reloads the visit workspace after the results
+        // are released instead of disabling a JavaFX button.
         return "redirect:/doctor/visit?visitId=" + visitId;
     }
 
