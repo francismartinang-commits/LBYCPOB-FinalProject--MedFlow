@@ -46,7 +46,10 @@ public final class DoctorRecommendationEngine {
     private DoctorRecommendationEngine() {
     }
 
-
+    /** Returns the suggested doctor category for the given reason-for-visit text. */
+    public static String recommendCategory(String reasonForVisit) {
+        if (reasonForVisit == null || reasonForVisit.isBlank()) {
+            return DEFAULT_CATEGORY;
 
 
 
