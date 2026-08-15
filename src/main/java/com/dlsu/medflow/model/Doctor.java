@@ -22,6 +22,11 @@ public class Doctor extends User {
     protected Doctor() {
     }
 
+    @Override
+    public Parent displayDashboard(HospitalDataStore store) {
+        return null;
+    }
+
     public Doctor(String userId, String name, String username, String password, String specialization) {
         super(userId, name, username, password, Role.DOCTOR);
         this.specialization = specialization;

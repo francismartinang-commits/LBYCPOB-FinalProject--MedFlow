@@ -1,13 +1,11 @@
 package com.dlsu.medflow.model;
 
-import com.dlsu.medflow.service.HospitalDataStore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
-import javafx.scene.Parent;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -69,12 +67,6 @@ public abstract class User implements Serializable {
     }
 
     // ---- POLYMORPHISM ------------------------------------------------------
-
-    /**
-     * METHOD OVERRIDING: temporarily retained while the remaining JavaFX
-     * subclasses are being converted to Spring Boot controllers.
-     */
-    public abstract Parent displayDashboard(HospitalDataStore store);
 
     /**
      * METHOD OVERRIDING: this is the single "validated method" through which
