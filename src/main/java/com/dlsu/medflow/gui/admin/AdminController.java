@@ -7,6 +7,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 @Controller
 public class AdminController {
 
@@ -72,10 +75,30 @@ public class AdminController {
         model.addAttribute("staffCount", staffCount);
         model.addAttribute("activeVisitCount", activeVisitCount);
 
+        // UNDERSTAND:
+        // This goes through every VisitStatus and counts how many visits
+        // are currently in each stage.
+        Map<VisitStatus, Long> visitsByStage = new LinkedHashMap<>();
+
+        for (VisitStatus status : VisitStatus.values()) {
+
+            long count = store.getAllVisits()
+                    .stream()
+                    .filter(visit -> visit.getStatus() == status)
+                    .count();
+
+            visitsByStage.put(status, count);
+        }
+
+        // DECISION:
+        // LinkedHashMap is used so the visit stages stay in the same order
+        // as they are declared inside VisitStatus.
+        model.addAttribute("visitsByStage", visitsByStage);
+
         // AI-CHECK:
-        // The overview logic was moved from the JavaFX AdminDashboard
-        // into the Spring Boot controller. AdminDashboard.html now
-        // handles only how these values are displayed.
+        // The overview logic from the JavaFX AdminDashboard was moved
+        // into the Spring Boot controller, while AdminDashboard.html
+        // handles how the values are displayed.
         return "AdminDashboard";
     }
 }
