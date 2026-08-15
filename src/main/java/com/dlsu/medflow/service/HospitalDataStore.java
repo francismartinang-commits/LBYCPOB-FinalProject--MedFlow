@@ -19,3 +19,5 @@ import java.util.List;
 
  */
  public class HospitalDataStore implements Serializable {
+    private static final String DATA_DIR = System.getProperty("user.home") + File.separator + ".medflow";
+    private static final String DATA_FILE = DATA_DIR + File.separator + "medflow_data.ser";
