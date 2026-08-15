@@ -4,6 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <title th:text="${pageTitle}">Admin Dashboard</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+          rel="stylesheet">
 </head>
 
 <body>
@@ -100,6 +103,10 @@
                        th:value="${user.username}">
 
                 <button type="submit"
+                        class="btn btn-sm"
+                        th:classappend="${user.active}
+                            ? ' btn-danger'
+                            : ' btn-success'"
                         th:text="${user.active ? 'Deactivate' : 'Activate'}">
                     Deactivate
                 </button>
@@ -229,7 +236,8 @@
     <!-- AI-CHECK:
          The form sends the account information to the Spring Boot
          controller instead of creating a JavaFX dialog. -->
-    <button type="submit">
+    <button type="submit"
+            class="btn btn-primary">
         Create Account
     </button>
 
@@ -257,7 +265,8 @@
                name="category"
                th:value="${category}">
 
-        <button type="submit">
+        <button type="submit"
+                class="btn btn-link text-danger">
             Remove
         </button>
 
@@ -275,7 +284,8 @@
            placeholder="New specialization, e.g., Endocrinology"
            required>
 
-    <button type="submit">
+    <button type="submit"
+            class="btn btn-primary">
         Add Category
     </button>
 
@@ -303,7 +313,8 @@
                name="section"
                th:value="${section}">
 
-        <button type="submit">
+        <button type="submit"
+                class="btn btn-link text-danger">
             Remove
         </button>
 
@@ -321,7 +332,8 @@
            placeholder="New section, e.g., Molecular Diagnostics"
            required>
 
-    <button type="submit">
+    <button type="submit"
+            class="btn btn-primary">
         Add Section
     </button>
 
