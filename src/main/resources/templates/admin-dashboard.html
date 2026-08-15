@@ -48,8 +48,6 @@
 
 <h2>Manage Accounts</h2>
 
-<!-- DECISION:
-     The JavaFX TableView is replaced with a normal HTML table. -->
 <table border="1">
 
     <thead>
@@ -63,8 +61,6 @@
 
     <tbody>
 
-    <!-- UNDERSTAND:
-         Thymeleaf repeats this row once for every User sent by AdminController. -->
     <tr th:each="user : ${users}">
 
         <td th:text="${user.name}">
@@ -89,9 +85,6 @@
                 Inactive
             </span>
 
-            <!-- DECISION:
-                 POST is used because activating or deactivating
-                 an account changes stored data. -->
             <form th:if="${user.role != T(com.dlsu.medflow.model.Role).ADMIN}"
                   th:action="@{/admin/accounts/toggle}"
                   method="post"
@@ -108,8 +101,6 @@
 
             </form>
 
-            <!-- UNDERSTAND:
-                 Admin accounts are protected from being deactivated. -->
             <span th:if="${user.role == T(com.dlsu.medflow.model.Role).ADMIN}">
                 Protected
             </span>
@@ -118,8 +109,6 @@
 
     </tr>
 
-    <!-- UNDERSTAND:
-         This message appears if MedFlow currently has no user accounts. -->
     <tr th:if="${users == null || users.isEmpty()}">
         <td colspan="4">
             No accounts yet.
@@ -138,26 +127,18 @@
 
 <hr>
 
-<!-- ================================================================
-     DOCTOR CATEGORIES
-     ================================================================ -->
-
 <h2>Doctor Categories</h2>
 
 <p>
     Used by the automatic Doctor Recommendation engine.
 </p>
 
-<!-- UNDERSTAND:
-     Thymeleaf repeats each doctor category sent by AdminController. -->
 <div th:each="category : ${doctorCategories}">
 
     <span th:text="${category}">
         Category
     </span>
 
-    <!-- DECISION:
-         POST is used because removing a category changes stored data. -->
     <form th:action="@{/admin/categories/remove}"
           method="post"
           style="display: inline;">
@@ -176,8 +157,6 @@
 
 <br>
 
-<!-- UNDERSTAND:
-     This form sends a new specialization to AdminController. -->
 <form th:action="@{/admin/categories/add}"
       method="post">
 
@@ -188,6 +167,62 @@
 
     <button type="submit">
         Add Category
+    </button>
+
+</form>
+
+<hr>
+
+<!-- ================================================================
+     LABORATORY SECTIONS
+     ================================================================ -->
+
+<h2>Laboratory Sections</h2>
+
+<p>
+    Used by the automatic Lab Request Routing engine.
+</p>
+
+<!-- UNDERSTAND:
+     Thymeleaf repeats every laboratory section sent by AdminController. -->
+<div th:each="section : ${labSections}">
+
+    <span th:text="${section}">
+        Laboratory Section
+    </span>
+
+    <!-- DECISION:
+         POST is used because removing a section changes stored data. -->
+    <form th:action="@{/admin/sections/remove}"
+          method="post"
+          style="display: inline;">
+
+        <input type="hidden"
+               name="section"
+               th:value="${section}">
+
+        <button type="submit">
+            Remove
+        </button>
+
+    </form>
+
+</div>
+
+<br>
+
+<!-- UNDERSTAND:
+     This form sends a new laboratory section to AdminController. -->
+<form th:action="@{/admin/sections/add}"
+      method="post">
+
+    <input type="text"
+           name="section"
+           placeholder="New section, e.g., Molecular Diagnostics"
+           required>
+
+    <button type="submit">
+        Add Section
     </button>
 
 </form>
