@@ -38,4 +38,7 @@ public final class DoctorRecommendationEngine {
                 new String[]{"cough", "breath", "asthma", "wheeze", "lungs"});
         CATEGORY_KEYWORDS.put("ENT (Otorhinolaryngology)",
                 new String[]{"ear", "nose", "throat", "sinus", "tonsil"});
+    }
+    public static final String DEFAULT_CATEGORY = "General Medicine";
+
 }
