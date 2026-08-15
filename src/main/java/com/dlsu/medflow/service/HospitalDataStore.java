@@ -17,4 +17,5 @@ import java.util.List;
  * serialization) so demo data survives between runs, and for seeding a set
  * of ready-to-use demo accounts the first time the application launches.</p>
 
-
+ */
+ public class HospitalDataStore implements Serializable {
