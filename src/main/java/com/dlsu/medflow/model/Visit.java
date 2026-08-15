@@ -1,6 +1,9 @@
 package com.dlsu.medflow.model;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embeddable;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -51,6 +54,15 @@ public class Visit implements Serializable {
     private List<LabRequest> labRequests = new ArrayList<>();
 
     // UNDERSTAND:
+    // Each visit status change is stored with its timestamp.
+    @ElementCollection
+    @CollectionTable(
+            name = "visit_status_history",
+            joinColumns = @JoinColumn(name = "visit_id")
+    )
+    private List<StatusLogEntry> history = new ArrayList<>();
+
+    // UNDERSTAND:
     // JPA requires a no-argument constructor when loading visits.
     protected Visit() {
     }
@@ -64,6 +76,13 @@ public class Visit implements Serializable {
         this.patient = patient;
         this.reasonForVisit = reasonForVisit;
         this.registeredAt = LocalDateTime.now();
+
+        this.history.add(
+                new StatusLogEntry(
+                        VisitStatus.REGISTERED,
+                        registeredAt
+                )
+        );
     }
 
     // UNDERSTAND:
@@ -83,6 +102,12 @@ public class Visit implements Serializable {
         }
 
         this.status = newStatus;
+        this.history.add(
+                new StatusLogEntry(
+                        newStatus,
+                        when
+                )
+        );
     }
 
     /** True once every laboratory request has encoded findings. */
@@ -148,10 +173,45 @@ public class Visit implements Serializable {
         return labRequests;
     }
 
+    public List<StatusLogEntry> getHistory() {
+        return history;
+    }
+
     @Override
     public String toString() {
         return "Visit " + visitId + " - "
                 + patient.getName()
                 + " (" + status.getLabel() + ")";
+    }
+
+    /** One timestamped row in the visit status timeline. */
+    @Embeddable
+    public static class StatusLogEntry implements Serializable {
+
+        @Enumerated(EnumType.STRING)
+        private VisitStatus status;
+
+        private LocalDateTime timestamp;
+
+        // UNDERSTAND:
+        // JPA requires a no-argument constructor when loading history.
+        protected StatusLogEntry() {
+        }
+
+        public StatusLogEntry(
+                VisitStatus status,
+                LocalDateTime timestamp) {
+
+            this.status = status;
+            this.timestamp = timestamp;
+        }
+
+        public VisitStatus getStatus() {
+            return status;
+        }
+
+        public LocalDateTime getTimestamp() {
+            return timestamp;
+        }
     }
 }
