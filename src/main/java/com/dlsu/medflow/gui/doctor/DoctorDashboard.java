@@ -2,6 +2,7 @@ package com.dlsu.medflow.gui.doctor;
 
 import com.dlsu.medflow.gui.components.StatusTrackerView;
 import com.dlsu.medflow.model.Doctor;
+import com.dlsu.medflow.model.Priority;
 import com.dlsu.medflow.model.Visit;
 import com.dlsu.medflow.model.VisitStatus;
 import com.dlsu.medflow.service.HospitalDataStore;
@@ -227,6 +228,53 @@ public class DoctorDashboard {
         redirectAttributes.addFlashAttribute(
                 "labMessage",
                 "Added and routed automatically."
+        );
+
+        return "redirect:/doctor/visit?visitId=" + visitId;
+    }
+
+    @PostMapping("/doctor/visit/lab/batch")
+    public String addBatchLabTests(
+            @RequestParam String visitId,
+            @RequestParam String testNames,
+            @RequestParam Priority priority,
+            RedirectAttributes redirectAttributes) {
+
+        Visit visit = store.getAllVisits().stream()
+                .filter(v -> v.getVisitId().equals(visitId))
+                .findFirst()
+                .orElse(null);
+
+        String raw = testNames.trim();
+
+        if (visit == null || raw.isEmpty()) {
+            redirectAttributes.addFlashAttribute(
+                    "labMessage",
+                    "Enter at least one test name."
+            );
+
+            return "redirect:/doctor/visit?visitId=" + visitId;
+        }
+
+        String[] tests = raw.split(",");
+
+        Doctor doctor = visit.getAssignedDoctor();
+
+        // UNDERSTAND:
+        // This replaces the JavaFX Add Batch button action.
+        // The priority is passed to the existing overloaded
+        // createRequest method as a String.
+        doctor.createRequest(
+                visit,
+                tests,
+                priority.name()
+        );
+
+        store.save();
+
+        redirectAttributes.addFlashAttribute(
+                "labMessage",
+                "Batch added and routed automatically."
         );
 
         return "redirect:/doctor/visit?visitId=" + visitId;
