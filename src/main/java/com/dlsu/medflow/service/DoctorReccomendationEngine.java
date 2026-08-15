@@ -28,4 +28,14 @@ public final class DoctorRecommendationEngine {
                 new String[]{"skin", "rash", "itch", "acne", "eczema"});
         CATEGORY_KEYWORDS.put("Orthopedics",
                 new String[]{"bone", "fracture", "joint", "sprain", "back pain", "knee", "shoulder"});
+        CATEGORY_KEYWORDS.put("Neurology",
+                new String[]{"headache", "migraine", "dizziness", "seizure", "numbness"});
+        CATEGORY_KEYWORDS.put("Gastroenterology",
+                new String[]{"stomach", "abdominal", "nausea", "vomiting", "diarrhea", "ulcer"});
+        CATEGORY_KEYWORDS.put("Obstetrics & Gynecology",
+                new String[]{"pregnan", "menstrual", "prenatal", "gynec"});
+        CATEGORY_KEYWORDS.put("Pulmonology",
+                new String[]{"cough", "breath", "asthma", "wheeze", "lungs"});
+        CATEGORY_KEYWORDS.put("ENT (Otorhinolaryngology)",
+                new String[]{"ear", "nose", "throat", "sinus", "tonsil"});
 }
