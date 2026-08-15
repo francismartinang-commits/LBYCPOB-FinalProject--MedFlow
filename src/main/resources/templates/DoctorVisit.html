@@ -47,8 +47,6 @@
 
     <hr>
 
-    <!-- UNDERSTAND:
-         Existing doctor notes are displayed when available. -->
     <div th:if="${clinicalNotes != null && !clinicalNotes.isBlank()}"
          class="card p-3 mb-3">
 
@@ -60,8 +58,6 @@
 
     </div>
 
-    <!-- UNDERSTAND:
-         This replaces the JavaFX laboratory request list. -->
     <div th:if="${labRequests != null && !labRequests.isEmpty()}"
          class="card p-3 mb-3">
 
@@ -95,8 +91,6 @@
 
     </div>
 
-    <!-- UNDERSTAND:
-         This replaces the JavaFX Begin Assessment button. -->
     <div th:if="${visit.status ==
             T(com.dlsu.medflow.model.VisitStatus).ASSIGNED_TO_DOCTOR}"
          class="card p-3 mb-3">
@@ -116,6 +110,83 @@
             </button>
 
         </form>
+
+    </div>
+
+    <!-- ============================================================
+         ASSESSMENT
+         ============================================================ -->
+
+    <div th:if="${visit.status ==
+            T(com.dlsu.medflow.model.VisitStatus).UNDER_DOCTOR_ASSESSMENT}"
+         class="card p-3 mb-3">
+
+        <h2>Assessment</h2>
+
+        <!-- UNDERSTAND:
+             This replaces the JavaFX Save Notes action. -->
+        <form th:action="@{/doctor/visit/notes}"
+              method="post"
+              class="mb-4">
+
+            <input type="hidden"
+                   name="visitId"
+                   th:value="${visit.visitId}">
+
+            <label for="notes"
+                   class="form-label">
+                Clinical Assessment Notes
+            </label>
+
+            <textarea id="notes"
+                      name="notes"
+                      class="form-control mb-2"
+                      rows="3"
+                      th:text="${clinicalNotes}">
+            </textarea>
+
+            <button type="submit"
+                    class="btn btn-secondary">
+                Save Notes
+            </button>
+
+        </form>
+
+        <hr>
+
+        <h3>Create Laboratory Request</h3>
+
+        <!-- UNDERSTAND:
+             This replaces createRequest(Visit, String). -->
+        <form th:action="@{/doctor/visit/lab/single}"
+              method="post">
+
+            <input type="hidden"
+                   name="visitId"
+                   th:value="${visit.visitId}">
+
+            <label for="testName"
+                   class="form-label">
+                Single Test
+            </label>
+
+            <input id="testName"
+                   type="text"
+                   name="testName"
+                   class="form-control mb-2"
+                   placeholder="e.g., CBC (Complete Blood Count)">
+
+            <button type="submit"
+                    class="btn btn-secondary">
+                Add Single Test
+            </button>
+
+        </form>
+
+        <p th:if="${labMessage}"
+           class="text-muted mt-2"
+           th:text="${labMessage}">
+        </p>
 
     </div>
 
