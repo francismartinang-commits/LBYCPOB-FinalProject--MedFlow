@@ -48,6 +48,11 @@
 
 <h2>Manage Accounts</h2>
 
+<p th:if="${errorMessage}"
+   th:text="${errorMessage}"
+   style="color: red;">
+</p>
+
 <table border="1">
 
     <thead>
@@ -119,11 +124,116 @@
 
 </table>
 
-<br>
+<hr>
 
-<button type="button">
-    + Add Staff Account
-</button>
+<!-- ================================================================
+     ADD STAFF ACCOUNT
+     ================================================================ -->
+
+<h2>Add Staff Account</h2>
+
+<!-- UNDERSTAND:
+     This form replaces the JavaFX Add Staff Account dialog. -->
+<form th:action="@{/admin/accounts/add}"
+      method="post">
+
+    <p>
+        <label for="role">Role:</label>
+
+        <select id="role"
+                name="role"
+                required>
+
+            <option th:each="role : ${staffRoles}"
+                    th:value="${role}"
+                    th:text="${role.displayName}">
+                Role
+            </option>
+
+        </select>
+    </p>
+
+    <p>
+        <label for="name">Full Name:</label>
+
+        <input id="name"
+               type="text"
+               name="name"
+               required>
+    </p>
+
+    <p>
+        <label for="username">Username:</label>
+
+        <input id="username"
+               type="text"
+               name="username"
+               required>
+    </p>
+
+    <p>
+        <label for="password">Password:</label>
+
+        <input id="password"
+               type="password"
+               name="password"
+               required>
+    </p>
+
+    <!-- UNDERSTAND:
+         Doctors can choose from the stored doctor categories. -->
+    <p>
+        <label for="specialization">
+            Doctor Specialization:
+        </label>
+
+        <select id="specialization"
+                name="specialization">
+
+            <option value="">
+                Select specialization
+            </option>
+
+            <option th:each="category : ${doctorCategories}"
+                    th:value="${category}"
+                    th:text="${category}">
+                Category
+            </option>
+
+        </select>
+    </p>
+
+    <!-- UNDERSTAND:
+         Lab Staff can choose from the stored laboratory sections. -->
+    <p>
+        <label for="section">
+            Laboratory Section:
+        </label>
+
+        <select id="section"
+                name="section">
+
+            <option value="">
+                Select laboratory section
+            </option>
+
+            <option th:each="labSection : ${labSections}"
+                    th:value="${labSection}"
+                    th:text="${labSection}">
+                Section
+            </option>
+
+        </select>
+    </p>
+
+    <!-- AI-CHECK:
+         The form sends the account information to the Spring Boot
+         controller instead of creating a JavaFX dialog. -->
+    <button type="submit">
+        Create Account
+    </button>
+
+</form>
 
 <hr>
 
@@ -173,26 +283,18 @@
 
 <hr>
 
-<!-- ================================================================
-     LABORATORY SECTIONS
-     ================================================================ -->
-
 <h2>Laboratory Sections</h2>
 
 <p>
     Used by the automatic Lab Request Routing engine.
 </p>
 
-<!-- UNDERSTAND:
-     Thymeleaf repeats every laboratory section sent by AdminController. -->
 <div th:each="section : ${labSections}">
 
     <span th:text="${section}">
         Laboratory Section
     </span>
 
-    <!-- DECISION:
-         POST is used because removing a section changes stored data. -->
     <form th:action="@{/admin/sections/remove}"
           method="post"
           style="display: inline;">
@@ -211,8 +313,6 @@
 
 <br>
 
-<!-- UNDERSTAND:
-     This form sends a new laboratory section to AdminController. -->
 <form th:action="@{/admin/sections/add}"
       method="post">
 
