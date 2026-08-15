@@ -1,5 +1,6 @@
 package com.dlsu.medflow.gui.doctor;
 
+import com.dlsu.medflow.gui.components.StatusTrackerView;
 import com.dlsu.medflow.model.Doctor;
 import com.dlsu.medflow.model.Visit;
 import com.dlsu.medflow.model.VisitStatus;
@@ -7,6 +8,7 @@ import com.dlsu.medflow.service.HospitalDataStore;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -14,12 +16,17 @@ import java.util.List;
 public class DoctorDashboard {
 
     private final HospitalDataStore store;
+    private final StatusTrackerView statusTrackerView;
 
     // UNDERSTAND:
-    // The JavaFX version created VBox, HBox, Labels, and cards.
-    // Spring MVC now prepares the dashboard data for Thymeleaf.
-    public DoctorDashboard(HospitalDataStore store) {
+    // Spring injects the data store and reusable status tracker component
+    // instead of the JavaFX dashboard creating UI objects directly.
+    public DoctorDashboard(
+            HospitalDataStore store,
+            StatusTrackerView statusTrackerView) {
+
         this.store = store;
+        this.statusTrackerView = statusTrackerView;
     }
 
     @GetMapping("/doctor")
@@ -90,6 +97,59 @@ public class DoctorDashboard {
         return "DoctorDashboard";
     }
 
+    @GetMapping("/doctor/visit")
+    public String showVisitWorkspace(
+            @RequestParam String visitId,
+            Model model) {
+
+        // UNDERSTAND:
+        // The JavaFX version opened a Stage for the selected visit.
+        // Spring MVC instead opens a separate Thymeleaf page.
+        Visit visit = store.getAllVisits().stream()
+                .filter(v -> v.getVisitId().equals(visitId))
+                .findFirst()
+                .orElse(null);
+
+        if (visit == null) {
+            model.addAttribute(
+                    "errorMessage",
+                    "Visit could not be found."
+            );
+            return "DoctorVisit";
+        }
+
+        Doctor doctor = visit.getAssignedDoctor();
+
+        model.addAttribute(
+                "pageTitle",
+                visit.getPatient().getName()
+        );
+
+        model.addAttribute("visit", visit);
+        model.addAttribute("doctor", doctor);
+        model.addAttribute("patient", visit.getPatient());
+
+        // UNDERSTAND:
+        // These replace the JavaFX Clinical Notes and
+        // Laboratory Requests sections.
+        model.addAttribute(
+                "clinicalNotes",
+                visit.getMedicalRecord().getDoctorNotes(doctor)
+        );
+
+        model.addAttribute(
+                "labRequests",
+                visit.getLabRequests()
+        );
+
+        model.addAttribute(
+                "statusRows",
+                statusTrackerView.buildTracker(visit)
+        );
+
+        return "DoctorVisit";
+    }
+
     public String actionLabelFor(VisitStatus status) {
         return switch (status) {
             case ASSIGNED_TO_DOCTOR -> "Begin Assessment";
@@ -103,6 +163,7 @@ public class DoctorDashboard {
     private String lastNameOnly(String fullName) {
         String withoutTitle = fullName.replace("Dr. ", "");
         String[] parts = withoutTitle.split(" ");
+
         return parts[parts.length - 1];
     }
 }
