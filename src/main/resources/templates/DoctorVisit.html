@@ -113,18 +113,12 @@
 
     </div>
 
-    <!-- ============================================================
-         ASSESSMENT
-         ============================================================ -->
-
     <div th:if="${visit.status ==
             T(com.dlsu.medflow.model.VisitStatus).UNDER_DOCTOR_ASSESSMENT}"
          class="card p-3 mb-3">
 
         <h2>Assessment</h2>
 
-        <!-- UNDERSTAND:
-             This replaces the JavaFX Save Notes action. -->
         <form th:action="@{/doctor/visit/notes}"
               method="post"
               class="mb-4">
@@ -156,10 +150,9 @@
 
         <h3>Create Laboratory Request</h3>
 
-        <!-- UNDERSTAND:
-             This replaces createRequest(Visit, String). -->
         <form th:action="@{/doctor/visit/lab/single}"
-              method="post">
+              method="post"
+              class="mb-4">
 
             <input type="hidden"
                    name="visitId"
@@ -179,6 +172,58 @@
             <button type="submit"
                     class="btn btn-secondary">
                 Add Single Test
+            </button>
+
+        </form>
+
+        <hr>
+
+        <!-- UNDERSTAND:
+             This replaces the JavaFX batch laboratory request controls. -->
+        <form th:action="@{/doctor/visit/lab/batch}"
+              method="post">
+
+            <input type="hidden"
+                   name="visitId"
+                   th:value="${visit.visitId}">
+
+            <label for="testNames"
+                   class="form-label">
+                Batch Tests
+            </label>
+
+            <input id="testNames"
+                   type="text"
+                   name="testNames"
+                   class="form-control mb-2"
+                   placeholder="e.g., CBC, Urinalysis, Blood Glucose">
+
+            <label for="priority"
+                   class="form-label">
+                Priority
+            </label>
+
+            <select id="priority"
+                    name="priority"
+                    class="form-select mb-2">
+
+                <option value="ROUTINE">
+                    Routine
+                </option>
+
+                <option value="URGENT">
+                    Urgent
+                </option>
+
+                <option value="STAT">
+                    Stat
+                </option>
+
+            </select>
+
+            <button type="submit"
+                    class="btn btn-primary">
+                Add Batch Tests
             </button>
 
         </form>
