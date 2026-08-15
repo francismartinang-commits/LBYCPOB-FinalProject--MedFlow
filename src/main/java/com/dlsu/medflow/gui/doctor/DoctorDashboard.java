@@ -103,9 +103,6 @@ public class DoctorDashboard {
             @RequestParam String visitId,
             Model model) {
 
-        // UNDERSTAND:
-        // The JavaFX version opened a Stage for the selected visit.
-        // Spring MVC instead opens a separate Thymeleaf page.
         Visit visit = store.getAllVisits().stream()
                 .filter(v -> v.getVisitId().equals(visitId))
                 .findFirst()
@@ -130,9 +127,6 @@ public class DoctorDashboard {
         model.addAttribute("doctor", doctor);
         model.addAttribute("patient", visit.getPatient());
 
-        // UNDERSTAND:
-        // These replace the JavaFX Clinical Notes and
-        // Laboratory Requests sections.
         model.addAttribute(
                 "clinicalNotes",
                 visit.getMedicalRecord().getDoctorNotes(doctor)
@@ -166,8 +160,6 @@ public class DoctorDashboard {
 
             Doctor doctor = visit.getAssignedDoctor();
 
-            // UNDERSTAND:
-            // This replaces the JavaFX Begin Assessment button action.
             doctor.updateStatus(
                     visit,
                     VisitStatus.UNDER_DOCTOR_ASSESSMENT
@@ -176,8 +168,36 @@ public class DoctorDashboard {
             store.save();
         }
 
+        return "redirect:/doctor/visit?visitId=" + visitId;
+    }
+
+    @PostMapping("/doctor/visit/notes")
+    public String saveClinicalNotes(
+            @RequestParam String visitId,
+            @RequestParam String notes) {
+
+        Visit visit = store.getAllVisits().stream()
+                .filter(v -> v.getVisitId().equals(visitId))
+                .findFirst()
+                .orElse(null);
+
+        if (visit != null) {
+
+            Doctor doctor = visit.getAssignedDoctor();
+
+            // UNDERSTAND:
+            // This replaces the JavaFX Save Notes button action.
+            visit.getMedicalRecord().setDoctorNotes(
+                    doctor,
+                    notes.trim()
+            );
+
+            store.save();
+        }
+
         // DECISION:
-        // The web page is reloaded after the status changes.
+        // The visit page is reloaded so the saved notes
+        // are immediately displayed again.
         return "redirect:/doctor/visit?visitId=" + visitId;
     }
 
