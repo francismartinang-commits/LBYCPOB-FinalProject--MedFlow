@@ -262,8 +262,6 @@ public class DoctorDashboard {
 
         // UNDERSTAND:
         // This replaces the JavaFX Add Batch button action.
-        // The priority is passed to the existing overloaded
-        // createRequest method as a String.
         doctor.createRequest(
                 visit,
                 tests,
@@ -277,6 +275,50 @@ public class DoctorDashboard {
                 "Batch added and routed automatically."
         );
 
+        return "redirect:/doctor/visit?visitId=" + visitId;
+    }
+
+    @PostMapping("/doctor/visit/review")
+    public String confirmReview(
+            @RequestParam String visitId,
+            @RequestParam String diagnosis,
+            RedirectAttributes redirectAttributes) {
+
+        Visit visit = store.getAllVisits().stream()
+                .filter(v -> v.getVisitId().equals(visitId))
+                .findFirst()
+                .orElse(null);
+
+        String diagnosisText = diagnosis.trim();
+
+        if (visit == null || diagnosisText.isEmpty()) {
+
+            redirectAttributes.addFlashAttribute(
+                    "reviewError",
+                    "Please write a diagnosis before confirming."
+            );
+
+            return "redirect:/doctor/visit?visitId=" + visitId;
+        }
+
+        Doctor doctor = visit.getAssignedDoctor();
+
+        // UNDERSTAND:
+        // This replaces the JavaFX Confirm Review button action.
+        visit.getMedicalRecord().setDiagnosis(
+                doctor,
+                diagnosisText
+        );
+
+        doctor.updateStatus(
+                visit,
+                VisitStatus.DOCTOR_REVIEWED
+        );
+
+        store.save();
+
+        // DECISION:
+        // Spring reloads the visit page after the review is completed.
         return "redirect:/doctor/visit?visitId=" + visitId;
     }
 
