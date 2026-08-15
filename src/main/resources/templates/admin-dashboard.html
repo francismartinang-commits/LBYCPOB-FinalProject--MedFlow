@@ -1,26 +1,47 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
-    <title th:text="${pageTitle}">
-        Admin Dashboard
-    </title>
+    <title th:text="${pageTitle}">Admin Dashboard</title>
 </head>
 
 <body>
 
-<div class="container">
+<h1 th:text="${pageTitle}">Admin Dashboard</h1>
 
-    <h1 th:text="${pageTitle}">
-        Admin Dashboard
-    </h1>
+<p th:text="${pageSubtitle}">
+    Manage accounts, doctor categories, and laboratory sections.
+</p>
 
-    <p th:text="${pageSubtitle}">
-        Manage accounts, doctor categories,
-        and laboratory sections.
-    </p>
+<h2>Overview</h2>
 
+<p>
+    Registered Patients:
+    <span th:text="${patientCount}">0</span>
+</p>
+
+<p>
+    Doctors:
+    <span th:text="${doctorCount}">0</span>
+</p>
+
+<p>
+    Nurses & Lab Staff:
+    <span th:text="${staffCount}">0</span>
+</p>
+
+<p>
+    Active Visits:
+    <span th:text="${activeVisitCount}">0</span>
+</p>
+
+<h2>Visits by Stage</h2>
+
+<div th:each="entry : ${visitsByStage}">
+    <span th:text="${entry.key.stageNumber}">1</span>.
+    <span th:text="${entry.key.label}">Stage</span>:
+    <span th:text="${entry.value}">0</span>
 </div>
 
 </body>
