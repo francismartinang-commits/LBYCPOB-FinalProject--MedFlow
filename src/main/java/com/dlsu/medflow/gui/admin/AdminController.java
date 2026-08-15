@@ -112,6 +112,14 @@ public class AdminController {
 
         model.addAttribute("roleDetails", roleDetails);
 
+        // UNDERSTAND:
+        // Doctor categories are sent to AdminDashboard.html so the
+        // admin can view and manage the available specializations.
+        model.addAttribute(
+                "doctorCategories",
+                store.getDoctorCategories()
+        );
+
         // AI-CHECK:
         // The JavaFX AdminDashboard logic is being separated between
         // AdminController and AdminDashboard.html for Spring Boot.
@@ -148,6 +156,39 @@ public class AdminController {
         // UNDERSTAND:
         // Redirect back to /admin after changing the account so the
         // refreshed account status is displayed.
+        return "redirect:/admin";
+    }
+
+    // UNDERSTAND:
+    // This receives a new doctor specialization from AdminDashboard.html
+    // and adds it to the stored list of doctor categories.
+    @PostMapping("/admin/categories/add")
+    public String addDoctorCategory(@RequestParam String category) {
+
+        String value = category.trim();
+
+        // DECISION:
+        // Empty category names are ignored so blank values are not stored.
+        if (!value.isEmpty()) {
+            store.addDoctorCategory(value);
+            store.save();
+        }
+
+        return "redirect:/admin";
+    }
+
+    // UNDERSTAND:
+    // This receives the selected doctor category from AdminDashboard.html
+    // and removes it from the stored list.
+    @PostMapping("/admin/categories/remove")
+    public String removeDoctorCategory(@RequestParam String category) {
+
+        store.removeDoctorCategory(category);
+        store.save();
+
+        // AI-CHECK:
+        // The JavaFX removable ListView behavior is replaced with
+        // a Spring Boot POST request.
         return "redirect:/admin";
     }
 
