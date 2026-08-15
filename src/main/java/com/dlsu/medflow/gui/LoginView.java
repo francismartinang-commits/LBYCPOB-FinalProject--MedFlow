@@ -1,4 +1,4 @@
-package com.dlsu.medflow.gui.patient;
+package com.dlsu.medflow.gui;
 
 import com.dlsu.medflow.gui.components.UI;
 import com.dlsu.medflow.gui.patient.PatientRegistrationDialog;

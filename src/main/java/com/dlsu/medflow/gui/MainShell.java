@@ -1,6 +1,5 @@
 package com.dlsu.medflow.gui;
 
-import com.dlsu.medflow.gui.components.UI;
 import com.dlsu.medflow.model.User;
 import com.dlsu.medflow.service.HospitalDataStore;
 import javafx.geometry.Insets;
