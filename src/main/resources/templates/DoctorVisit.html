@@ -178,8 +178,6 @@
 
         <hr>
 
-        <!-- UNDERSTAND:
-             This replaces the JavaFX batch laboratory request controls. -->
         <form th:action="@{/doctor/visit/lab/batch}"
               method="post">
 
@@ -232,6 +230,52 @@
            class="text-muted mt-2"
            th:text="${labMessage}">
         </p>
+
+    </div>
+
+    <!-- UNDERSTAND:
+         This replaces the JavaFX Review Laboratory Findings section. -->
+    <div th:if="${visit.status ==
+            T(com.dlsu.medflow.model.VisitStatus).FINDINGS_SENT_TO_DOCTOR}"
+         class="card p-3 mb-3">
+
+        <h2>Review Laboratory Findings</h2>
+
+        <p class="text-muted">
+            Review the laboratory findings above and enter
+            the final diagnosis before confirming.
+        </p>
+
+        <form th:action="@{/doctor/visit/review}"
+              method="post">
+
+            <input type="hidden"
+                   name="visitId"
+                   th:value="${visit.visitId}">
+
+            <label for="diagnosis"
+                   class="form-label">
+                Final Diagnosis
+            </label>
+
+            <textarea id="diagnosis"
+                      name="diagnosis"
+                      class="form-control mb-2"
+                      rows="3"
+                      placeholder="Enter final diagnosis">
+            </textarea>
+
+            <p th:if="${reviewError}"
+               class="text-danger"
+               th:text="${reviewError}">
+            </p>
+
+            <button type="submit"
+                    class="btn btn-primary">
+                Confirm Review
+            </button>
+
+        </form>
 
     </div>
 
