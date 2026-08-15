@@ -43,6 +43,69 @@
     <span th:text="${entry.key.label}">Stage</span>:
     <span th:text="${entry.value}">0</span>
 </div>
+<hr>
 
+<h2>Manage Accounts</h2>
+
+<!-- DECISION:
+     The JavaFX TableView is replaced with a normal HTML table. -->
+<table border="1">
+
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Role</th>
+        <th>Username</th>
+        <th>Status</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+    <!-- UNDERSTAND:
+         Thymeleaf repeats this row once for every User sent by AdminController. -->
+    <tr th:each="user : ${users}">
+
+        <td th:text="${user.name}">
+            Name
+        </td>
+
+        <td th:text="${user.role.displayName}">
+            Role
+        </td>
+
+        <td th:text="${user.username}">
+            Username
+        </td>
+
+        <td>
+            <span th:if="${user.active}">
+                Active
+            </span>
+
+            <span th:unless="${user.active}">
+                Inactive
+            </span>
+        </td>
+
+    </tr>
+
+    <!-- UNDERSTAND:
+         This message appears if MedFlow currently has no user accounts. -->
+    <tr th:if="${users == null || users.isEmpty()}">
+        <td colspan="4">
+            No accounts yet.
+        </td>
+    </tr>
+
+    </tbody>
+
+</table>
+
+<br>
+
+<button type="button">
+    + Add Staff Account
+</button>
 </body>
 </html>

@@ -95,10 +95,14 @@ public class AdminController {
         // as they are declared inside VisitStatus.
         model.addAttribute("visitsByStage", visitsByStage);
 
+        // UNDERSTAND:
+        // This sends all registered users to AdminDashboard.html
+        // so they can be displayed inside the accounts table.
+        model.addAttribute("users", store.getAllUsers());
+
         // AI-CHECK:
-        // The overview logic from the JavaFX AdminDashboard was moved
-        // into the Spring Boot controller, while AdminDashboard.html
-        // handles how the values are displayed.
+        // The overview and account display logic from the JavaFX AdminDashboard
+        // is now handled through the Spring Boot controller and Thymeleaf page.
         return "AdminDashboard";
     }
 }
