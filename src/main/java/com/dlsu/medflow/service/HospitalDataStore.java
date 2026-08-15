@@ -29,3 +29,9 @@ import java.util.List;
 
     private int userSequence = 0;
     private int visitSequence = 0;
+
+
+
+// ---------------------------------------------------------------------
+// Loading / saving
+// ---------------------------------------------------------------------
