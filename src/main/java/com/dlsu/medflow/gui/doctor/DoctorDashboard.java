@@ -8,6 +8,7 @@ import com.dlsu.medflow.service.HospitalDataStore;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -150,7 +151,38 @@ public class DoctorDashboard {
         return "DoctorVisit";
     }
 
+    @PostMapping("/doctor/visit/begin")
+    public String beginAssessment(
+            @RequestParam String visitId) {
+
+        Visit visit = store.getAllVisits().stream()
+                .filter(v -> v.getVisitId().equals(visitId))
+                .findFirst()
+                .orElse(null);
+
+        if (visit != null
+                && visit.getStatus()
+                == VisitStatus.ASSIGNED_TO_DOCTOR) {
+
+            Doctor doctor = visit.getAssignedDoctor();
+
+            // UNDERSTAND:
+            // This replaces the JavaFX Begin Assessment button action.
+            doctor.updateStatus(
+                    visit,
+                    VisitStatus.UNDER_DOCTOR_ASSESSMENT
+            );
+
+            store.save();
+        }
+
+        // DECISION:
+        // The web page is reloaded after the status changes.
+        return "redirect:/doctor/visit?visitId=" + visitId;
+    }
+
     public String actionLabelFor(VisitStatus status) {
+
         return switch (status) {
             case ASSIGNED_TO_DOCTOR -> "Begin Assessment";
             case FINDINGS_SENT_TO_DOCTOR -> "Review Findings";
@@ -161,6 +193,7 @@ public class DoctorDashboard {
     }
 
     private String lastNameOnly(String fullName) {
+
         String withoutTitle = fullName.replace("Dr. ", "");
         String[] parts = withoutTitle.split(" ");
 
