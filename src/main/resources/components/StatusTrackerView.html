@@ -5,33 +5,30 @@
 <body>
 
 <!-- UNDERSTAND:
-     This replaces the JavaFX StatusTrackerView and displays
-     every stage of a patient's visit. -->
+     This replaces the JavaFX StatusTrackerView. -->
 <div th:fragment="statusTracker(visit)"
      class="status-tracker">
 
-    <div th:each="stage, stat : ${T(com.dlsu.medflow.model.VisitStatus).values()}"
+    <div th:each="stage, stat :
+            ${T(com.dlsu.medflow.model.VisitStatus).values()}"
          class="tracker-row">
 
         <div class="tracker-marker">
 
-            <!-- UNDERSTAND:
-                 A stage before the current status is already completed. -->
+            <!-- Completed stage -->
             <span th:if="${stage.ordinal() < visit.status.ordinal()}"
                   class="tracker-dot tracker-completed">
                 ✓
             </span>
 
-            <!-- UNDERSTAND:
-                 The current stage displays its stage number. -->
+            <!-- Current stage -->
             <span th:if="${stage.ordinal() == visit.status.ordinal()}"
                   class="tracker-dot tracker-current"
                   th:text="${stage.stageNumber}">
                 1
             </span>
 
-            <!-- UNDERSTAND:
-                 Future stages are displayed as pending. -->
+            <!-- Pending stage -->
             <span th:if="${stage.ordinal() > visit.status.ordinal()}"
                   class="tracker-dot tracker-pending"
                   th:text="${stage.stageNumber}">
@@ -39,7 +36,7 @@
             </span>
 
             <!-- DECISION:
-                 The connector is not displayed after the final stage. -->
+                 The last stage does not need another connector. -->
             <div th:unless="${stat.last}"
                  class="tracker-line"
                  th:classappend="${stage.ordinal() < visit.status.ordinal()}
@@ -56,7 +53,7 @@
                         : 'tracker-step-title-pending'">
 
                 <span th:text="${stage.stageNumber}">1</span>.
-                <span th:text="${stage.label}">Stage</span>
+                <span th:text="${stage.label}">Visit Stage</span>
 
             </strong>
 
