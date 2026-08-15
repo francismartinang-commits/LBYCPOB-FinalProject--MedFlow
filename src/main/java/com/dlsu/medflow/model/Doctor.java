@@ -1,10 +1,7 @@
 package com.dlsu.medflow.model;
 
-import com.dlsu.medflow.gui.doctor.DoctorDashboard;
-import com.dlsu.medflow.service.HospitalDataStore;
 import com.dlsu.medflow.service.LabRoutingEngine;
 import jakarta.persistence.Entity;
-import javafx.scene.Parent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,11 +33,6 @@ public class Doctor extends User {
 
     public void setSpecialization(String specialization) {
         this.specialization = specialization;
-    }
-
-    @Override
-    public Parent displayDashboard(HospitalDataStore store) {
-        return new DoctorDashboard(this, store);
     }
 
     @Override
@@ -86,43 +78,28 @@ public class Doctor extends User {
         } catch (IllegalArgumentException ex) {
             parsedPriority = Priority.ROUTINE;
         }
-
         List<LabRequest> batch = new ArrayList<>();
-
         for (String testName : testNames) {
             if (testName == null || testName.isBlank()) {
                 continue;
             }
-
             LabRequest request = buildRequest(testName.trim(), parsedPriority);
             visit.addLabRequest(request);
             batch.add(request);
         }
-
         advanceToRequested(visit);
         return batch;
     }
 
     private LabRequest buildRequest(String testName, Priority priority) {
-        LabRequest request = new LabRequest(
-                UUID.randomUUID().toString().substring(0, 8),
-                testName,
-                priority
-        );
-
-        request.setAssignedSection(
-                LabRoutingEngine.routeTest(testName)
-        );
-
+        LabRequest request = new LabRequest(UUID.randomUUID().toString().substring(0, 8), testName, priority);
+        request.setAssignedSection(LabRoutingEngine.routeTest(testName));
         return request;
     }
 
     private void advanceToRequested(Visit visit) {
         if (visit.getStatus() == VisitStatus.UNDER_DOCTOR_ASSESSMENT) {
-            updateStatus(
-                    visit,
-                    VisitStatus.LABORATORY_REQUESTED
-            );
+            updateStatus(visit, VisitStatus.LABORATORY_REQUESTED);
         }
     }
 }
