@@ -9,17 +9,11 @@ public class AdminController {
 
     // UNDERSTAND:
     // @GetMapping connects the "/admin" URL to this method.
-    // When the user goes to /admin, Spring Boot runs showAdminDashboard().
-
-    // DECISION:
-    // Model is used to send data from the controller to the HTML page
-    // instead of directly creating a JavaFX dashboard.
     @GetMapping("/admin")
     public String showAdminDashboard(Model model) {
 
-        // UNDERSTAND:
-        // These values are added to the Model so they can be displayed
-        // inside the Thymeleaf admin dashboard page.
+        // DECISION:
+        // The Model sends values from the controller to AdminDashboard.html.
         model.addAttribute(
                 "pageTitle",
                 "Admin Dashboard"
@@ -31,9 +25,8 @@ public class AdminController {
         );
 
         // AI-CHECK:
-        // The JavaFX AdminDashboard is replaced by a Thymeleaf template.
-        // Returning "admin-dashboard" tells Spring Boot to open
-        // admin-dashboard.html from the templates folder.
-        return "admin-dashboard";
+        // Instead of returning a JavaFX Parent, Spring Boot returns the name
+        // of the Thymeleaf page that should be displayed.
+        return "AdminDashboard";
     }
 }
