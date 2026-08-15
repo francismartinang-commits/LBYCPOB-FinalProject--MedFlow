@@ -59,6 +59,48 @@
 
     </div>
 
+    <h2>Assigned Patients</h2>
+
+    <div th:if="${visits == null || visits.isEmpty()}"
+         class="card p-3">
+
+        No patients have been assigned to you yet.
+
+    </div>
+
+    <div th:each="visit : ${visits}"
+         class="card p-3 mb-3">
+
+        <div class="d-flex justify-content-between align-items-start">
+
+            <div>
+                <h4 th:text="${visit.patient.name}">
+                    Patient Name
+                </h4>
+
+                <p class="text-muted"
+                   th:text="${visit.reasonForVisit}">
+                    Reason for visit
+                </p>
+            </div>
+
+            <span th:class="${T(com.dlsu.medflow.gui.components.UI)
+                    .statusBadgeClass(visit.status)}"
+                  th:text="${visit.status.label}">
+                Status
+            </span>
+
+        </div>
+
+        <a class="btn btn-primary"
+           th:href="@{/doctor/visit(visitId=${visit.visitId})}">
+
+            Open
+
+        </a>
+
+    </div>
+
 </div>
 
 </body>
