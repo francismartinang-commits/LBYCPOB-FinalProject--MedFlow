@@ -26,6 +26,16 @@
         Requests routed to your section.
     </p>
 
+    <div th:if="${findingsMessage}"
+         class="alert alert-success"
+         th:text="${findingsMessage}">
+    </div>
+
+    <div th:if="${findingsError}"
+         class="alert alert-danger"
+         th:text="${findingsError}">
+    </div>
+
     <hr>
 
     <h2>Overview</h2>
@@ -85,12 +95,48 @@
             </span>
         </p>
 
-        <p class="text-muted mb-0">
+        <p class="text-muted mb-1">
             Visit:
             <span th:text="${item.visit.visitId}">
                 Visit ID
             </span>
         </p>
+
+        <p class="text-muted">
+            Ordered by:
+            <span th:text="${item.visit.assignedDoctor != null
+                    ? item.visit.assignedDoctor.name
+                    : '-'}">
+                Doctor
+            </span>
+        </p>
+
+        <!-- UNDERSTAND:
+             This replaces the JavaFX findings TextArea
+             and Submit Findings button. -->
+        <form th:action="@{/lab/findings}"
+              method="post">
+
+            <input type="hidden"
+                   name="requestId"
+                   th:value="${item.labRequest.requestId}">
+
+            <label class="form-label">
+                Laboratory Findings
+            </label>
+
+            <textarea name="findings"
+                      class="form-control mb-2"
+                      rows="3"
+                      placeholder="Enter laboratory findings...">
+            </textarea>
+
+            <button type="submit"
+                    class="btn btn-primary">
+                Submit Findings
+            </button>
+
+        </form>
 
     </div>
 
