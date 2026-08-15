@@ -6,7 +6,7 @@
 
 <!-- UNDERSTAND:
      This replaces the JavaFX StatusTrackerView. -->
-<div th:fragment="statusTracker(visit)"
+<div th:fragment="statusTracker(visit, statusTimestamps)"
      class="status-tracker">
 
     <div th:each="stage, stat :
@@ -61,6 +61,16 @@
                th:text="${stage.description}">
                 Stage description
             </p>
+
+            <!-- UNDERSTAND:
+                 The timestamp is only shown if the visit
+                 has already reached this stage. -->
+            <small th:if="${statusTimestamps != null
+                        && statusTimestamps[stage] != null}"
+                   class="tracker-step-time"
+                   th:text="${statusTimestamps[stage]}">
+                Aug 16, 12:00 AM
+            </small>
 
         </div>
 
