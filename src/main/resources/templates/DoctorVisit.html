@@ -233,8 +233,6 @@
 
     </div>
 
-    <!-- UNDERSTAND:
-         This replaces the JavaFX Review Laboratory Findings section. -->
     <div th:if="${visit.status ==
             T(com.dlsu.medflow.model.VisitStatus).FINDINGS_SENT_TO_DOCTOR}"
          class="card p-3 mb-3">
@@ -276,6 +274,46 @@
             </button>
 
         </form>
+
+    </div>
+
+    <!-- UNDERSTAND:
+         This replaces the JavaFX Release Results to Patient action. -->
+    <div th:if="${visit.status ==
+            T(com.dlsu.medflow.model.VisitStatus).DOCTOR_REVIEWED}"
+         class="card p-3 mb-3">
+
+        <h2>Assessment Complete</h2>
+
+        <p class="text-muted">
+            The diagnosis has been confirmed.
+            Results can now be released to the patient.
+        </p>
+
+        <form th:action="@{/doctor/visit/release}"
+              method="post">
+
+            <input type="hidden"
+                   name="visitId"
+                   th:value="${visit.visitId}">
+
+            <button type="submit"
+                    class="btn btn-success">
+                Release Results to Patient
+            </button>
+
+        </form>
+
+    </div>
+
+    <!-- DECISION:
+         After release, the page shows the completed state
+         instead of displaying another action button. -->
+    <div th:if="${visit.status ==
+            T(com.dlsu.medflow.model.VisitStatus).RELEASED_TO_PATIENT}"
+         class="alert alert-success">
+
+        Results have been released to the patient.
 
     </div>
 
