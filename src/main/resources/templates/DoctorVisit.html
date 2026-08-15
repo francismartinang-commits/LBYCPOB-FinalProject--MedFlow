@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${pageTitle}">Doctor Visit</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+</head>
+
+<body>
+
+<div class="container py-4">
+
+    <a th:href="@{/doctor}"
+       class="btn btn-secondary mb-3">
+        Back to Dashboard
+    </a>
+
+    <h1 th:text="${patient.name}">
+        Patient Name
+    </h1>
+
+    <p class="text-muted">
+        Reason for visit:
+        <span th:text="${visit.reasonForVisit}">
+            Reason
+        </span>
+    </p>
+
+    <p class="text-muted">
+        Patient contact:
+        <span th:text="${patient.contactNumber}">
+            Contact
+        </span>
+        · Age
+        <span th:text="${patient.age}">
+            0
+        </span>
+        ·
+        <span th:text="${patient.gender}">
+            Gender
+        </span>
+    </p>
+
+    <hr>
+
+    <h2>Status Timeline</h2>
+
+    <div class="card p-3">
+
+        <div th:each="row : ${statusRows}"
+             class="mb-3">
+
+            <div class="d-flex align-items-center gap-2">
+
+                <span class="badge"
+                      th:classappend="${row.completed}
+                          ? ' bg-success'
+                          : (${row.current}
+                              ? ' bg-primary'
+                              : ' bg-secondary')"
+                      th:text="${row.completed}
+                          ? '✓'
+                          : ${row.stageNumber}">
+                    1
+                </span>
+
+                <strong>
+                    <span th:text="${row.stageNumber}">
+                        1
+                    </span>.
+                    <span th:text="${row.label}">
+                        Stage
+                    </span>
+                </strong>
+
+            </div>
+
+            <p class="text-muted mb-1"
+               th:text="${row.description}">
+                Description
+            </p>
+
+            <small th:if="${row.timestamp != null}"
+                   th:text="${row.timestamp}">
+                Aug 16, 1:00 AM
+            </small>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
