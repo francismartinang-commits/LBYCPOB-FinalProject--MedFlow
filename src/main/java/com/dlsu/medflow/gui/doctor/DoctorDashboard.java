@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -19,9 +20,6 @@ public class DoctorDashboard {
     private final HospitalDataStore store;
     private final StatusTrackerView statusTrackerView;
 
-    // UNDERSTAND:
-    // Spring injects the data store and reusable status tracker component
-    // instead of the JavaFX dashboard creating UI objects directly.
     public DoctorDashboard(
             HospitalDataStore store,
             StatusTrackerView statusTrackerView) {
@@ -33,9 +31,6 @@ public class DoctorDashboard {
     @GetMapping("/doctor")
     public String showDashboard(Model model) {
 
-        // DECISION:
-        // Login/session handling will be connected when authentication
-        // reaches its own conversion step.
         Doctor doctor = store.getAllUsers().stream()
                 .filter(user -> user instanceof Doctor)
                 .map(user -> (Doctor) user)
@@ -185,8 +180,6 @@ public class DoctorDashboard {
 
             Doctor doctor = visit.getAssignedDoctor();
 
-            // UNDERSTAND:
-            // This replaces the JavaFX Save Notes button action.
             visit.getMedicalRecord().setDoctorNotes(
                     doctor,
                     notes.trim()
@@ -195,9 +188,47 @@ public class DoctorDashboard {
             store.save();
         }
 
-        // DECISION:
-        // The visit page is reloaded so the saved notes
-        // are immediately displayed again.
+        return "redirect:/doctor/visit?visitId=" + visitId;
+    }
+
+    @PostMapping("/doctor/visit/lab/single")
+    public String addSingleLabTest(
+            @RequestParam String visitId,
+            @RequestParam String testName,
+            RedirectAttributes redirectAttributes) {
+
+        Visit visit = store.getAllVisits().stream()
+                .filter(v -> v.getVisitId().equals(visitId))
+                .findFirst()
+                .orElse(null);
+
+        String value = testName.trim();
+
+        if (visit == null || value.isEmpty()) {
+            redirectAttributes.addFlashAttribute(
+                    "labMessage",
+                    "Enter a test name first."
+            );
+
+            return "redirect:/doctor/visit?visitId=" + visitId;
+        }
+
+        Doctor doctor = visit.getAssignedDoctor();
+
+        // UNDERSTAND:
+        // This replaces the JavaFX Add Single Test button action.
+        doctor.createRequest(
+                visit,
+                value
+        );
+
+        store.save();
+
+        redirectAttributes.addFlashAttribute(
+                "labMessage",
+                "Added and routed automatically."
+        );
+
         return "redirect:/doctor/visit?visitId=" + visitId;
     }
 
