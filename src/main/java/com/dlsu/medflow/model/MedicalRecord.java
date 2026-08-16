@@ -28,4 +28,13 @@ public class MedicalRecord implements Serializable {
         }
         throw new SecurityException("Only the assigned doctor or an admin may view clinical notes.");
     }
+
+    // UNDERSTAND: Recording or modifying doctor notes must be restricted to clinical or administrative personnel.
+    // DECISION: Validate requester role in setDoctorNotes and safely sanitize null input strings to empty defaults.
+    public void setDoctorNotes(User requester, String doctorNotes) {
+        if (requester.getRole() != Role.DOCTOR && requester.getRole() != Role.ADMIN) {
+            throw new SecurityException("Only a doctor may record clinical notes.");
+        }
+        this.doctorNotes = doctorNotes == null ? "" : doctorNotes;
+    }
 }
