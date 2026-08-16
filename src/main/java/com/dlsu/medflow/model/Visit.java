@@ -37,4 +37,14 @@ public class Visit implements Serializable {
     private final MedicalRecord medicalRecord = new MedicalRecord();
     private final List<LabRequest> labRequests = new ArrayList<>();
     private final List<StatusLogEntry> history = new ArrayList<>();
+
+    // UNDERSTAND: Constructing a visit requires binding the patient and visit reason while capturing creation timestamp.
+    // DECISION: Assign identity properties, set registeredAt to current time, and record initial REGISTERED log entry.
+    public Visit(String visitId, Patient patient, String reasonForVisit) {
+        this.visitId = visitId;
+        this.patient = patient;
+        this.reasonForVisit = reasonForVisit;
+        this.registeredAt = LocalDateTime.now();
+        this.history.add(new StatusLogEntry(VisitStatus.REGISTERED, registeredAt));
+    }
 }
