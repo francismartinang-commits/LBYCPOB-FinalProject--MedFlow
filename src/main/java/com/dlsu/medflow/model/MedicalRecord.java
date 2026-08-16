@@ -64,4 +64,10 @@ public class MedicalRecord implements Serializable {
         }
         this.diagnosis = diagnosis == null ? "" : diagnosis;
     }
+
+    // UNDERSTAND: System components need a quick mechanism to check if a diagnosis has been recorded.
+    // DECISION: Provide hasDiagnosis utility method returning true when diagnosis is neither null nor blank.
+    public boolean hasDiagnosis() {
+        return diagnosis != null && !diagnosis.isBlank();
+    }
 }
