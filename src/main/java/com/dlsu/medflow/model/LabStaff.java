@@ -19,4 +19,12 @@ public class LabStaff extends User {
         super(userId, name, username, password, Role.LAB_STAFF);
         this.section = section;
     }
+
+    public String getSection() {
+        return section;
+    }
+
+    public void setSection(String section) {
+        this.section = section;
+    }
 }
