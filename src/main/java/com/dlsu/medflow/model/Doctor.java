@@ -142,3 +142,12 @@ public class Doctor extends User {
         request.setAssignedSection(LabRoutingEngine.routeTest(testName));
         return request;
     }
+
+    // UNDERSTAND: Ordering lab tests transitions visit workflow stage if under doctor assessment.
+    // DECISION: Auto-advance visit to LABORATORY_REQUESTED only if current status is UNDER_DOCTOR_ASSESSMENT.
+    private void advanceToRequested(Visit visit) {
+        if (visit.getStatus() == VisitStatus.UNDER_DOCTOR_ASSESSMENT) {
+            updateStatus(visit, VisitStatus.LABORATORY_REQUESTED);
+        }
+    }
+}
