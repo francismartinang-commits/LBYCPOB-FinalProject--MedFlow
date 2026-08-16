@@ -137,7 +137,13 @@ import java.util.List;
         }
         return fallback;
     }
+    // ---------------------------------------------------------------------
+    // Queues used by the different dashboards
+    // ---------------------------------------------------------------------
 
+    public List<Visit> getPendingRegistrations() {
+        return filterByStatus(VisitStatus.REGISTERED);
+    }
 }
 
 
