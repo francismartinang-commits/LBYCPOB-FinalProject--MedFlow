@@ -10,3 +10,10 @@ import java.io.Serializable;
 // UNDERSTAND: LabRequest instances need to be persisted or transmitted across service boundaries.
 // DECISION: Implement Serializable to allow state serialization across HTTP sessions or caching storage.
 public class LabRequest implements Serializable {
+
+    // UNDERSTAND: Core identifying and classification traits of a test should not change post-instantiation.
+    // DECISION: Declare requestId, testName, and priority as final fields to enforce immutability.
+    private final String requestId;
+    private final String testName;
+    private final Priority priority;
+}
