@@ -87,6 +87,13 @@ import java.util.List;
    public boolean usernameTaken(String username) {
       for (User user : users) {
          if (user.getUsername().equalsIgnoreCase(username)) {
+            return true;
+         }
+      }
+      return false;
+   }
+
+}
 }
 
 
