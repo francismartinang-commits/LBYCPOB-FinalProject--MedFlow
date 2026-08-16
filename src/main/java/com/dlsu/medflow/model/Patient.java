@@ -36,4 +36,15 @@ public class Patient extends User {
     public String getDashboardView() {
         return "patient/dashboard";
     }
+
+    // UNDERSTAND: Patient dashboard needs to display visit history in reverse chronological order.
+    // DECISION: Copy visit history list, apply Collections.reverse to put most recent visits first, and expose in model map.
+    @Override
+    public Map<String, Object> buildDashboardModel(HospitalDataStore store) {
+        List<Visit> visits = new ArrayList<>(visitHistory);
+        java.util.Collections.reverse(visits); // most recent first, same order the JavaFX list used
+        Map<String, Object> model = new HashMap<>();
+        model.put("visits", visits);
+        return model;
+    }
 }
