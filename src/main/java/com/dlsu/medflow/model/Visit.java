@@ -188,4 +188,25 @@ public class Visit implements Serializable {
     public String toString() {
         return "Visit " + visitId + " - " + patient.getName() + " (" + status.getLabel() + ")";
     }
+
+    /** One timestamped row in a visit's status timeline. */
+    // UNDERSTAND: Audit trail history requires an immutable data structure coupling status transitions with timestamps.
+    // DECISION: Define static nested class StatusLogEntry implementing Serializable with private final fields and getters.
+    public static class StatusLogEntry implements Serializable {
+        private final VisitStatus status;
+        private final LocalDateTime timestamp;
+
+        public StatusLogEntry(VisitStatus status, LocalDateTime timestamp) {
+            this.status = status;
+            this.timestamp = timestamp;
+        }
+
+        public VisitStatus getStatus() {
+            return status;
+        }
+
+        public LocalDateTime getTimestamp() {
+            return timestamp;
+        }
+    }
 }
