@@ -23,4 +23,11 @@ public class Nurse extends User {
     public String getDashboardView() {
         return "nurse/dashboard";
     }
+
+    // UNDERSTAND: Nurse dashboard requires comprehensive queues across registration, sampling, lab transit, and doctor assignment.
+    // DECISION: Query HospitalDataStore for pending queues and doctor lists to populate dashboard model map.
+    @Override
+    public Map<String, Object> buildDashboardModel(HospitalDataStore store) {
+        Map<String, Object> model = new HashMap<>();
+        model.put("registrations", store.getPendingRegistrations());
 }
