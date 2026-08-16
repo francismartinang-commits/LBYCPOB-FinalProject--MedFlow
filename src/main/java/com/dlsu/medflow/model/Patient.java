@@ -57,4 +57,16 @@ public class Patient extends User {
         // from every other role is itself an example of method overriding.
         throw new SecurityException("Patients cannot change a visit's status.");
     }
+
+    // UNDERSTAND: External registration and visit logging services need to associate new visits with the patient.
+    // DECISION: Provide helper method to append visits to the internal visitHistory list.
+    public void addVisit(Visit visit) {
+        visitHistory.add(visit);
+    }
+
+    // UNDERSTAND: Patient data accessors are required for profile rendering and demographic management.
+    // DECISION: Expose standard getters and setters for visit history, age, gender, contact number, and address fields.
+    public List<Visit> getVisitHistory() {
+        return visitHistory;
+    }
 }
