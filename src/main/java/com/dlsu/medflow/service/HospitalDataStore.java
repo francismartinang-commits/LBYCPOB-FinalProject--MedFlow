@@ -351,6 +351,45 @@ import java.util.List;
         v1.getMedicalRecord().setDiagnosis(drReyes,
                 "Viral upper respiratory tract infection. Prescribed paracetamol for fever, adequate rest, "
                         + "and increased fluid intake. Follow up if symptoms persist beyond 5 days.");
+        v1.advance(drReyes, VisitStatus.DOCTOR_REVIEWED, now.minusHours(6));
+        v1.advance(drReyes, VisitStatus.RELEASED_TO_PATIENT, now.minusHours(5));
+
+        // --- Freshly registered visit: waiting in the Nurse queue ---
+        Visit v2 = new Visit(nextVisitId(), juan, "Chest pain after climbing a flight of stairs");
+        juan.addVisit(v2);
+        visits.add(v2);
+        v2.setRecommendedDoctor(drSantos);
+
+        // --- Visit already routed to two lab sections: waiting on lab staff ---
+        Visit v3 = new Visit(nextVisitId(), maria, "Needs routine blood work and urinalysis before starting a new job");
+        maria.addVisit(v3);
+        visits.add(v3);
+        v3.setRecommendedDoctor(drReyes);
+        v3.setAssignedDoctor(drReyes);
+        v3.advance(nurseRamos, VisitStatus.ASSIGNED_TO_DOCTOR, now.minusHours(5));
+        v3.advance(drReyes, VisitStatus.UNDER_DOCTOR_ASSESSMENT, now.minusHours(4));
+        v3.getMedicalRecord().setDoctorNotes(drReyes, "Asymptomatic, pre-employment work-up requested.");
+        drReyes.createRequest(v3, new String[]{"CBC (Complete Blood Count)", "Urinalysis"}, "ROUTINE");
+        v3.advance(nurseRamos, VisitStatus.SAMPLE_COLLECTED, now.minusHours(3));
+        v3.advance(nurseRamos, VisitStatus.SENT_TO_LABORATORY, now.minusHours(2));
+        v3.advance(nurseRamos, VisitStatus.UNDER_LABORATORY_ANALYSIS, now.minusHours(2));
+
+        // --- Visit with findings already in: waiting on doctor review ---
+        Visit v4 = new Visit(nextVisitId(), ramon, "Follow-up creatinine test for kidney monitoring");
+        ramon.addVisit(v4);
+        visits.add(v4);
+        v4.setRecommendedDoctor(drReyes);
+        v4.setAssignedDoctor(drReyes);
+        v4.advance(nurseRamos, VisitStatus.ASSIGNED_TO_DOCTOR, now.minusHours(20));
+        v4.advance(drReyes, VisitStatus.UNDER_DOCTOR_ASSESSMENT, now.minusHours(19));
+        v4.getMedicalRecord().setDoctorNotes(drReyes, "Routine follow-up for kidney function monitoring.");
+        drReyes.createRequest(v4, "Creatinine");
+        v4.advance(nurseRamos, VisitStatus.SAMPLE_COLLECTED, now.minusHours(18));
+        v4.advance(nurseRamos, VisitStatus.SENT_TO_LABORATORY, now.minusHours(17));
+        v4.advance(nurseRamos, VisitStatus.UNDER_LABORATORY_ANALYSIS, now.minusHours(17));
+        v4.getLabRequests().get(0).encodeFindings("Creatinine: 0.9 mg/dL - within normal limits.");
+        v4.advance(labManalo, VisitStatus.FINDINGS_SENT_TO_DOCTOR, now.minusHours(2));
+    }
 }
 
 
