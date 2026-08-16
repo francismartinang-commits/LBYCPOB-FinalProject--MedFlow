@@ -18,4 +18,14 @@ public class MedicalRecord implements Serializable {
     // DECISION: Declare doctorNotes and diagnosis as private fields initialized to empty strings to avoid nulls.
     private String doctorNotes = "";
     private String diagnosis = "";
+
+    /** Only the assigned doctor (or an Admin, for troubleshooting) may read the clinical notes. */
+    // UNDERSTAND: Clinical notes contain sensitive diagnostic observations that require strict role-based authorization.
+    // DECISION: Guard getDoctorNotes to allow access only to DOCTOR or ADMIN roles, throwing SecurityException otherwise.
+    public String getDoctorNotes(User requester) {
+        if (requester.getRole() == Role.DOCTOR || requester.getRole() == Role.ADMIN) {
+            return doctorNotes;
+        }
+        throw new SecurityException("Only the assigned doctor or an admin may view clinical notes.");
+    }
 }
