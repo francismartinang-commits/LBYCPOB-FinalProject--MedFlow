@@ -283,6 +283,38 @@ import java.util.List;
         doctorCategories.add("Pulmonology");
         doctorCategories.add("ENT (Otorhinolaryngology)");
 
+        labSections.add("Hematology");
+        labSections.add("Clinical Microscopy");
+        labSections.add("Chemistry / Biochemistry");
+        labSections.add("Radiology / Imaging");
+        labSections.add("Cardiac Diagnostics");
+        labSections.add("Microbiology");
+        labSections.add("General Laboratory");
+
+        Admin admin = new Admin(nextUserId("AD"), "System Administrator", "admin", "admin123");
+        users.add(admin);
+
+        Doctor drReyes = new Doctor(nextUserId("DR"), "Dr. Ana Reyes", "dr.reyes", "doctor123", "General Medicine");
+        Doctor drSantos = new Doctor(nextUserId("DR"), "Dr. Miguel Santos", "dr.santos", "doctor123", "Cardiology");
+        Doctor drCruz = new Doctor(nextUserId("DR"), "Dr. Bea Cruz", "dr.cruz", "doctor123", "Pediatrics");
+        Doctor drTan = new Doctor(nextUserId("DR"), "Dr. Carlos Tan", "dr.tan", "doctor123", "Orthopedics");
+        users.add(drReyes);
+        users.add(drSantos);
+        users.add(drCruz);
+        users.add(drTan);
+
+        Nurse nurseRamos = new Nurse(nextUserId("NS"), "Liza Ramos", "nurse.ramos", "nurse123");
+        users.add(nurseRamos);
+
+        LabStaff labDizon = new LabStaff(nextUserId("LB"), "Jun Dizon", "lab.dizon", "lab123", "Hematology");
+        LabStaff labLim = new LabStaff(nextUserId("LB"), "Grace Lim", "lab.lim", "lab123", "Clinical Microscopy");
+        LabStaff labPaolo = new LabStaff(nextUserId("LB"), "Paolo Reyes", "lab.paolo", "lab123", "Radiology / Imaging");
+        LabStaff labManalo = new LabStaff(nextUserId("LB"), "Ella Manalo", "lab.manalo", "lab123", "Chemistry / Biochemistry");
+        users.add(labDizon);
+        users.add(labLim);
+        users.add(labPaolo);
+        users.add(labManalo);
+
 }
 
 
