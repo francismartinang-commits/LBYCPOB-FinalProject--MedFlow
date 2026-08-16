@@ -69,6 +69,11 @@ public final class DoctorRecommendationEngine {
 // ---------------------------------------------------------------------
 
 public Patient registerPatient(String name, int age, String gender, String contactNumber,
+                               String address, String username, String password) {
+    Patient patient = new Patient(nextUserId("PT"), name, username, password, age, gender, contactNumber, address);
+    users.add(patient);
+    return patient;
+}
 
 
 
