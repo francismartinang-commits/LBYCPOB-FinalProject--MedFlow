@@ -134,3 +134,11 @@ public class Doctor extends User {
         advanceToRequested(visit);
         return batch;
     }
+
+    // UNDERSTAND: Every lab request needs a unique ID and laboratory section routing assignment.
+    // DECISION: Helper builds LabRequest with 8-character UUID slice and delegates section routing to LabRoutingEngine.
+    private LabRequest buildRequest(String testName, Priority priority) {
+        LabRequest request = new LabRequest(UUID.randomUUID().toString().substring(0, 8), testName, priority);
+        request.setAssignedSection(LabRoutingEngine.routeTest(testName));
+        return request;
+    }
