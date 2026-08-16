@@ -55,4 +55,13 @@ public class MedicalRecord implements Serializable {
         }
         throw new SecurityException("This result has not been released yet.");
     }
+
+    // UNDERSTAND: Finalizing a medical diagnosis requires authoritative clinical or administrative access.
+    // DECISION: Verify requester role in setDiagnosis, treating null values as empty strings to maintain data integrity.
+    public void setDiagnosis(User requester, String diagnosis) {
+        if (requester.getRole() != Role.DOCTOR && requester.getRole() != Role.ADMIN) {
+            throw new SecurityException("Only a doctor may finalize a diagnosis.");
+        }
+        this.diagnosis = diagnosis == null ? "" : diagnosis;
+    }
 }
