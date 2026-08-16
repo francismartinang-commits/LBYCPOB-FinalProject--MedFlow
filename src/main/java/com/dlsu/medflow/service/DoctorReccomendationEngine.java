@@ -76,4 +76,20 @@ public Patient registerPatient(String name, int age, String gender, String conta
 }
 
 
+/**
+ * Creates a new visit and immediately runs the Doctor Recommendation
+ * engine against the reason for visit, exactly as described in the
+ * System Framework ("Reason-for-visit input -> Doctor recommendation").
+ * The recommendation is only a suggestion until a Nurse/Staff confirms it.
+ */
+public Visit registerVisit(Patient patient, String reasonForVisit) {
+    Visit visit = new Visit(nextVisitId(), patient, reasonForVisit);
+    String category = DoctorRecommendationEngine.recommendCategory(reasonForVisit);
+    Doctor recommended = findAvailableDoctorForCategory(category);
+    visit.setRecommendedDoctor(recommended);
+    patient.addVisit(visit);
+    visits.add(visit);
+    return visit;
+}
+
 
