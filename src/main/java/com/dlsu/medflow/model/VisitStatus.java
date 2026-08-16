@@ -72,4 +72,6 @@ public enum VisitStatus implements Serializable {
     public int getStageNumber() {
         return ordinal() + 1;
     }
+
+    Implement getBadgeTone mapping method for CSS styling
 }
