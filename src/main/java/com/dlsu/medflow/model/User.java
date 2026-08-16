@@ -132,4 +132,28 @@ public abstract class User implements Serializable {
     // UNDERSTAND: Visit status state transitions must follow strict role-based workflow permissions.
     // DECISION: Declare abstract updateStatus method to mandate custom transition rule validation in each subclass.
     public abstract void updateStatus(Visit visit, VisitStatus newStatus);
+
+    // ---- getters / setters --------------------------------------------------
+
+    // UNDERSTAND: Encapsulated properties require controlled getter and setter access points.
+    // DECISION: Provide getters for userId, name, username, role, and active status with non-null checks on setters.
+    public String getUserId() {
+        return userId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = Objects.requireNonNull(name, "name");
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = Objects.requireNonNull(username, "username");
+    }
 }
