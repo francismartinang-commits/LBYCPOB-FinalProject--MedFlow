@@ -235,6 +235,38 @@ import java.util.List;
         doctorCategories.remove(category);
     }
 
+    public List<String> getLabSections() {
+        return Collections.unmodifiableList(labSections);
+    }
+
+    public void addLabSection(String section) {
+        if (section != null && !section.isBlank() && !labSections.contains(section)) {
+            labSections.add(section);
+        }
+    }
+
+    public void removeLabSection(String section) {
+        labSections.remove(section);
+    }
+
+    public void addUser(User user) {
+        users.add(user);
+    }
+
+    public String generateUserId(String prefix) {
+        return nextUserId(prefix);
+    }
+
+    private String nextUserId(String prefix) {
+        userSequence++;
+        return prefix + "-" + String.format("%04d", userSequence);
+    }
+
+    private String nextVisitId() {
+        visitSequence++;
+        return "V-" + String.format("%05d", visitSequence);
+    }
+
 }
 
 
