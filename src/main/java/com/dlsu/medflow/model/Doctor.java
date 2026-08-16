@@ -31,3 +31,17 @@ public class Doctor extends User {
     public void setSpecialization(String specialization) {
         this.specialization = specialization;
     }
+
+    // UNDERSTAND: UI display components need extended role context for doctors.
+    // DECISION: Override getRoleDetail to dynamically append specialization to the base role title.
+    @Override
+    public String getRoleDetail() {
+        return "Doctor - " + specialization;
+    }
+
+    // UNDERSTAND: Framework routing maps Doctor users to their designated web template.
+    // DECISION: Return explicit relative path string mapping directly to doctor dashboard view.
+    @Override
+    public String getDashboardView() {
+        return "doctor/dashboard";
+    }
