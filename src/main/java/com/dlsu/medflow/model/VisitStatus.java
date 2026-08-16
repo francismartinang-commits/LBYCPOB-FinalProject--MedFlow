@@ -55,4 +55,14 @@ public enum VisitStatus implements Serializable {
         this.label = label;
         this.description = description;
     }
+
+    // UNDERSTAND: UI components and status trackers require access to descriptive textual labels.
+    // DECISION: Provide getter methods returning label and description properties.
+    public String getLabel() {
+        return label;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 }
