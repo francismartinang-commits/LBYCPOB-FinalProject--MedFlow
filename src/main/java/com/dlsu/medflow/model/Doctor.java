@@ -45,3 +45,12 @@ public class Doctor extends User {
     public String getDashboardView() {
         return "doctor/dashboard";
     }
+
+    @Override
+    public Map<String, Object> buildDashboardModel(HospitalDataStore store) {
+        // UNDERSTAND: Doctor dashboard requires active visits prioritized above completed/released visits.
+        // DECISION: Sort patient visit list using Boolean comparison so RELEASED_TO_PATIENT visits sink to bottom.
+        List<Visit> visits = new ArrayList<>(store.getVisitsForDoctor(this));
+        visits.sort((a, b) -> Boolean.compare(
+                a.getStatus() == VisitStatus.RELEASED_TO_PATIENT,
+                b.getStatus() == VisitStatus.RELEASED_TO_PATIENT));
