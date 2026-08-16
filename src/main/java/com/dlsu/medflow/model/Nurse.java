@@ -41,4 +41,9 @@ public class Nurse extends User {
         // UNDERSTAND: Nurses manage triage intake and laboratory specimen handoff transition phases.
         // DECISION: Evaluate boolean rule matrix for permitted status jumps, rejecting invalid transitions with IllegalStateException.
         VisitStatus current = visit.getStatus();
+        boolean allowed =
+                (current == VisitStatus.REGISTERED && newStatus == VisitStatus.ASSIGNED_TO_DOCTOR)
+                        || (current == VisitStatus.LABORATORY_REQUESTED && newStatus == VisitStatus.SAMPLE_COLLECTED)
+                        || (current == VisitStatus.SAMPLE_COLLECTED && newStatus == VisitStatus.SENT_TO_LABORATORY)
+                        || (current == VisitStatus.SENT_TO_LABORATORY && newStatus == VisitStatus.UNDER_LABORATORY_ANALYSIS);
 }
