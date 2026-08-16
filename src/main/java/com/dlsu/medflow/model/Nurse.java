@@ -10,3 +10,10 @@ import java.util.Map;
  * registration and sample collection" (System Framework).
  */
 public class Nurse extends User {
+
+    // UNDERSTAND: Nurse subclass represents clinical staff handling patient onboarding, triage, and specimen collection.
+    // DECISION: Pass credentials to super constructor with fixed role assignment to Role.NURSE_STAFF.
+    public Nurse(String userId, String name, String username, String password) {
+        super(userId, name, username, password, Role.NURSE_STAFF);
+    }
+}
