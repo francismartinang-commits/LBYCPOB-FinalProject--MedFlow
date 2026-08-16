@@ -17,3 +17,10 @@ public class Admin extends User {
     public Admin(String userId, String name, String username, String password) {
         super(userId, name, username, password, Role.ADMIN);
     }
+
+    // UNDERSTAND: Framework routing needs to identify which UI dashboard layout to render for admins.
+    // DECISION: Hardcode relative view path string to map directly to the admin template file.
+    @Override
+    public String getDashboardView() {
+        return "admin/dashboard";
+    }
