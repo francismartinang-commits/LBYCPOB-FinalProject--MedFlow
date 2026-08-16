@@ -64,5 +64,16 @@ public class LabRequest implements Serializable {
         return findingsEncoded;
     }
 
+    /** Called only by Laboratory Staff dashboards after they encode a result. */
+    // UNDERSTAND: Lab findings must be validated and explicitly flagged once recorded by laboratory personnel.
+    // DECISION: Guard encodeFindings against null/blank inputs and set findingsEncoded to true upon recording.
+    public void encodeFindings(String findings) {
+        if (findings == null || findings.isBlank()) {
+            throw new IllegalArgumentException("Findings cannot be empty.");
+        }
+        this.findings = findings;
+        this.findingsEncoded = true;
+    }
+
 
 }
