@@ -52,4 +52,11 @@ public class LabStaff extends User {
         model.put("pendingCount", pending.size());
         return model;
     }
+
+    @Override
+    public void updateStatus(Visit visit, VisitStatus newStatus) {
+        // UNDERSTAND: Lab staff can only advance visits from analysis to completed findings stage.
+        // DECISION: Restrict status transitions strictly to UNDER_LABORATORY_ANALYSIS -> FINDINGS_SENT_TO_DOCTOR.
+        VisitStatus current = visit.getStatus();
+        if (current == VisitStatus.UNDER_LABORATORY_ANALYSIS && newStatus == VisitStatus.FINDINGS_SENT_TO_DOCTOR) {
 }
