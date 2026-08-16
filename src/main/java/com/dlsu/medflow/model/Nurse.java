@@ -16,4 +16,11 @@ public class Nurse extends User {
     public Nurse(String userId, String name, String username, String password) {
         super(userId, name, username, password, Role.NURSE_STAFF);
     }
+
+    // UNDERSTAND: Web framework maps Nurse users to their dedicated dashboard template.
+    // DECISION: Return explicit relative path string pointing directly to nurse dashboard view.
+    @Override
+    public String getDashboardView() {
+        return "nurse/dashboard";
+    }
 }
