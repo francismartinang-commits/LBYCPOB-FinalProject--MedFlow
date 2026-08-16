@@ -12,3 +12,10 @@ import java.util.Map;
  * released results" (System Framework / Scope).
  */
 public class Patient extends User {
+
+    private int age;
+    private String gender;
+    private String contactNumber;
+    private String address;
+    private final List<Visit> visitHistory = new ArrayList<>();
+}
