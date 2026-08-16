@@ -24,3 +24,12 @@ public class Admin extends User {
     public String getDashboardView() {
         return "admin/dashboard";
     }
+
+    @Override
+    public Map<String, Object> buildDashboardModel(HospitalDataStore store) {
+        // UNDERSTAND: Dashboard overview needs metric counters for system user roles and active clinical visits.
+        // DECISION: Stream and filter all system users and visits in real-time to compute aggregate counts.
+        long patients = store.getAllUsers().stream().filter(u -> u.getRole() == Role.PATIENT).count();
+        long doctors = store.getAllUsers().stream().filter(u -> u.getRole() == Role.DOCTOR).count();
+        long staff = store.getAllUsers().stream()
+                .filter(u -> u.getRole() == Role.NURSE_STAFF || u.getRole() == Role.LAB_STAFF).count();
