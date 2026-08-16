@@ -181,4 +181,11 @@ public class Visit implements Serializable {
     public List<StatusLogEntry> getHistory() {
         return history;
     }
+
+    // UNDERSTAND: Log statements and debug views need concise visual summaries of a visit instance.
+    // DECISION: Override toString to output visitId, patient name, and status display label.
+    @Override
+    public String toString() {
+        return "Visit " + visitId + " - " + patient.getName() + " (" + status.getLabel() + ")";
+    }
 }
