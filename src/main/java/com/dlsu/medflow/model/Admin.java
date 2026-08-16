@@ -43,3 +43,12 @@ public class Admin extends User {
             long count = store.getAllVisits().stream().filter(v -> v.getStatus() == status).count();
             visitsByStage.put(status, count);
         }
+
+        // UNDERSTAND: UI needs access to system counts, administrative configurations, and user lists.
+        // DECISION: Package data metrics, enum stages, and system lists into a unified Key-Value model map.
+        Map<String, Object> model = new HashMap<>();
+        model.put("patientCount", patients);
+        model.put("doctorCount", doctors);
+        model.put("staffCount", staff);
+        model.put("activeVisits", activeVisits);
+        model.put("visitsByStage", visitsByStage);
