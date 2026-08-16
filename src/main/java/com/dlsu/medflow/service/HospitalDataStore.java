@@ -172,6 +172,21 @@ import java.util.List;
         }
         return result;
     }
+    /** Lab requests still awaiting findings, routed to the given section, paired with their parent visit. */
+    public List<LabQueueItem> getPendingLabRequests(String section) {
+        List<LabQueueItem> result = new ArrayList<>();
+        for (Visit visit : visits) {
+            if (visit.getStatus() != VisitStatus.UNDER_LABORATORY_ANALYSIS) {
+                continue;
+            }
+            for (LabRequest request : visit.getLabRequests()) {
+                if (!request.isFindingsEncoded() && request.getAssignedSection().equals(section)) {
+                    result.add(new LabQueueItem(visit, request));
+                }
+            }
+        }
+        return result;
+    }
 
 }
 
