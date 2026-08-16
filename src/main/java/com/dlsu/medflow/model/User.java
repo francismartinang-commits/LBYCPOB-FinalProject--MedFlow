@@ -98,4 +98,38 @@ public abstract class User implements Serializable {
     public String getRoleDetail() {
         return role.getDisplayName();
     }
+
+    // ---- POLYMORPHISM ------------------------------------------------------
+
+    /**
+     * METHOD OVERRIDING: every subclass names a completely different
+     * Thymeleaf template here — a Doctor's dashboard template is nothing
+     * like a Laboratory Staff member's queue template — exactly as the
+     * JavaFX edition returned a different {@code Parent} per role.
+     */
+    // UNDERSTAND: Polymorphic view resolution requires role subclasses to define their specific Thymeleaf template key.
+    // DECISION: Declare abstract getDashboardView method to force implementation in concrete user subclasses.
+    public abstract String getDashboardView();
+
+    /**
+     * METHOD OVERRIDING: every subclass gathers completely different data
+     * for that template — assigned patients for a Doctor, this section's
+     * pending queue for a LabStaff, and so on. Returned as a plain
+     * {@code Map} (not a Spring {@code Model}) so the domain layer still
+     * doesn't need to import anything from the web framework.
+     */
+    // UNDERSTAND: Dashboard rendering requires role-specific model data without coupling the domain model to Spring MVC APIs.
+    // DECISION: Declare abstract buildDashboardModel returning a raw Map<String, Object> populated using HospitalDataStore.
+    public abstract Map<String, Object> buildDashboardModel(HospitalDataStore store);
+
+    /**
+     * METHOD OVERRIDING: this is the single "validated method" through which
+     * {@link Visit#getStatus()} may ever change (see the Encapsulation note
+     * on {@code Visit}). Each role only allows the specific transitions it is
+     * responsible for in the System Framework; anyone else attempting an
+     * out-of-turn transition receives an {@link IllegalStateException}.
+     */
+    // UNDERSTAND: Visit status state transitions must follow strict role-based workflow permissions.
+    // DECISION: Declare abstract updateStatus method to mandate custom transition rule validation in each subclass.
+    public abstract void updateStatus(Visit visit, VisitStatus newStatus);
 }
