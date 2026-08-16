@@ -41,4 +41,15 @@ public class LabStaff extends User {
     public String getDashboardView() {
         return "labstaff/dashboard";
     }
+
+    // UNDERSTAND: Lab staff dashboard requires current section queue items and pending count.
+    // DECISION: Query HospitalDataStore using staff section and expose items and size in model map.
+    @Override
+    public Map<String, Object> buildDashboardModel(HospitalDataStore store) {
+        var pending = store.getPendingLabRequests(section);
+        Map<String, Object> model = new HashMap<>();
+        model.put("queueItems", pending);
+        model.put("pendingCount", pending.size());
+        return model;
+    }
 }
