@@ -52,3 +52,8 @@ public class Admin extends User {
         model.put("staffCount", staff);
         model.put("activeVisits", activeVisits);
         model.put("visitsByStage", visitsByStage);
+        model.put("allUsers", store.getAllUsers());
+        model.put("categories", store.getDoctorCategories());
+        model.put("sections", store.getLabSections());
+        return model;
+    }
