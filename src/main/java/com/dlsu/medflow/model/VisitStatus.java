@@ -73,5 +73,25 @@ public enum VisitStatus implements Serializable {
         return ordinal() + 1;
     }
 
-    Implement getBadgeTone mapping method for CSS styling
+    /**
+     * CSS badge tone for this status, e.g. {@code "badge-success"}.
+     * Was inline switch logic inside the JavaFX {@code UI.statusBadge(...)}
+     * helper; moved onto the enum itself so both the model and the
+     * Thymeleaf templates can share one source of truth.
+     */
+    // UNDERSTAND: Visual status badges in Thymeleaf templates require distinct color tones based on stage completion.
+    // DECISION: Map enum states to CSS tone strings using a switch statement, returning success, neutral, info, or warning.
+    public String getBadgeTone() {
+        switch (this) {
+            case RELEASED_TO_PATIENT:
+                return "success";
+            case REGISTERED:
+                return "neutral";
+            case DOCTOR_REVIEWED:
+            case FINDINGS_SENT_TO_DOCTOR:
+                return "info";
+            default:
+                return "warning";
+        }
+    }
 }
