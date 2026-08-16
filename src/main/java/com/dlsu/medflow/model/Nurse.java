@@ -30,4 +30,9 @@ public class Nurse extends User {
     public Map<String, Object> buildDashboardModel(HospitalDataStore store) {
         Map<String, Object> model = new HashMap<>();
         model.put("registrations", store.getPendingRegistrations());
+        model.put("sampleCollection", store.getPendingSampleCollection());
+        model.put("sendToLab", store.getPendingSendToLaboratory());
+        model.put("allDoctors", store.getAllDoctors());
+        return model;
+    }
 }
