@@ -59,4 +59,14 @@ public class LabStaff extends User {
         // DECISION: Restrict status transitions strictly to UNDER_LABORATORY_ANALYSIS -> FINDINGS_SENT_TO_DOCTOR.
         VisitStatus current = visit.getStatus();
         if (current == VisitStatus.UNDER_LABORATORY_ANALYSIS && newStatus == VisitStatus.FINDINGS_SENT_TO_DOCTOR) {
+
+            // UNDERSTAND: Advancing to doctor review requires all pending lab tests to have encoded results.
+            // DECISION: Throw IllegalStateException if visit.allFindingsEncoded() evaluates to false.
+            if (!visit.allFindingsEncoded()) {
+                throw new IllegalStateException("All test findings must be encoded before this visit can move on.");
+            }
+            visit.advance(this, newStatus);
+            return;
+        }
+        }
 }
