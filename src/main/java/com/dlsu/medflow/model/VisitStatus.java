@@ -5,11 +5,16 @@ import java.io.Serializable;
 /**
  * The 10-stage visit lifecycle defined in the proposal's "Status Descriptions"
  * table, from Registered to Released to Patient. The declaration order below
- * IS the workflow order, so ordinal() doubles as the step index used by
- * {@link com.dlsu.medflow.gui.components.StatusTrackerView}.
+ * IS the workflow order, so ordinal() doubles as the step index used by the
+ * status-tracker Thymeleaf fragment (was: {@code StatusTrackerView} in the
+ * JavaFX edition).
  */
+// UNDERSTAND: VisitStatus defines the rigid 10-stage lifecycle sequence of a patient visit across clinical workflows.
+// DECISION: Implement Serializable to allow status flags to be passed across session and application boundaries.
 public enum VisitStatus implements Serializable {
 
+    // UNDERSTAND: Each enum constant represents a formal stage in the system's status progression table.
+    // DECISION: Declare fixed enum constants with human-readable labels and operational descriptions.
     REGISTERED(
             "Registered",
             "Patient record is created in the system."),
@@ -40,25 +45,4 @@ public enum VisitStatus implements Serializable {
     RELEASED_TO_PATIENT(
             "Released to Patient",
             "The final result is released and made visible to the patient.");
-
-    private final String label;
-    private final String description;
-
-    VisitStatus(String label, String description) {
-        this.label = label;
-        this.description = description;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    /** 1-based stage number, matching the proposal's "Status #" column. */
-    public int getStageNumber() {
-        return ordinal() + 1;
-    }
 }
