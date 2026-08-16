@@ -267,6 +267,22 @@ import java.util.List;
         return "V-" + String.format("%05d", visitSequence);
     }
 
+    // ---------------------------------------------------------------------
+    // Demo data
+    // ---------------------------------------------------------------------
+
+    private void seedDemoData() {
+        doctorCategories.add("General Medicine");
+        doctorCategories.add("Cardiology");
+        doctorCategories.add("Pediatrics");
+        doctorCategories.add("Dermatology");
+        doctorCategories.add("Orthopedics");
+        doctorCategories.add("Neurology");
+        doctorCategories.add("Gastroenterology");
+        doctorCategories.add("Obstetrics & Gynecology");
+        doctorCategories.add("Pulmonology");
+        doctorCategories.add("ENT (Otorhinolaryngology)");
+
 }
 
 
