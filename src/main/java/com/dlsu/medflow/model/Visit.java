@@ -112,4 +112,21 @@ public class Visit implements Serializable {
         }
         return null;
     }
+
+    /**
+     * Human-readable doctor line for a patient's visit card — "assigned",
+     * "recommended, pending confirmation", or "not yet assigned". Moved here
+     * from {@code PatientDashboard} so the template can stay simple.
+     */
+    // UNDERSTAND: UI cards require formatted strings summarizing assigned or recommended doctor statuses.
+    // DECISION: Check assignedDoctor first, then recommendedDoctor, returning formatted descriptive text or default fallback string.
+    public String getDoctorLabel() {
+        if (assignedDoctor != null) {
+            return assignedDoctor.getName() + " (" + assignedDoctor.getSpecialization() + ")";
+        }
+        if (recommendedDoctor != null) {
+            return recommendedDoctor.getName() + " (recommended, pending confirmation)";
+        }
+        return "Not yet assigned";
+    }
 }
