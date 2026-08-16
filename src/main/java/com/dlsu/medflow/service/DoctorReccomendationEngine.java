@@ -50,8 +50,6 @@ public final class DoctorRecommendationEngine {
     public static String recommendCategory(String reasonForVisit) {
         if (reasonForVisit == null || reasonForVisit.isBlank()) {
             return DEFAULT_CATEGORY;
-
-
         }
         String text = reasonForVisit.toLowerCase();
         for (Map.Entry<String, String[]> entry : CATEGORY_KEYWORDS.entrySet()) {
@@ -64,5 +62,13 @@ public final class DoctorRecommendationEngine {
         return DEFAULT_CATEGORY;
     }
 }
+
+
+// ---------------------------------------------------------------------
+// Registration
+// ---------------------------------------------------------------------
+
+public Patient registerPatient(String name, int age, String gender, String contactNumber,
+
 
 
