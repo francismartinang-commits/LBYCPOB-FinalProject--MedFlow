@@ -205,6 +205,36 @@ import java.util.List;
         return result;
     }
 
+
+
+    public List<Patient> getAllPatients() {
+        List<Patient> result = new ArrayList<>();
+        for (User user : users) {
+            if (user instanceof Patient) {
+                result.add((Patient) user);
+            }
+        }
+        return result;
+    }
+
+    public List<Visit> getAllVisits() {
+        return Collections.unmodifiableList(visits);
+    }
+
+    public List<String> getDoctorCategories() {
+        return Collections.unmodifiableList(doctorCategories);
+    }
+
+    public void addDoctorCategory(String category) {
+        if (category != null && !category.isBlank() && !doctorCategories.contains(category)) {
+            doctorCategories.add(category);
+        }
+    }
+
+    public void removeDoctorCategory(String category) {
+        doctorCategories.remove(category);
+    }
+
 }
 
 
