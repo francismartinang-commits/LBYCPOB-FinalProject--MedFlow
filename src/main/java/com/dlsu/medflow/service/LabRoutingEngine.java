@@ -25,4 +25,8 @@ public final class LabRoutingEngine {
         SECTION_KEYWORDS.put("Microbiology",
                 new String[]{"culture", "sensitivity", "swab", "gram stain"});
     }
+    public static final String DEFAULT_SECTION = "General Laboratory";
+
+    private LabRoutingEngine() {
+    }
 }
