@@ -72,6 +72,15 @@ import java.util.List;
    // ---------------------------------------------------------------------
    // Authentication
    // ---------------------------------------------------------------------
+
+   public User authenticate(String username, String password) {
+      for (User user : users) {
+         if (user.getUsername().equalsIgnoreCase(username) && user.isActive() && user.checkPassword(password)) {
+            return user;
+         }
+      }
+      return null;
+   }
 }
 
 
