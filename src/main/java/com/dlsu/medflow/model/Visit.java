@@ -21,3 +21,20 @@ import java.util.List;
 // UNDERSTAND: Visit tracks a patient's medical journey across system workflow states.
 // DECISION: Implement Serializable to allow persistence and session transmission of visit state.
 public class Visit implements Serializable {
+
+    // UNDERSTAND: Core identity, patient link, visit reason, and initial registration time are immutable.
+    // DECISION: Declare private final fields for visitId, patient, reasonForVisit, and registeredAt.
+    private final String visitId;
+    private final Patient patient;
+    private final String reasonForVisit;
+    private final LocalDateTime registeredAt;
+
+    // UNDERSTAND: Workflow status, doctor assignments, medical record, lab requests, and audit logs evolve over time.
+    // DECISION: Initialize status to REGISTERED, instantiate final nested medical record, lab requests, and history log.
+    private VisitStatus status = VisitStatus.REGISTERED;
+    private Doctor recommendedDoctor;
+    private Doctor assignedDoctor;
+    private final MedicalRecord medicalRecord = new MedicalRecord();
+    private final List<LabRequest> labRequests = new ArrayList<>();
+    private final List<StatusLogEntry> history = new ArrayList<>();
+}
