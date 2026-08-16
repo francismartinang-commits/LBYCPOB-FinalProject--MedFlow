@@ -57,3 +57,14 @@ public class Admin extends User {
         model.put("sections", store.getLabSections());
         return model;
     }
+
+    @Override
+    public void updateStatus(Visit visit, VisitStatus newStatus) {
+        // UNDERSTAND: Standard users are constrained by strict sequential status transitions.
+        // DECISION: Override updateStatus to allow Admin to jump a Visit directly to any stage without checks.
+        // Unlike every other role, an Admin may correct a visit to ANY stage.
+        // This is a deliberate, distinct override: administrative privilege
+        // means no workflow restriction applies, only an audit trail entry.
+        visit.advance(this, newStatus);
+    }
+}
