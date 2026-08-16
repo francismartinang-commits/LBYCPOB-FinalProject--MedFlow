@@ -34,4 +34,11 @@ public class LabStaff extends User {
     public String getRoleDetail() {
         return "Laboratory Staff - " + section;
     }
+
+    // UNDERSTAND: Web framework routes lab staff users to their designated view template.
+    // DECISION: Return relative template path pointing directly to lab staff dashboard view.
+    @Override
+    public String getDashboardView() {
+        return "labstaff/dashboard";
+    }
 }
