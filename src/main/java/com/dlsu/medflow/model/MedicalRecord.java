@@ -37,4 +37,17 @@ public class MedicalRecord implements Serializable {
         }
         this.doctorNotes = doctorNotes == null ? "" : doctorNotes;
     }
+
+    /**
+     * The diagnosis is visible to the doctor/admin at any time, but only
+     * visible to the patient once the visit has actually reached
+     * {@code RELEASED_TO_PATIENT} - matching the proposal's requirement that
+     * results only become visible to the patient once released.
+     */
+    // UNDERSTAND: Patient access to diagnosis must be conditional based on the visit's release status lifecycle stage.
+    // DECISION: Grant immediate access to DOCTOR/ADMIN, but require releasedToPatient flag true for PATIENT requesters.
+    public String getDiagnosis(User requester, boolean releasedToPatient) {
+        if (requester.getRole() == Role.DOCTOR || requester.getRole() == Role.ADMIN) {
+            return diagnosis;
+        }
 }
