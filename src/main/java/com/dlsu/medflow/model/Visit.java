@@ -47,4 +47,31 @@ public class Visit implements Serializable {
         this.registeredAt = LocalDateTime.now();
         this.history.add(new StatusLogEntry(VisitStatus.REGISTERED, registeredAt));
     }
+
+    /**
+     * The only way {@link #status} is ever mutated. Callers are always a
+     * {@link User} subclass's already-validated {@code updateStatus(...)}
+     * override, never controller code directly.
+     */
+    // UNDERSTAND: Mutating status during live user interactions defaults to the current timestamp.
+    // DECISION: Delegate advance call with current LocalDateTime to the overloaded advance method.
+    public void advance(User approver, VisitStatus newStatus) {
+        advance(approver, newStatus, LocalDateTime.now());
+    }
+
+    /**
+     * Overload used when a precise historical timestamp matters (currently
+     * only the demo-data seeding in {@code HospitalDataStore}, so sample
+     * visits show a realistic timeline instead of every step happening in
+     * the same instant).
+     */
+    // UNDERSTAND: Workflow status transitions must verify user authorization and record audit entry timestamps.
+    // DECISION: Throw SecurityException if approver is null, then update status field and append StatusLogEntry to history.
+    public void advance(User approver, VisitStatus newStatus, LocalDateTime when) {
+        if (approver == null) {
+            throw new SecurityException("A visit's status can only change through a validated user action.");
+        }
+        this.status = newStatus;
+        this.history.add(new StatusLogEntry(newStatus, when));
+    }
 }
