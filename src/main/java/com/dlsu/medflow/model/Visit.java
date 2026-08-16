@@ -129,4 +129,56 @@ public class Visit implements Serializable {
         }
         return "Not yet assigned";
     }
+
+    // ---- getters ------------------------------------------------------------
+
+    // UNDERSTAND: Encapsulated properties require controlled getter access and explicit mutators for doctor assignments.
+    // DECISION: Expose standard getters for core properties and setters for recommendedDoctor and assignedDoctor.
+    public String getVisitId() {
+        return visitId;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public String getReasonForVisit() {
+        return reasonForVisit;
+    }
+
+    public LocalDateTime getRegisteredAt() {
+        return registeredAt;
+    }
+
+    public VisitStatus getStatus() {
+        return status;
+    }
+
+    public Doctor getRecommendedDoctor() {
+        return recommendedDoctor;
+    }
+
+    public void setRecommendedDoctor(Doctor recommendedDoctor) {
+        this.recommendedDoctor = recommendedDoctor;
+    }
+
+    public Doctor getAssignedDoctor() {
+        return assignedDoctor;
+    }
+
+    public void setAssignedDoctor(Doctor assignedDoctor) {
+        this.assignedDoctor = assignedDoctor;
+    }
+
+    public MedicalRecord getMedicalRecord() {
+        return medicalRecord;
+    }
+
+    public List<LabRequest> getLabRequests() {
+        return labRequests;
+    }
+
+    public List<StatusLogEntry> getHistory() {
+        return history;
+    }
 }
