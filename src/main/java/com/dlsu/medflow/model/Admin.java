@@ -35,3 +35,11 @@ public class Admin extends User {
                 .filter(u -> u.getRole() == Role.NURSE_STAFF || u.getRole() == Role.LAB_STAFF).count();
         long activeVisits = store.getAllVisits().stream()
                 .filter(v -> v.getStatus() != VisitStatus.RELEASED_TO_PATIENT).count();
+
+        // UNDERSTAND: Analytics need to map out patient progression across all 10 stages of the workflow.
+        // DECISION: Use LinkedHashMap to preserve stage order matching VisitStatus enum declaration order.
+        Map<VisitStatus, Long> visitsByStage = new LinkedHashMap<>();
+        for (VisitStatus status : VisitStatus.values()) {
+            long count = store.getAllVisits().stream().filter(v -> v.getStatus() == status).count();
+            visitsByStage.put(status, count);
+        }
