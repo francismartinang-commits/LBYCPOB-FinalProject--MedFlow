@@ -187,6 +187,23 @@ import java.util.List;
         }
         return result;
     }
+    // ---------------------------------------------------------------------
+    // Admin-facing lists
+    // ---------------------------------------------------------------------
+
+    public List<User> getAllUsers() {
+        return Collections.unmodifiableList(users);
+    }
+
+    public List<Doctor> getAllDoctors() {
+        List<Doctor> result = new ArrayList<>();
+        for (User user : users) {
+            if (user instanceof Doctor) {
+                result.add((Doctor) user);
+            }
+        }
+        return result;
+    }
 
 }
 
