@@ -122,6 +122,21 @@ import java.util.List;
         return visit;
     }
 
+    private Doctor findAvailableDoctorForCategory(String category) {
+        Doctor fallback = null;
+        for (User user : users) {
+            if (user instanceof Doctor && user.isActive()) {
+                Doctor doctor = (Doctor) user;
+                if (fallback == null) {
+                    fallback = doctor;
+                }
+                if (doctor.getSpecialization().equalsIgnoreCase(category)) {
+                    return doctor;
+                }
+            }
+        }
+        return fallback;
+    }
 
 }
 
