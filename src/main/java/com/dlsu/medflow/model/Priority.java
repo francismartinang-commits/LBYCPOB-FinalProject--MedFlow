@@ -8,4 +8,27 @@ public enum Priority implements Serializable {
     URGENT("Urgent"),
     STAT("STAT");
 
+    private final String label;
+
+    Priority(String label) {
+        this.label = label;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    /** CSS badge tone for this priority, mirrors {@link VisitStatus#getBadgeTone()}. */
+    public String getBadgeTone() {
+        switch (this) {
+            case STAT:
+                return "danger";
+            case URGENT:
+                return "warning";
+            default:
+                return "neutral";
+        }
+    }
+}
+
 
