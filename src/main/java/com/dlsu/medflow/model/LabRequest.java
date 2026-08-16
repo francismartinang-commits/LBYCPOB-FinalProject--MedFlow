@@ -54,5 +54,15 @@ public class LabRequest implements Serializable {
         this.assignedSection = assignedSection;
     }
 
+    // UNDERSTAND: Result viewing and status checks require read access to recorded findings.
+    // DECISION: Provide public getters for findings text and the findingsEncoded state indicator.
+    public String getFindings() {
+        return findings;
+    }
+
+    public boolean isFindingsEncoded() {
+        return findingsEncoded;
+    }
+
 
 }
