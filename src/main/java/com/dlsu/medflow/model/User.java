@@ -37,3 +37,23 @@ import java.util.Objects;
 // UNDERSTAND: User is the abstract root entity representing generic user credentials, profile information, and role polymorphism.
 // DECISION: Implement Serializable to ensure all user domain subclasses support distributed caching and state persistence.
 public abstract class User implements Serializable {
+
+    // UNDERSTAND: Core identity, security credentials, role, and active status state fields must be encapsulated.
+    // DECISION: Declare immutable identity/role fields as final and keep mutable credentials private with sensible defaults.
+    private final String userId;
+    private String name;
+    private String username;
+    private String password;
+    private final Role role;
+    private boolean active = true;
+
+    // UNDERSTAND: Subclass construction requires mandatory core identity and credential values.
+    // DECISION: Validate non-null inputs via Objects.requireNonNull in the protected constructor to enforce invariant integrity.
+    protected User(String userId, String name, String username, String password, Role role) {
+        this.userId = Objects.requireNonNull(userId, "userId");
+        this.name = Objects.requireNonNull(name, "name");
+        this.username = Objects.requireNonNull(username, "username");
+        this.password = Objects.requireNonNull(password, "password");
+        this.role = Objects.requireNonNull(role, "role");
+    }
+}
