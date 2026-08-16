@@ -315,6 +315,42 @@ import java.util.List;
         users.add(labPaolo);
         users.add(labManalo);
 
+        Patient juan = new Patient(nextUserId("PT"), "Juan Dela Cruz", "patient.juan", "patient123",
+                29, "Male", "0917-555-0101", "Manila City");
+        Patient maria = new Patient(nextUserId("PT"), "Maria Santos", "patient.maria", "patient123",
+                34, "Female", "0917-555-0202", "Quezon City");
+        Patient ramon = new Patient(nextUserId("PT"), "Ramon Lopez", "patient.ramon", "patient123",
+                41, "Male", "0917-555-0303", "Makati City");
+        users.add(juan);
+        users.add(maria);
+        users.add(ramon);
+
+        LocalDateTime now = LocalDateTime.now();
+
+        // --- Fully completed visit: showcases the whole 10-stage journey ---
+        Visit v1 = new Visit(nextVisitId(), juan, "Persistent fever and body weakness for the past 2 days");
+        juan.addVisit(v1);
+        visits.add(v1);
+        v1.setRecommendedDoctor(drReyes);
+        v1.setAssignedDoctor(drReyes);
+        v1.advance(nurseRamos, VisitStatus.ASSIGNED_TO_DOCTOR, now.minusHours(30));
+        v1.advance(drReyes, VisitStatus.UNDER_DOCTOR_ASSESSMENT, now.minusHours(28));
+        v1.getMedicalRecord().setDoctorNotes(drReyes,
+                "Low-grade fever with generalized weakness, no danger signs. CBC requested to rule out "
+                        + "bacterial infection.");
+        LabRequest cbc = new LabRequest(java.util.UUID.randomUUID().toString().substring(0, 8),
+                "CBC (Complete Blood Count)", Priority.ROUTINE);
+        cbc.setAssignedSection(LabRoutingEngine.routeTest(cbc.getTestName()));
+        v1.addLabRequest(cbc);
+        v1.advance(drReyes, VisitStatus.LABORATORY_REQUESTED, now.minusHours(27));
+        v1.advance(nurseRamos, VisitStatus.SAMPLE_COLLECTED, now.minusHours(26));
+        v1.advance(nurseRamos, VisitStatus.SENT_TO_LABORATORY, now.minusHours(25));
+        v1.advance(nurseRamos, VisitStatus.UNDER_LABORATORY_ANALYSIS, now.minusHours(25));
+        cbc.encodeFindings("WBC 7.2 x10^9/L (normal); Hemoglobin 14.1 g/dL (normal). No signs of bacterial infection.");
+        v1.advance(labDizon, VisitStatus.FINDINGS_SENT_TO_DOCTOR, now.minusHours(10));
+        v1.getMedicalRecord().setDiagnosis(drReyes,
+                "Viral upper respiratory tract infection. Prescribed paracetamol for fever, adequate rest, "
+                        + "and increased fluid intake. Follow up if symptoms persist beyond 5 days.");
 }
 
 
