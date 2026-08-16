@@ -58,6 +58,12 @@ import java.util.List;
          if (!dir.exists()) {
             dir.mkdirs();
          }
+         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(DATA_FILE))) {
+            out.writeObject(this);
+         }
+      } catch (IOException ex) {
+         System.err.println("Could not save data: " + ex.getMessage());
+      }
 }
 
 
