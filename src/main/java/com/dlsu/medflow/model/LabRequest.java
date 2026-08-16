@@ -30,5 +30,19 @@ public class LabRequest implements Serializable {
         this.priority = priority;
     }
 
+    // UNDERSTAND: Read-only properties must be accessible to external system components.
+    // DECISION: Provide public getter accessors for immutable request attributes.
+    public String getRequestId() {
+        return requestId;
+    }
+
+    public String getTestName() {
+        return testName;
+    }
+
+    public Priority getPriority() {
+        return priority;
+    }
+
 
 }
