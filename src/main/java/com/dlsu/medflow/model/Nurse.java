@@ -35,4 +35,10 @@ public class Nurse extends User {
         model.put("allDoctors", store.getAllDoctors());
         return model;
     }
+
+    @Override
+    public void updateStatus(Visit visit, VisitStatus newStatus) {
+        // UNDERSTAND: Nurses manage triage intake and laboratory specimen handoff transition phases.
+        // DECISION: Evaluate boolean rule matrix for permitted status jumps, rejecting invalid transitions with IllegalStateException.
+        VisitStatus current = visit.getStatus();
 }
