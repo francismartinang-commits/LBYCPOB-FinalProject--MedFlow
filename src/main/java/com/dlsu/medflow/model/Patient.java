@@ -47,4 +47,14 @@ public class Patient extends User {
         model.put("visits", visits);
         return model;
     }
+
+    // UNDERSTAND: Patients are passive participants who can view status but cannot modify workflow state.
+    // DECISION: Override updateStatus to unconditionally throw SecurityException, preventing status modification.
+    @Override
+    public void updateStatus(Visit visit, VisitStatus newStatus) {
+        // A patient is a passive participant in the workflow; they can view
+        // progress but never move it forward themselves. Distinct behaviour
+        // from every other role is itself an example of method overriding.
+        throw new SecurityException("Patients cannot change a visit's status.");
+    }
 }
