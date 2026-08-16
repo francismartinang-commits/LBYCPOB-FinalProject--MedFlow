@@ -88,3 +88,20 @@ public class Doctor extends User {
         }
         visit.advance(this, newStatus);
     }
+
+    // ---- POLYMORPHISM: method overloading -----------------------------------
+    // Unchanged from the JavaFX edition: neither overload ever touched the UI
+    // layer, so both survive the conversion to Spring Boot verbatim.
+
+    /**
+     * "createRequest(String testName) - processes a single, standard
+     * laboratory request." Always uses ROUTINE priority.
+     */
+    // UNDERSTAND: Single lab requests are common routine occurrences.
+    // DECISION: Overload createRequest to default single test ordering directly to Priority.ROUTINE.
+    public LabRequest createRequest(Visit visit, String testName) {
+        LabRequest request = buildRequest(testName, Priority.ROUTINE);
+        visit.addLabRequest(request);
+        advanceToRequested(visit);
+        return request;
+    }
