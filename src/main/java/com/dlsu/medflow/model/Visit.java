@@ -74,4 +74,42 @@ public class Visit implements Serializable {
         this.status = newStatus;
         this.history.add(new StatusLogEntry(newStatus, when));
     }
+
+    /** True once every lab request attached to this visit has encoded findings. */
+    // UNDERSTAND: Progressing beyond lab stages requires verifying that all associated lab requests have encoded findings.
+    // DECISION: Return false if labRequests is empty or if any request is unencoded; return true if all are encoded.
+    public boolean allFindingsEncoded() {
+        if (labRequests.isEmpty()) {
+            return false;
+        }
+        for (LabRequest request : labRequests) {
+            if (!request.isFindingsEncoded()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // UNDERSTAND: Medical testing orders must be attached to the visit instance.
+    // DECISION: Append given LabRequest to the internal labRequests collection.
+    public void addLabRequest(LabRequest request) {
+        labRequests.add(request);
+    }
+
+    /**
+     * The timestamp this visit first reached {@code stage}, formatted for
+     * display, or {@code null} if it hasn't reached that stage yet. Used by
+     * the status-tracker Thymeleaf fragment; was a private method inside the
+     * JavaFX {@code StatusTrackerView} before this conversion.
+     */
+    // UNDERSTAND: UI timeline components need to retrieve the exact timestamp when a visit entered a specific stage.
+    // DECISION: Iterate history log, return matching timestamp for target status, or null if stage hasn't been reached.
+    public LocalDateTime getTimestampFor(VisitStatus stage) {
+        for (StatusLogEntry entry : history) {
+            if (entry.getStatus() == stage) {
+                return entry.getTimestamp();
+            }
+        }
+        return null;
+    }
 }
