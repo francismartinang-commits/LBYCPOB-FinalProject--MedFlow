@@ -16,4 +16,9 @@ public class LabRequest implements Serializable {
     private final String requestId;
     private final String testName;
     private final Priority priority;
+    // UNDERSTAND: Test routing and clinical outcome results evolve dynamically over the request lifecycle.
+    // DECISION: Initialize default mutable state for section assignment, text findings, and encoding status flag.
+    private String assignedSection = "Unrouted";
+    private String findings = "";
+    private boolean findingsEncoded = false;
 }
