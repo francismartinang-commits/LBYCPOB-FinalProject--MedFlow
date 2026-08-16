@@ -75,5 +75,11 @@ public class LabRequest implements Serializable {
         this.findingsEncoded = true;
     }
 
-
+    // UNDERSTAND: Log messages and UI components need a clean textual representation of the lab request.
+    // DECISION: Override toString to format test name, priority label, and assigned routing section.
+    @Override
+    public String toString() {
+        return testName + " [" + priority.getLabel() + "] -> " + assignedSection;
+    }
 }
+
