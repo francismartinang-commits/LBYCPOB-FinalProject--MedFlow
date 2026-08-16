@@ -29,4 +29,11 @@ public class Patient extends User {
         this.contactNumber = contactNumber;
         this.address = address;
     }
+
+    // UNDERSTAND: Framework routing maps Patient users to their dedicated web template.
+    // DECISION: Return explicit relative view path pointing directly to the patient dashboard view.
+    @Override
+    public String getDashboardView() {
+        return "patient/dashboard";
+    }
 }
