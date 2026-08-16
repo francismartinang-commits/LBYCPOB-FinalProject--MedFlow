@@ -44,5 +44,15 @@ public class LabRequest implements Serializable {
         return priority;
     }
 
+    // UNDERSTAND: Routing engine and laboratory staff need to query and reassign test sections.
+    // DECISION: Expose standard getter and setter for the assignedSection field.
+    public String getAssignedSection() {
+        return assignedSection;
+    }
+
+    public void setAssignedSection(String assignedSection) {
+        this.assignedSection = assignedSection;
+    }
+
 
 }
