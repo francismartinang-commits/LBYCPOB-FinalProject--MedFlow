@@ -70,3 +70,21 @@ public class Doctor extends User {
         model.put("completed", completed);
         return model;
     }
+
+    @Override
+    public void updateStatus(Visit visit, VisitStatus newStatus) {
+        // UNDERSTAND: Doctors are restricted to specific, valid workflow state transitions.
+        // DECISION: Enforce strict boolean rule matrix allowing only authorized status transitions, throwing exception otherwise.
+        VisitStatus current = visit.getStatus();
+        boolean allowed =
+                (current == VisitStatus.ASSIGNED_TO_DOCTOR && newStatus == VisitStatus.UNDER_DOCTOR_ASSESSMENT)
+                        || (current == VisitStatus.UNDER_DOCTOR_ASSESSMENT && newStatus == VisitStatus.LABORATORY_REQUESTED)
+                        || (current == VisitStatus.FINDINGS_SENT_TO_DOCTOR && newStatus == VisitStatus.DOCTOR_REVIEWED)
+                        || (current == VisitStatus.DOCTOR_REVIEWED && newStatus == VisitStatus.RELEASED_TO_PATIENT);
+
+        if (!allowed) {
+            throw new IllegalStateException(
+                    "A doctor cannot move a visit from " + current.getLabel() + " to " + newStatus.getLabel() + ".");
+        }
+        visit.advance(this, newStatus);
+    }
