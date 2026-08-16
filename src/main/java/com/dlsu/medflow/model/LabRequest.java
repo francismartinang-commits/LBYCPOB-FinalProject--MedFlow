@@ -21,4 +21,14 @@ public class LabRequest implements Serializable {
     private String assignedSection = "Unrouted";
     private String findings = "";
     private boolean findingsEncoded = false;
+
+    // UNDERSTAND: Creating a lab request requires its primary identifier and operational attributes.
+    // DECISION: Provide an explicit 3-parameter constructor to assign essential immutable values upon creation.
+    public LabRequest(String requestId, String testName, Priority priority) {
+        this.requestId = requestId;
+        this.testName = testName;
+        this.priority = priority;
+    }
+
+
 }
