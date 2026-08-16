@@ -45,4 +45,14 @@ public enum VisitStatus implements Serializable {
     RELEASED_TO_PATIENT(
             "Released to Patient",
             "The final result is released and made visible to the patient.");
+
+    private final String label;
+    private final String description;
+
+    // UNDERSTAND: Enum values must encapsulate their fixed display labels and status descriptions upon creation.
+    // DECISION: Define a private constructor binding string parameters to private final fields.
+    VisitStatus(String label, String description) {
+        this.label = label;
+        this.description = description;
+    }
 }
