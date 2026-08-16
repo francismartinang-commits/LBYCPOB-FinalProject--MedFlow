@@ -37,5 +37,16 @@ import java.util.List;
 
 
 
+public static HospitalDataStore loadOrCreate() {
+   File file = new File(DATA_FILE);
+   if (file.exists()) {
+      try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
+         Object loaded = in.readObject();
+         if (loaded instanceof HospitalDataStore) {
+            return (HospitalDataStore) loaded;
+         }
+
+
+
 
 
