@@ -50,4 +50,6 @@ public class Nurse extends User {
             throw new IllegalStateException(
                     "Nurse/Staff cannot move a visit from " + current.getLabel() + " to " + newStatus.getLabel() + ".");
         }
+        visit.advance(this, newStatus);
+    }
 }
