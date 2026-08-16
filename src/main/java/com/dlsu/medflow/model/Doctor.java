@@ -54,3 +54,19 @@ public class Doctor extends User {
         visits.sort((a, b) -> Boolean.compare(
                 a.getStatus() == VisitStatus.RELEASED_TO_PATIENT,
                 b.getStatus() == VisitStatus.RELEASED_TO_PATIENT));
+
+        // UNDERSTAND: Summary cards require counts across various actionable stage groupings.
+        // DECISION: Stream visits to filter metrics for assessment, lab findings, overall progress, and release status.
+        long awaitingAssessment = visits.stream().filter(v -> v.getStatus() == VisitStatus.ASSIGNED_TO_DOCTOR).count();
+        long awaitingFindings = visits.stream().filter(v -> v.getStatus() == VisitStatus.FINDINGS_SENT_TO_DOCTOR).count();
+        long inProgress = visits.stream().filter(v -> v.getStatus() != VisitStatus.RELEASED_TO_PATIENT).count();
+        long completed = visits.stream().filter(v -> v.getStatus() == VisitStatus.RELEASED_TO_PATIENT).count();
+
+        Map<String, Object> model = new HashMap<>();
+        model.put("visits", visits);
+        model.put("awaitingAssessment", awaitingAssessment);
+        model.put("awaitingFindings", awaitingFindings);
+        model.put("inProgress", inProgress);
+        model.put("completed", completed);
+        return model;
+    }
