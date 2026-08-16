@@ -46,4 +46,8 @@ public class Nurse extends User {
                         || (current == VisitStatus.LABORATORY_REQUESTED && newStatus == VisitStatus.SAMPLE_COLLECTED)
                         || (current == VisitStatus.SAMPLE_COLLECTED && newStatus == VisitStatus.SENT_TO_LABORATORY)
                         || (current == VisitStatus.SENT_TO_LABORATORY && newStatus == VisitStatus.UNDER_LABORATORY_ANALYSIS);
+        if (!allowed) {
+            throw new IllegalStateException(
+                    "Nurse/Staff cannot move a visit from " + current.getLabel() + " to " + newStatus.getLabel() + ".");
+        }
 }
