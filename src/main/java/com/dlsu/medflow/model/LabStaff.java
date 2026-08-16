@@ -27,4 +27,11 @@ public class LabStaff extends User {
     public void setSection(String section) {
         this.section = section;
     }
+
+    // UNDERSTAND: UI components need detailed role context including section assignment.
+    // DECISION: Override getRoleDetail to append assigned section to base laboratory staff title.
+    @Override
+    public String getRoleDetail() {
+        return "Laboratory Staff - " + section;
+    }
 }
