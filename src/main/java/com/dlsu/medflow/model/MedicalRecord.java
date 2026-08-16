@@ -50,4 +50,9 @@ public class MedicalRecord implements Serializable {
         if (requester.getRole() == Role.DOCTOR || requester.getRole() == Role.ADMIN) {
             return diagnosis;
         }
+        if (requester.getRole() == Role.PATIENT && releasedToPatient) {
+            return diagnosis;
+        }
+        throw new SecurityException("This result has not been released yet.");
+    }
 }
