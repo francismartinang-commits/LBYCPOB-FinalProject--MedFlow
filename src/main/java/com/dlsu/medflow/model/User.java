@@ -156,4 +156,16 @@ public abstract class User implements Serializable {
     public void setUsername(String username) {
         this.username = Objects.requireNonNull(username, "username");
     }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 }
