@@ -19,32 +19,40 @@ import java.util.List;
 
  */
  public class HospitalDataStore implements Serializable {
-    private static final String DATA_DIR = System.getProperty("user.home") + File.separator + ".medflow";
-    private static final String DATA_FILE = DATA_DIR + File.separator + "medflow_data.ser";
+   private static final String DATA_DIR = System.getProperty("user.home") + File.separator + ".medflow";
+   private static final String DATA_FILE = DATA_DIR + File.separator + "medflow_data.ser";
 
-    private final List<User> users = new ArrayList<>();
-    private final List<Visit> visits = new ArrayList<>();
-    private final List<String> doctorCategories = new ArrayList<>();
-    private final List<String> labSections = new ArrayList<>();
+   private final List<User> users = new ArrayList<>();
+   private final List<Visit> visits = new ArrayList<>();
+   private final List<String> doctorCategories = new ArrayList<>();
+   private final List<String> labSections = new ArrayList<>();
 
-    private int userSequence = 0;
-    private int visitSequence = 0;
+   private int userSequence = 0;
+   private int visitSequence = 0;
 
 // ---------------------------------------------------------------------
 // Loading / saving
 // ---------------------------------------------------------------------
 
 
-
-
-public static HospitalDataStore loadOrCreate() {
-   File file = new File(DATA_FILE);
-   if (file.exists()) {
-      try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
-         Object loaded = in.readObject();
-         if (loaded instanceof HospitalDataStore) {
-            return (HospitalDataStore) loaded;
+   public static HospitalDataStore loadOrCreate() {
+      File file = new File(DATA_FILE);
+      if (file.exists()) {
+         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
+            Object loaded = in.readObject();
+            if (loaded instanceof HospitalDataStore) {
+               return (HospitalDataStore) loaded;
+            }
+         } catch (IOException | ClassNotFoundException ex) {
+            System.err.println("Could not read saved data, starting fresh: " + ex.getMessage());
          }
+      }
+      HospitalDataStore store = new HospitalDataStore();
+      store.seedDemoData();
+      store.save();
+      return store;
+   }
+}
 
 
 
