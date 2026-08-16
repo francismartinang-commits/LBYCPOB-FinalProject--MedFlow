@@ -33,3 +33,5 @@ public class Admin extends User {
         long doctors = store.getAllUsers().stream().filter(u -> u.getRole() == Role.DOCTOR).count();
         long staff = store.getAllUsers().stream()
                 .filter(u -> u.getRole() == Role.NURSE_STAFF || u.getRole() == Role.LAB_STAFF).count();
+        long activeVisits = store.getAllVisits().stream()
+                .filter(v -> v.getStatus() != VisitStatus.RELEASED_TO_PATIENT).count();
