@@ -65,4 +65,11 @@ public enum VisitStatus implements Serializable {
     public String getDescription() {
         return description;
     }
+
+    /** 1-based stage number, matching the proposal's "Status #" column. */
+    // UNDERSTAND: The proposal specifies a 1-based stage index mapping directly to ordinal placement.
+    // DECISION: Return ordinal() + 1 to calculate the stage number dynamically without extra storage.
+    public int getStageNumber() {
+        return ordinal() + 1;
+    }
 }
