@@ -13,3 +13,9 @@ import java.io.Serializable;
 // UNDERSTAND: MedicalRecord instances need to be persisted or transmitted across service boundaries.
 // DECISION: Implement Serializable interface to support session state serialization and storage persistence.
 public class MedicalRecord implements Serializable {
+
+    // UNDERSTAND: Sensitive clinical data fields must be encapsulated and hidden from unauthorized direct access.
+    // DECISION: Declare doctorNotes and diagnosis as private fields initialized to empty strings to avoid nulls.
+    private String doctorNotes = "";
+    private String diagnosis = "";
+}
