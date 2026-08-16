@@ -168,4 +168,11 @@ public abstract class User implements Serializable {
     public void setActive(boolean active) {
         this.active = active;
     }
+
+    // UNDERSTAND: Diagnostic logs and UI dropdown lists require clear human-readable string representations of user instances.
+    // DECISION: Override toString to format name alongside the role display name.
+    @Override
+    public String toString() {
+        return name + " (" + role.getDisplayName() + ")";
+    }
 }
