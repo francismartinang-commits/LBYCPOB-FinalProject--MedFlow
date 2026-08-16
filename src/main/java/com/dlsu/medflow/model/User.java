@@ -56,4 +56,22 @@ public abstract class User implements Serializable {
         this.password = Objects.requireNonNull(password, "password");
         this.role = Objects.requireNonNull(role, "role");
     }
+
+    // ---- shared behaviour -------------------------------------------------
+
+    /** Shared method mentioned under Inheritance ("shared methods login(), logout()"). */
+    // UNDERSTAND: Password verification must perform safe null-safe comparisons without exposing raw credentials.
+    // DECISION: Implement checkPassword returning a boolean comparison result rather than providing a raw password getter.
+    public boolean checkPassword(String attempt) {
+        return password != null && password.equals(attempt);
+    }
+
+    // UNDERSTAND: Password updates must enforce length boundaries to prevent weak or corrupted credentials.
+    // DECISION: Validate non-null input with a minimum 4-character length check, throwing IllegalArgumentException on failure.
+    public void setPassword(String newPassword) {
+        if (newPassword == null || newPassword.length() < 4) {
+            throw new IllegalArgumentException("Password must be at least 4 characters long.");
+        }
+        this.password = newPassword;
+    }
 }
