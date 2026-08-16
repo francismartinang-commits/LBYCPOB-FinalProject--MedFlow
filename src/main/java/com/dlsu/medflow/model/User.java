@@ -74,4 +74,28 @@ public abstract class User implements Serializable {
         }
         this.password = newPassword;
     }
+
+    /** Up to two initials for the sidebar avatar circle — shared by every role's dashboard layout. */
+    // UNDERSTAND: Avatar components require a two-letter uppercase representation derived from the user's name.
+    // DECISION: Tokenize user name by whitespace and extract up to two leading characters, defaulting to "?" if empty.
+    public String getInitials() {
+        String[] parts = name.trim().split("\\s+");
+        StringBuilder sb = new StringBuilder();
+        for (String part : parts) {
+            if (!part.isEmpty()) {
+                sb.append(Character.toUpperCase(part.charAt(0)));
+            }
+            if (sb.length() >= 2) {
+                break;
+            }
+        }
+        return sb.length() > 0 ? sb.toString() : "?";
+    }
+
+    /** "Doctor - General Medicine" / "Laboratory Staff - Hematology" / just the role name for everyone else. */
+    // UNDERSTAND: UI headers require display strings describing the user's operational role.
+    // DECISION: Delegate getRoleDetail directly to role.getDisplayName() for default string formatting.
+    public String getRoleDetail() {
+        return role.getDisplayName();
+    }
 }
