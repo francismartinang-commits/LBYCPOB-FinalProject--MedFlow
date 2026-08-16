@@ -144,6 +144,35 @@ import java.util.List;
     public List<Visit> getPendingRegistrations() {
         return filterByStatus(VisitStatus.REGISTERED);
     }
+
+    public List<Visit> getPendingSampleCollection() {
+        return filterByStatus(VisitStatus.LABORATORY_REQUESTED);
+    }
+
+    public List<Visit> getPendingSendToLaboratory() {
+        return filterByStatus(VisitStatus.SAMPLE_COLLECTED);
+    }
+
+    private List<Visit> filterByStatus(VisitStatus status) {
+        List<Visit> result = new ArrayList<>();
+        for (Visit visit : visits) {
+            if (visit.getStatus() == status) {
+                result.add(visit);
+            }
+        }
+        return result;
+    }
+
+    public List<Visit> getVisitsForDoctor(Doctor doctor) {
+        List<Visit> result = new ArrayList<>();
+        for (Visit visit : visits) {
+            if (visit.getAssignedDoctor() == doctor) {
+                result.add(visit);
+            }
+        }
+        return result;
+    }
+
 }
 
 
