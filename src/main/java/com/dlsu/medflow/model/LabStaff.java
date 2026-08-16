@@ -10,3 +10,13 @@ import java.util.Map;
  * requests and encode findings" (System Framework).
  */
 public class LabStaff extends User {
+
+    private String section;
+
+    // UNDERSTAND: LabStaff extends User with section-specific routing metadata.
+    // DECISION: Store section field alongside base User credentials and fix role to Role.LAB_STAFF.
+    public LabStaff(String userId, String name, String username, String password, String section) {
+        super(userId, name, username, password, Role.LAB_STAFF);
+        this.section = section;
+    }
+}
