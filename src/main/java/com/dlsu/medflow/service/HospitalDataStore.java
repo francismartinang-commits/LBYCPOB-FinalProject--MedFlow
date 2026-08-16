@@ -390,6 +390,24 @@ import java.util.List;
         v4.getLabRequests().get(0).encodeFindings("Creatinine: 0.9 mg/dL - within normal limits.");
         v4.advance(labManalo, VisitStatus.FINDINGS_SENT_TO_DOCTOR, now.minusHours(2));
     }
+    /** Pairs a lab request with the visit it belongs to, for display in a laboratory staff queue. */
+    public static class LabQueueItem {
+        private final Visit visit;
+        private final LabRequest labRequest;
+
+        public LabQueueItem(Visit visit, LabRequest labRequest) {
+            this.visit = visit;
+            this.labRequest = labRequest;
+        }
+
+        public Visit getVisit() {
+            return visit;
+        }
+
+        public LabRequest getLabRequest() {
+            return labRequest;
+        }
+    }
 }
 
 
