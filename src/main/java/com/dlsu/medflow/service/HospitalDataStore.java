@@ -45,6 +45,9 @@ public static HospitalDataStore loadOrCreate() {
          if (loaded instanceof HospitalDataStore) {
             return (HospitalDataStore) loaded;
          }
+      } catch (IOException | ClassNotFoundException ex) {
+         System.err.println("Could not read saved data, starting fresh: " + ex.getMessage());
+      }a
 
 
 
