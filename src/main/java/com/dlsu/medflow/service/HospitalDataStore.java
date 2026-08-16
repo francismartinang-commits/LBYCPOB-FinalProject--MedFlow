@@ -52,6 +52,12 @@ import java.util.List;
       store.save();
       return store;
    }
+   public void save() {
+      try {
+         File dir = new File(DATA_DIR);
+         if (!dir.exists()) {
+            dir.mkdirs();
+         }
 }
 
 
