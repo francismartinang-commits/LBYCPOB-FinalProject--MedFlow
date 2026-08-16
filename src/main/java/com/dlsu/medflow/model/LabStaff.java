@@ -68,5 +68,7 @@ public class LabStaff extends User {
             visit.advance(this, newStatus);
             return;
         }
-        }
+        throw new IllegalStateException(
+                "Laboratory Staff cannot move a visit from " + current.getLabel() + " to " + newStatus.getLabel() + ".");
+    }
 }
