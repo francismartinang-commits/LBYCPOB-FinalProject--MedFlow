@@ -29,4 +29,21 @@ public final class LabRoutingEngine {
 
     private LabRoutingEngine() {
     }
+
+    /** Returns the laboratory section responsible for processing the given test. */
+    public static String routeTest(String testName) {
+        if (testName == null || testName.isBlank()) {
+            return DEFAULT_SECTION;
+        }
+        String text = testName.toLowerCase();
+        for (Map.Entry<String, String[]> entry : SECTION_KEYWORDS.entrySet()) {
+            for (String keyword : entry.getValue()) {
+                if (text.contains(keyword)) {
+                    return entry.getKey();
+                }
+            }
+        }
+        return DEFAULT_SECTION;
+    }
 }
+
