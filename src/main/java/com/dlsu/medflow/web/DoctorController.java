@@ -71,4 +71,16 @@ public class DoctorController {
         }
         return "redirect:/doctor/visits/" + visitId;
     }
+
+    /** "Single Test (createRequest(String))" — mirrors the JavaFX Add Single Test button. */
+    @PostMapping("/visits/{visitId}/tests/single")
+    public String addSingleTest(@PathVariable String visitId, @RequestParam String testName, HttpSession session) {
+        Doctor doctor = requireDoctor(session);
+        Visit visit = requireOwnVisit(doctor, visitId);
+        if (visit != null && testName != null && !testName.isBlank()) {
+            doctor.createRequest(visit, testName.trim());
+            store.save();
+        }
+        return "redirect:/doctor/visits/" + visitId;
+    }
 }
