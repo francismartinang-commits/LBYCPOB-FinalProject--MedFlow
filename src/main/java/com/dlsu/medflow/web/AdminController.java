@@ -21,4 +21,12 @@ public class AdminController {
         this.store = store;
     }
 
+
+    @GetMapping("/accounts/new")
+    public String newAccountForm(Model model) {
+        model.addAttribute("categories", store.getDoctorCategories());
+        model.addAttribute("sections", store.getLabSections());
+        return "admin/add-account";
+    }
+
 }
