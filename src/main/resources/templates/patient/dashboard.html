@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>MedFlow - Patient Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/medflow.css}"/>
+</head>
+<body>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+    <div class="main-content">
+        <div class="header-row">
+            <div>
+                <div class="page-title" th:text="'Welcome, ' + ${user.name.split(' ')[0]}">Welcome, Juan</div>
+                <div class="page-subtitle" style="margin-bottom:0;">Track your visits in real time, from registration to released results.</div>
+            </div>
+            <div class="spacer"></div>
+            <a class="btn btn-primary" th:href="@{/patient/visits/new}">+ Register a New Visit</a>
+        </div>
+
+        <div class="section-title">Your Visits</div>
+
+        <div th:if="${#lists.isEmpty(visits)}" class="card">
+            <p class="body-text">You have no visits yet. Use "Register a New Visit" above to get started.</p>
+        </div>
+
+        <div class="card" th:each="visit : ${visits}">
+            <div class="card-row">
+                <div>
+                    <div class="section-title" style="margin-bottom:4px;" th:text="${visit.reasonForVisit}">Reason</div>
+                    <div class="muted-text">
+                        Visit <span th:text="${visit.visitId}">V-00001</span> &middot;
+                        Registered <span th:text="${#temporals.format(visit.registeredAt, 'MMM d, yyyy - h:mm a')}">Jan 1</span>
+                    </div>
+                    <div class="muted-text" style="margin-top:2px;">Doctor: <span th:text="${visit.doctorLabel}">-</span></div>
+                </div>
+                <div class="spacer"></div>
+                <span class="badge" th:classappend="'badge-' + ${visit.status.badgeTone}" th:text="${visit.status.label}">Status</span>
+            </div>
+            <div style="margin-top: 12px;">
+                <a class="btn btn-secondary" th:href="@{'/patient/visits/' + ${visit.visitId} + '/timeline'}">View Status Timeline</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
