@@ -1,22 +1,20 @@
 package com.dlsu.medflow;
 
-import com.dlsu.medflow.service.HospitalDataStore;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 
+/**
+ * Entry point for the Spring Boot edition of MedFlow.
+ *
+ * <p>Replaces {@code Launcher.java} / {@code Main.java} from the JavaFX
+ * edition, whose only job was working around a JavaFX runtime quirk before
+ * calling {@code Application.launch}. A Spring Boot app has no equivalent
+ * problem - this class just boots the embedded web server.</p>
+ */
 @SpringBootApplication
 public class MedFlowApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(MedFlowApplication.class, args);
-	}
-
-	// UNDERSTAND:
-	// @Bean lets Spring Boot manage HospitalDataStore so it can be
-	// injected into controllers such as AdminController.
-	@Bean
-	public HospitalDataStore hospitalDataStore() {
-		return HospitalDataStore.loadOrCreate();
 	}
 }
