@@ -38,4 +38,13 @@ public class AuthInterceptor implements HandlerInterceptor {
             response.sendRedirect("/login");
             return false;
         }
+
+        String path = request.getRequestURI();
+        Role requiredRole = roleForPath(path);
+        if (requiredRole != null && user.getRole() != requiredRole) {
+            response.sendRedirect("/dashboard");
+            return false;
+        }
+        return true;
+    }
 }
