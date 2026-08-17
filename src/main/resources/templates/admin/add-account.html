@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>MedFlow - Add Staff Account</title>
+    <link rel="stylesheet" th:href="@{/css/medflow.css}"/>
+</head>
+<body>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+    <div class="main-content">
+        <a class="btn-link" th:href="@{/dashboard}">&larr; Back to dashboard</a>
+        <div class="page-title" style="margin-top:10px;">Add Staff Account</div>
+        <div class="page-subtitle">Create a Doctor, Nurse/Staff, Laboratory Staff, or Admin account.</div>
+
+        <div class="card wide-card">
+            <div class="alert alert-error" th:if="${errorMessage}" th:text="${errorMessage}">Error</div>
+
+            <form th:action="@{/admin/accounts}" method="post" id="addAccountForm">
+                <div class="field-group">
+                    <label class="field-label">Role</label>
+                    <select name="role" id="roleSelect" onchange="toggleRoleFields()">
+                        <option value="DOCTOR">Doctor</option>
+                        <option value="NURSE_STAFF">Nurse / Staff</option>
+                        <option value="LAB_STAFF">Laboratory Staff</option>
+                        <option value="ADMIN">Admin</option>
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label class="field-label">Full Name</label>
+                    <input class="text-input" type="text" name="name"/>
+                </div>
+                <div class="field-group">
+                    <label class="field-label">Username</label>
+                    <input class="text-input" type="text" name="username" autocomplete="off"/>
+                </div>
+                <div class="field-group">
+                    <label class="field-label">Password</label>
+                    <input class="text-input" type="password" name="password" autocomplete="new-password"/>
+                </div>
+
+                <div class="field-group" id="specializationGroup">
+                    <label class="field-label">Specialization</label>
+                    <select name="specialization">
+                        <option th:each="cat : ${categories}" th:value="${cat}" th:text="${cat}">Category</option>
+                    </select>
+                </div>
+
+                <div class="field-group" id="sectionGroup" style="display:none;">
+                    <label class="field-label">Laboratory Section</label>
+                    <select name="section">
+                        <option th:each="sec : ${sections}" th:value="${sec}" th:text="${sec}">Section</option>
+                    </select>
+                </div>
+
+                <div style="display:flex; gap:12px; justify-content:flex-end;">
+                    <a class="btn btn-secondary" th:href="@{/dashboard}">Cancel</a>
+                    <button class="btn btn-primary" type="submit">Create Account</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    function toggleRoleFields() {
+        var role = document.getElementById("roleSelect").value;
+        document.getElementById("specializationGroup").style.display = (role === "DOCTOR") ? "block" : "none";
+        document.getElementById("sectionGroup").style.display = (role === "LAB_STAFF") ? "block" : "none";
+    }
+    toggleRoleFields();
+</script>
+</body>
+</html>
