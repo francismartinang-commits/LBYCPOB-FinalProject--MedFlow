@@ -98,3 +98,17 @@
                         <form th:action="@{/admin/sections/remove}" method="post" style="margin-left:auto;">
                             <input type="hidden" name="section" th:value="${sec}"/>
                             <button type="submit" class="btn-link">Remove</button>
+                        </form>
+                    </li>
+                </ul>
+                <form th:action="@{/admin/sections}" method="post" style="display:flex; gap:10px; margin-top:14px;">
+                    <input class="text-input" type="text" name="section" placeholder="New section, e.g., Molecular Diagnostics"/>
+                    <button class="btn btn-primary" type="submit" style="flex:none;">Add Section</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:src="@{/js/tabs.js}"></script>
+</body>
+</html>
