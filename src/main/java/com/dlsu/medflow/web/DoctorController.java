@@ -60,4 +60,15 @@ public class DoctorController {
         }
         return "redirect:/doctor/visits/" + visitId;
     }
+
+    @PostMapping("/visits/{visitId}/notes")
+    public String saveNotes(@PathVariable String visitId, @RequestParam String notes, HttpSession session) {
+        Doctor doctor = requireDoctor(session);
+        Visit visit = requireOwnVisit(doctor, visitId);
+        if (visit != null) {
+            visit.getMedicalRecord().setDoctorNotes(doctor, notes == null ? "" : notes.trim());
+            store.save();
+        }
+        return "redirect:/doctor/visits/" + visitId;
+    }
 }
