@@ -24,3 +24,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
  *       bounce to their own {@code /dashboard} instead.</li>
  * </ol>
  */
+
+
+public class AuthInterceptor implements HandlerInterceptor {
