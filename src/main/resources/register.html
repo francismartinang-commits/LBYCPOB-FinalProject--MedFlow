@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>MedFlow - New Patient Registration</title>
+    <link rel="stylesheet" th:href="@{/css/medflow.css}"/>
+</head>
+<body style="background: var(--color-bg);">
+<div style="max-width: 640px; margin: 48px auto; padding: 0 20px;">
+    <div class="card" style="padding: 30px 32px;">
+        <div class="page-title">New Patient Registration</div>
+        <div class="page-subtitle">Register once, then log in any time to track your visit.</div>
+
+        <div class="alert alert-error" th:if="${errorMessage}" th:text="${errorMessage}">Error</div>
+
+        <form th:action="@{/register}" method="post">
+            <div th:replace="~{fragments/registration-fields :: fields(${form})}"></div>
+            <div style="display:flex; gap:12px; justify-content:flex-end; margin-top: 8px;">
+                <a class="btn btn-secondary" th:href="@{/login}">Cancel</a>
+                <button class="btn btn-primary" type="submit">Register</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
