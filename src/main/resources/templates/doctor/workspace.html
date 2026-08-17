@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>MedFlow - Visit Workspace</title>
+    <link rel="stylesheet" th:href="@{/css/medflow.css}"/>
+</head>
+<body>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+    <div class="main-content">
+        <a class="btn-link" th:href="@{/dashboard}">&larr; Back to dashboard</a>
+
+        <div class="page-title" style="margin-top:10px;" th:text="${visit.patient.name}">Patient</div>
+        <div class="page-subtitle">Reason for visit: <span th:text="${visit.reasonForVisit}">Reason</span></div>
+        <div class="muted-text" style="margin-top:-14px; margin-bottom:22px;">
+            Patient contact: <span th:text="${visit.patient.contactNumber}">-</span> &middot;
+            Age <span th:text="${visit.patient.age}">0</span> &middot;
+            <span th:text="${visit.patient.gender}">-</span>
+        </div>
+
+        <!-- Clinical notes, if any have been recorded -->
+        <div class="card wide-card" th:if="${!#strings.isEmpty(notes)}">
+            <div class="section-title">Clinical Notes</div>
+            <p class="body-text" th:text="${notes}">Notes</p>
+        </div>
+
+        <!-- Laboratory requests, if any have been created -->
+        <div class="card wide-card" th:if="${!#lists.isEmpty(visit.labRequests)}">
+            <div class="section-title">Laboratory Requests</div>
+            <div th:each="request : ${visit.labRequests}" style="margin-bottom:10px;">
+                <div class="card-row">
+                    <span th:text="${request.testName}">Test</span>
+                    <span class="badge" th:classappend="'badge-' + ${request.priority.badgeTone}" th:text="${request.priority.label}">Priority</span>
+                    <span class="muted-text" th:text="'&rarr; ' + ${request.assignedSection}">-&gt; Section</span>
+                </div>
+                <p class="body-text" th:if="${request.findingsEncoded}" th:text="'Findings: ' + ${request.findings}">Findings</p>
+            </div>
+        </div>
+
+        <!-- ASSIGNED_TO_DOCTOR: begin assessment -->
+        <div class="card wide-card" th:if="${visit.status.name() == 'ASSIGNED_TO_DOCTOR'}">
+            <div class="section-title">Ready to see this patient?</div>
+            <form th:action="@{'/doctor/visits/' + ${visit.visitId} + '/begin'}" method="post">
+                <button class="btn btn-primary" type="submit">Begin Assessment</button>
+            </form>
+        </div>
+
+        <!-- UNDER_DOCTOR_ASSESSMENT: notes + create lab requests -->
+        <div class="card wide-card" th:if="${visit.status.name() == 'UNDER_DOCTOR_ASSESSMENT'}">
+            <div class="section-title">Assessment</div>
+            <form th:action="@{'/doctor/visits/' + ${visit.visitId} + '/notes'}" method="post">
+                <div class="field-group">
+                    <textarea name="notes" placeholder="Clinical assessment notes..." th:text="${notes}"></textarea>
+                </div>
+                <button class="btn btn-secondary" type="submit">Save Notes</button>
+            </form>
+
+            <hr style="border:none; border-top:1px solid var(--color-border); margin:20px 0;"/>
+
+            <div class="section-title">Create Laboratory Request</div>
+            <form th:action="@{'/doctor/visits/' + ${visit.visitId} + '/tests/single'}" method="post" style="margin-bottom:18px;">
+                <div class="field-group">
+                    <label class="field-label">Single Test (createRequest(String))</label>
+                    <input class="text-input" type="text" name="testName" placeholder="e.g., CBC (Complete Blood Count)"/>
+                </div>
+                <button class="btn btn-secondary" type="submit">Add Single Test</button>
+            </form>
+
+            <form th:action="@{'/doctor/visits/' + ${visit.visitId} + '/tests/batch'}" method="post">
+                <div class="field-group">
+                    <label class="field-label">Batch Tests, comma-separated (createRequest(String[], String))</label>
+                    <input class="text-input" type="text" name="testNames" placeholder="e.g., CBC, Urinalysis, X-ray Chest"/>
+                </div>
+                <div class="form-row" style="align-items:flex-end;">
+                    <div class="field-group" style="max-width:200px;">
+                        <label class="field-label">Priority</label>
+                        <select name="priority">
+                            <option value="ROUTINE">Routine</option>
+                            <option value="URGENT">Urgent</option>
+                            <option value="STAT">STAT</option>
+                        </select>
+                    </div>
+                    <div class="field-group" style="flex:none;">
+                        <button class="btn btn-secondary" type="submit">Add Batch</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- FINDINGS_SENT_TO_DOCTOR: review + diagnose -->
+        <div class="card wide-card" th:if="${visit.status.name() == 'FINDINGS_SENT_TO_DOCTOR'}">
+            <div class="section-title">Review Laboratory Findings</div>
+            <div class="alert alert-error" th:if="${errorMessage}" th:text="${errorMessage}">Error</div>
+            <form th:action="@{'/doctor/visits/' + ${visit.visitId} + '/review'}" method="post">
+                <div class="field-group">
+                    <textarea name="diagnosis" placeholder="Final diagnosis and advice for the patient..."></textarea>
+                </div>
+                <button class="btn btn-primary" type="submit">Confirm Review</button>
+            </form>
