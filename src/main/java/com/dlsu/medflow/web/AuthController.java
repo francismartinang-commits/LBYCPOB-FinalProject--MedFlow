@@ -140,6 +140,21 @@ public class AuthController {
     private boolean isBlank(String s) {
         return s == null || s.isBlank();
     }
+
+    private String registerError(Model model, String message, String name, String age, String gender,
+                                 String contactNumber, String address, String username, String reason) {
+        model.addAttribute("errorMessage", message);
+        Map<String, String> form = new HashMap<>();
+        form.put("name", name);
+        form.put("age", age);
+        form.put("gender", gender);
+        form.put("contactNumber", contactNumber);
+        form.put("address", address);
+        form.put("username", username);
+        form.put("reason", reason);
+        model.addAttribute("form", form);
+        return "register";
+    }
 }
 
 
