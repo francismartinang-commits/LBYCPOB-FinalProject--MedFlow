@@ -29,4 +29,21 @@ public class AdminController {
         return "admin/add-account";
     }
 
+    @PostMapping("/accounts")
+    public String createAccount(@RequestParam Role role, @RequestParam String name, @RequestParam String username,
+                                @RequestParam String password,
+                                @RequestParam(required = false) String specialization,
+                                @RequestParam(required = false) String section,
+                                Model model) {
+
+        if (name.isBlank() || username.isBlank() || password.isBlank()) {
+            return accountError(model, "Please fill in every field.");
+        }
+        if (password.length() < 4) {
+            return accountError(model, "Password must be at least 4 characters long.");
+        }
+        if (store.usernameTaken(username.trim())) {
+            return accountError(model, "That username is already taken.");
+        }
+
 }
