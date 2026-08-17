@@ -40,5 +40,11 @@ public class AuthController {
         this.store = store;
     }
 
+    @GetMapping("/")
+    public String root(HttpSession session) {
+        boolean loggedIn = session.getAttribute(SessionKeys.CURRENT_USER) != null;
+        return loggedIn ? "redirect:/dashboard" : "redirect:/login";
+    }
+
 
 }
