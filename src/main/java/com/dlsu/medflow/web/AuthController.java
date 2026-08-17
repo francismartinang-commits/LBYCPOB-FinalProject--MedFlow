@@ -155,6 +155,12 @@ public class AuthController {
         model.addAttribute("form", form);
         return "register";
     }
+
+    @PostMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/login";
+    }
 }
 
 
