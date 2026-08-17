@@ -47,4 +47,41 @@ public class AuthController {
     }
 
 
+    @GetMapping("/login")
+    public String loginForm(HttpSession session,
+                            @RequestParam(required = false) String registered,
+                            @RequestParam(required = false) String username,
+                            Model model) {
+        if (session.getAttribute(SessionKeys.CURRENT_USER) != null) {
+            return "redirect:/dashboard";
+        }
+        if (registered != null) {
+            model.addAttribute("successMessage", "Registration successful! Enter your password to log in.");
+            model.addAttribute("prefillUsername", username);
+        }
+        model.addAttribute("demoAccounts", DEMO_ACCOUNTS);
+        return "login";
+    }
+
+}
+
+@PostMapping("/login")
+public String login(@RequestParam String username, @RequestParam String password,
+                    HttpSession session, Model model) {
+    model.addAttribute("demoAccounts", DEMO_ACCOUNTS);
+    if (username.isBlank() || password.isBlank()) {
+        model.addAttribute("errorMessage", "Please enter both your username and password.");
+        model.addAttribute("prefillUsername", username);
+        return "login";
+    }
+    User user = store.authenticate(username, password);
+    if (user == null) {
+        model.addAttribute("errorMessage", "Incorrect username or password. Please try again.");
+        model.addAttribute("prefillUsername", username);
+        return "login";
+    }
+    session.setAttribute(SessionKeys.CURRENT_USER, user);
+    return "redirect:/dashboard";
+}
+
 }
