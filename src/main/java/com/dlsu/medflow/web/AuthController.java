@@ -15,6 +15,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * Replaces {@code LoginView} and {@code PatientRegistrationDialog} from the
+ * JavaFX edition. Same validation rules, just triggered by an HTTP POST
+ * instead of a button's {@code setOnAction}.
+ */
+@Controller
 public class AuthController {
-}
