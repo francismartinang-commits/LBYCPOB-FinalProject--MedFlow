@@ -13,6 +13,8 @@ import com.dlsu.medflow.web.support.SessionKeys;
 import jakarta.servlet.http.HttpSession;
 import java.util.HashMap;
 
+
+
 /** Replaces the three tabs of {@code NurseDashboard}, plus its walk-in registration dialog. */
 @Controller
 @RequestMapping("/nurse")
@@ -99,5 +101,15 @@ public class NurseController {
         }
         return "redirect:/dashboard";
     }
-
+    
+    @PostMapping("/samples/{visitId}/confirm")
+    public String confirmSample(@PathVariable String visitId, HttpSession session) {
+        Nurse nurse = (Nurse) session.getAttribute(SessionKeys.CURRENT_USER);
+        Visit visit = store.getVisitById(visitId);
+        if (visit != null) {
+            nurse.updateStatus(visit, VisitStatus.SAMPLE_COLLECTED);
+            store.save();
+        }
+        return "redirect:/dashboard";
+    }
 }
