@@ -76,4 +76,13 @@ public class AdminController {
         return "redirect:/dashboard?tab=categories";
     }
 
+
+    @PostMapping("/categories/remove")
+    public String removeCategory(@RequestParam String category) {
+        store.removeDoctorCategory(category);
+        store.save();
+        return "redirect:/dashboard?tab=categories";
+    }
+
+
 }
