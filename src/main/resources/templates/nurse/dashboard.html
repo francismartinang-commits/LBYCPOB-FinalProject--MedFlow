@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>MedFlow - Nurse / Staff Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/medflow.css}"/>
+</head>
+<body>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+    <div class="main-content">
+        <div class="header-row">
+            <div>
+                <div class="page-title">Nurse / Staff Dashboard</div>
+                <div class="page-subtitle" style="margin-bottom:0;">Confirm doctor assignments, sample collection, and laboratory hand-offs.</div>
+            </div>
+            <div class="spacer"></div>
+            <a class="btn btn-secondary" th:href="@{/nurse/walkin}">+ Register Walk-in Patient</a>
+        </div>
+
+        <div class="tabs-bar">
+            <button type="button" class="tab-btn" data-tab-target="registrations">New Registrations</button>
+            <button type="button" class="tab-btn" data-tab-target="samples">Sample Collection</button>
+            <button type="button" class="tab-btn" data-tab-target="send">Send to Laboratory</button>
+        </div>
+
+        <!-- Tab 1: confirm doctor assignment -->
+        <div class="tab-panel" data-tab-panel="registrations">
+            <div class="card" th:if="${#lists.isEmpty(registrations)}">
+                <p class="body-text">No new registrations right now.</p>
+            </div>
+            <div class="card" th:each="visit : ${registrations}">
+                <div class="section-title" th:text="${visit.patient.name}">Patient</div>
+                <p class="muted-text" th:text="'&quot;' + ${visit.reasonForVisit} + '&quot;'">Reason</p>
+                <p class="muted-text" th:text="${visit.recommendedDoctor != null ? 'System suggestion: ' + visit.recommendedDoctor.name : 'No system suggestion available.'}">Suggestion</p>
+
+                <form th:action="@{'/nurse/registrations/' + ${visit.visitId} + '/confirm'}" method="post">
+                    <div class="field-group">
+                        <label class="field-label">Assign to</label>
+                        <select name="doctorId">
+                            <option th:each="doc : ${allDoctors}" th:value="${doc.userId}"
+                                    th:selected="${visit.recommendedDoctor != null and doc.userId == visit.recommendedDoctor.userId}"
+                                    th:text="${doc.name} + ' (' + ${doc.specialization} + ')'">Doctor</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Confirm Assignment</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tab 2: confirm sample collected -->
+        <div class="tab-panel" data-tab-panel="samples">
+            <div class="card" th:if="${#lists.isEmpty(sampleCollection)}">
+                <p class="body-text">No samples awaiting collection.</p>
+            </div>
+            <div class="card" th:each="visit : ${sampleCollection}">
+                <div class="section-title" th:text="${visit.patient.name}">Patient</div>
+                <p class="muted-text" th:text="'Ordered by ' + ${visit.assignedDoctor.name}">Doctor</p>
+                <div style="margin: 8px 0;">
+                    <div th:each="request : ${visit.labRequests}" class="card-row" style="margin-bottom:4px;">
+                        <span th:text="${request.testName}">Test</span>
+                        <span class="badge" th:classappend="'badge-' + ${request.priority.badgeTone}" th:text="${request.priority.label}">Priority</span>
+                    </div>
+                </div>
+                <form th:action="@{'/nurse/samples/' + ${visit.visitId} + '/confirm'}" method="post">
+                    <button class="btn btn-primary" type="submit">Confirm Sample Collected</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tab 3: send to laboratory -->
+        <div class="tab-panel" data-tab-panel="send">
+            <div class="card" th:if="${#lists.isEmpty(sendToLab)}">
+                <p class="body-text">Nothing waiting to be sent to the laboratory.</p>
+            </div>
+            <div class="card" th:each="visit : ${sendToLab}">
+                <div class="section-title" th:text="${visit.patient.name}">Patient</div>
+                <div style="margin: 8px 0;">
+                    <p class="muted-text" th:each="request : ${visit.labRequests}"
+                       th:text="${request.testName} + ' &rarr; ' + ${request.assignedSection}">Test -&gt; Section</p>
+                </div>
+                <form th:action="@{'/nurse/send/' + ${visit.visitId}}" method="post">
+                    <button class="btn btn-primary" type="submit">Send to Laboratory</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:src="@{/js/tabs.js}"></script>
+</body>
+</html>
