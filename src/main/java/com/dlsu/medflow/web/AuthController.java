@@ -22,3 +22,16 @@ import java.util.Map;
  */
 @Controller
 public class AuthController {
+
+    /** Mirrors LoginView's demo-account quick-fill panel. */
+    private static final List<String[]> DEMO_ACCOUNTS = List.of(
+            new String[]{"Admin", "admin", "admin123"},
+            new String[]{"Doctor - Dr. Ana Reyes (General Medicine)", "dr.reyes", "doctor123"},
+            new String[]{"Doctor - Dr. Miguel Santos (Cardiology)", "dr.santos", "doctor123"},
+            new String[]{"Nurse / Staff - Liza Ramos", "nurse.ramos", "nurse123"},
+            new String[]{"Laboratory Staff - Jun Dizon (Hematology)", "lab.dizon", "lab123"},
+            new String[]{"Laboratory Staff - Ella Manalo (Chemistry / Biochemistry)", "lab.manalo", "lab123"},
+            new String[]{"Patient - Juan Dela Cruz", "patient.juan", "patient123"}
+    );
+
+}
