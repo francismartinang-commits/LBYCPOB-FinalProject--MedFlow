@@ -83,4 +83,18 @@ public class DoctorController {
         }
         return "redirect:/doctor/visits/" + visitId;
     }
+
+    /** "Batch Tests (createRequest(String[], String))" — mirrors the JavaFX Add Batch button. */
+    @PostMapping("/visits/{visitId}/tests/batch")
+    public String addBatchTests(@PathVariable String visitId, @RequestParam String testNames,
+                                @RequestParam String priority, HttpSession session) {
+        Doctor doctor = requireDoctor(session);
+        Visit visit = requireOwnVisit(doctor, visitId);
+        if (visit != null && testNames != null && !testNames.isBlank()) {
+            String[] names = testNames.split(",");
+            doctor.createRequest(visit, names, priority);
+            store.save();
+        }
+        return "redirect:/doctor/visits/" + visitId;
+    }
 }
