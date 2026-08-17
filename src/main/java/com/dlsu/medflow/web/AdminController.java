@@ -1,4 +1,10 @@
 package com.dlsu.medflow.web;
 
-public class AdminController {
-}
+import com.dlsu.medflow.model.*;
+import com.dlsu.medflow.service.HospitalDataStore;
+import com.dlsu.medflow.web.support.SessionKeys;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
