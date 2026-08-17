@@ -64,5 +64,9 @@ public class AdminController {
             case ADMIN -> newUser = new Admin(store.generateUserId("AD"), name.trim(), username.trim(), password);
             default -> newUser = new Nurse(store.generateUserId("NS"), name.trim(), username.trim(), password);
         }
+        store.addUser(newUser);
+        store.save();
+        return "redirect:/dashboard?tab=accounts";
+    }
 
 }
