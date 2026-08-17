@@ -100,5 +100,11 @@ public class AdminController {
     }
 
 
+    private String accountError(Model model, String message) {
+        model.addAttribute("errorMessage", message);
+        model.addAttribute("categories", store.getDoctorCategories());
+        model.addAttribute("sections", store.getLabSections());
+        return "admin/add-account";
+    }
 
 }
