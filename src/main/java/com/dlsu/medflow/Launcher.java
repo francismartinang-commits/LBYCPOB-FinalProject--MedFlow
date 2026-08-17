@@ -1,9 +1,0 @@
-package com.dlsu.medflow;
-
-import com.sun.tools.javac.Main;
-
-public class Launcher {
-    public static void main(String[] args) {
-        Main.main(args);
-    }
-}
