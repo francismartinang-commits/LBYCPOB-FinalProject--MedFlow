@@ -92,4 +92,13 @@ public class AdminController {
     }
 
 
+    @PostMapping("/sections/remove")
+    public String removeSection(@RequestParam String section) {
+        store.removeLabSection(section);
+        store.save();
+        return "redirect:/dashboard?tab=sections";
+    }
+
+
+
 }
