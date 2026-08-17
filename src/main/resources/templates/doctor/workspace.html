@@ -98,3 +98,22 @@
                 </div>
                 <button class="btn btn-primary" type="submit">Confirm Review</button>
             </form>
+        </div>
+
+        <!-- DOCTOR_REVIEWED: release to patient -->
+        <div class="card wide-card" th:if="${visit.status.name() == 'DOCTOR_REVIEWED'}">
+            <div class="section-title">Ready to release?</div>
+            <p class="body-text">The patient will immediately be able to see the diagnosis and laboratory findings.</p>
+            <form th:action="@{'/doctor/visits/' + ${visit.visitId} + '/release'}" method="post">
+                <button class="btn btn-success" type="submit">Release Results to Patient</button>
+            </form>
+        </div>
+
+        <div class="card wide-card">
+            <div class="section-title">Status Timeline</div>
+            <div th:replace="~{fragments/status-tracker :: tracker(${visit})}"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
