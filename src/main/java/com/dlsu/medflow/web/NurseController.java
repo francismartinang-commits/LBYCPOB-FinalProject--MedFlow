@@ -1,3 +1,5 @@
+package com.dlsu.medflow.web;
+
 import com.dlsu.medflow.model.Patient;
 import com.dlsu.medflow.service.HospitalDataStore;
 import org.springframework.stereotype.Controller;
