@@ -97,4 +97,25 @@ public class DoctorController {
         }
         return "redirect:/doctor/visits/" + visitId;
     }
+
+    @PostMapping("/visits/{visitId}/review")
+    public String review(@PathVariable String visitId, @RequestParam String diagnosis,
+                         HttpSession session, Model model) {
+        Doctor doctor = requireDoctor(session);
+        Visit visit = requireOwnVisit(doctor, visitId);
+        if (visit == null) {
+            return "redirect:/dashboard";
+        }
+        if (diagnosis == null || diagnosis.isBlank()) {
+            model.addAttribute("visit", visit);
+            model.addAttribute("doctor", doctor);
+            model.addAttribute("notes", visit.getMedicalRecord().getDoctorNotes(doctor));
+            model.addAttribute("errorMessage", "Please write a diagnosis before confirming.");
+            return "doctor/workspace";
+        }
+        visit.getMedicalRecord().setDiagnosis(doctor, diagnosis.trim());
+        doctor.updateStatus(visit, VisitStatus.DOCTOR_REVIEWED);
+        store.save();
+        return "redirect:/doctor/visits/" + visitId;
+    }
 }
