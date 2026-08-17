@@ -95,6 +95,47 @@ public class AuthController {
         }
         return "register";
     }
+
+    @PostMapping("/register")
+    public String register(@RequestParam String name, @RequestParam String age, @RequestParam String gender,
+                           @RequestParam String contactNumber, @RequestParam String address,
+                           @RequestParam String username, @RequestParam String password,
+                           @RequestParam String reason, Model model) {
+
+        if (isBlank(name) || isBlank(age) || isBlank(contactNumber) || isBlank(address)
+                || isBlank(username) || isBlank(password) || isBlank(reason)) {
+            return registerError(model, "Please fill in every field before submitting.",
+                    name, age, gender, contactNumber, address, username, reason);
+        }
+
+        int parsedAge;
+        try {
+            parsedAge = Integer.parseInt(age.trim());
+            if (parsedAge <= 0 || parsedAge > 130) {
+                throw new NumberFormatException();
+            }
+        } catch (NumberFormatException ex) {
+            return registerError(model, "Please enter a valid age.",
+                    name, age, gender, contactNumber, address, username, reason);
+        }
+
+        if (password.length() < 4) {
+            return registerError(model, "Password must be at least 4 characters long.",
+                    name, age, gender, contactNumber, address, username, reason);
+        }
+
+        if (store.usernameTaken(username.trim())) {
+            return registerError(model, "That username is already taken - please choose another.",
+                    name, age, gender, contactNumber, address, username, reason);
+        }
+
+        Patient patient = store.registerPatient(name.trim(), parsedAge, gender, contactNumber.trim(),
+                address.trim(), username.trim(), password);
+        store.registerVisit(patient, reason.trim());
+        store.save();
+
+        return "redirect:/login?registered=true&username=" + username.trim();
+    }
 }
 
 
