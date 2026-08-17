@@ -1,0 +1,17 @@
+<!-- Replaces StatusTrackerView.java: a vertical timeline of all 10 VisitStatus
+     stages, marking which are done, which is current, and when each was reached. -->
+<ul xmlns:th="http://www.thymeleaf.org" th:fragment="tracker(visit)" class="tracker">
+    <li th:each="stage, iter : ${T(com.dlsu.medflow.model.VisitStatus).values()}"
+        th:with="ts=${visit.getTimestampFor(stage)}"
+        th:classappend="${stage.ordinal() lt visit.status.ordinal() ? 'done' : (stage == visit.status ? 'current' : '')}"
+        class="tracker-step">
+        <div class="tracker-dot"></div>
+        <div class="tracker-line" th:if="${!iter.last}"></div>
+        <div>
+            <div class="tracker-title" th:text="|${stage.stageNumber}. ${stage.label}|">1. Registered</div>
+            <div class="tracker-time" th:if="${ts != null}"
+                 th:text="${#temporals.format(ts, 'MMM d, yyyy - h:mm a')}">Jan 1, 2026 - 8:00 AM</div>
+            <div class="tracker-time" th:unless="${ts != null}">Not yet reached</div>
+        </div>
+    </li>
+</ul>
