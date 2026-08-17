@@ -46,4 +46,3 @@ public final class LabRoutingEngine {
         return DEFAULT_SECTION;
     }
 }
-

@@ -129,4 +129,5 @@ public class DoctorController {
         }
         return "redirect:/doctor/visits/" + visitId;
     }
+
 }
