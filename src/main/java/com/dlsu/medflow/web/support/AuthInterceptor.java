@@ -47,4 +47,13 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
         return true;
     }
+
+    private Role roleForPath(String path) {
+        if (path.startsWith("/patient/")) return Role.PATIENT;
+        if (path.startsWith("/doctor/")) return Role.DOCTOR;
+        if (path.startsWith("/nurse/")) return Role.NURSE_STAFF;
+        if (path.startsWith("/labstaff/")) return Role.LAB_STAFF;
+        if (path.startsWith("/admin/")) return Role.ADMIN;
+        return null; // /dashboard and anything else just needs *a* logged-in user
+    }
 }
