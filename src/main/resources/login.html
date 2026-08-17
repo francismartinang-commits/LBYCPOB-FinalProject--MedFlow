@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>MedFlow - Log In</title>
+    <link rel="stylesheet" th:href="@{/css/medflow.css}"/>
+</head>
+<body>
+<div class="split-screen">
+    <div class="split-left">
+        <div class="brand-badge">DE LA SALLE UNIVERSITY &middot; LBYCPOB PROJECT</div>
+        <div class="brand-pulse">&#9724;&#8202;/\/\&#8202;&#9724;</div>
+        <div class="brand-title">MedFlow</div>
+        <div class="brand-tagline">
+            Hospital &amp; Laboratory Information System<br/><br/>
+            Follow every patient from registration to released results - with role-based access
+            for Patients, Doctors, Nurses/Staff, Laboratory Staff, and Admins.
+        </div>
+    </div>
+    <div class="split-right">
+        <div>
+            <div class="auth-card">
+                <div class="auth-title">Welcome back</div>
+                <div class="auth-subtitle">Sign in with your MedFlow account to continue.</div>
+
+                <div class="alert alert-error" th:if="${errorMessage}" th:text="${errorMessage}">Error</div>
+                <div class="alert alert-success" th:if="${successMessage}" th:text="${successMessage}">Success</div>
+
+                <form th:action="@{/login}" method="post">
+                    <div class="field-group">
+                        <label class="field-label" for="username">Username</label>
+                        <input class="text-input" type="text" id="username" name="username"
+                               th:value="${prefillUsername}" autocomplete="username"/>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label" for="password">Password</label>
+                        <input class="text-input" type="password" id="password" name="password"
+                               autocomplete="current-password"/>
+                    </div>
+                    <button class="btn btn-primary btn-block" type="submit">Log In</button>
+                </form>
+                <div style="margin-top: 14px;">
+                    <a class="btn-link" th:href="@{/register}">New patient? Register here</a>
+                </div>
+            </div>
+
+            <details style="max-width: 400px; margin-top: 18px;">
+                <summary class="muted-text" style="cursor: pointer;">Demo accounts (for quick testing)</summary>
+                <div class="card" style="margin-top: 10px;">
+                    <div th:each="demo : ${demoAccounts}" style="margin-bottom: 8px;">
+                        <div class="muted-text" th:text="${demo[0]}">Role</div>
+                        <div class="card-row">
+                            <code th:text="${demo[1] + ' / ' + demo[2]}">user / pass</code>
+                            <button type="button" class="btn-link" style="margin-left:auto"
+                                    th:attr="data-u=${demo[1]},data-p=${demo[2]}"
+                                    onclick="document.getElementById('username').value=this.dataset.u;document.getElementById('password').value=this.dataset.p;">Use</button>
+                        </div>
+                    </div>
+                </div>
+            </details>
+        </div>
+    </div>
+</div>
+</body>
+</html>
