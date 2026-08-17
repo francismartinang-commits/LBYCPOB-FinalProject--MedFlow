@@ -118,4 +118,15 @@ public class DoctorController {
         store.save();
         return "redirect:/doctor/visits/" + visitId;
     }
+
+    @PostMapping("/visits/{visitId}/release")
+    public String release(@PathVariable String visitId, HttpSession session) {
+        Doctor doctor = requireDoctor(session);
+        Visit visit = requireOwnVisit(doctor, visitId);
+        if (visit != null) {
+            doctor.updateStatus(visit, VisitStatus.RELEASED_TO_PATIENT);
+            store.save();
+        }
+        return "redirect:/doctor/visits/" + visitId;
+    }
 }
