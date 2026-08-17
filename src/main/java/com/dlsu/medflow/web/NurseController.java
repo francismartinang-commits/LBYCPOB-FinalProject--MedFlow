@@ -60,4 +60,24 @@ public class NurseController {
         store.save();
         return "redirect:/dashboard";
     }
+
+    private boolean isBlank(String s) {
+        return s == null || s.isBlank();
+    }
+
+    private String walkInError(Model model, String message, String name, String age, String gender,
+                               String contactNumber, String address, String username, String reason) {
+        model.addAttribute("errorMessage", message);
+        var form = new HashMap<String, String>();
+        form.put("name", name);
+        form.put("age", age);
+        form.put("gender", gender);
+        form.put("contactNumber", contactNumber);
+        form.put("address", address);
+        form.put("username", username);
+        form.put("reason", reason);
+        model.addAttribute("form", form);
+        return "nurse/walkin";
+    }
+
 }
