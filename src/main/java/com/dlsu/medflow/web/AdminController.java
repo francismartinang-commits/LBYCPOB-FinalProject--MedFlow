@@ -84,5 +84,12 @@ public class AdminController {
         return "redirect:/dashboard?tab=categories";
     }
 
+    @PostMapping("/sections")
+    public String addSection(@RequestParam String section) {
+        store.addLabSection(section.trim());
+        store.save();
+        return "redirect:/dashboard?tab=sections";
+    }
+
 
 }
