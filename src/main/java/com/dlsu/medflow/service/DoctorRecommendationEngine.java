@@ -1,6 +1,5 @@
 package com.dlsu.medflow.service;
 
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -15,9 +14,7 @@ import java.util.Map;
  * A simple keyword match is enough to demonstrate the automation described
  * in the proposal without pretending to be real clinical decision support.</p>
  */
-
-public class DoctorRecommendationEngine {
-
+public final class DoctorRecommendationEngine {
 
     private static final Map<String, String[]> CATEGORY_KEYWORDS = new LinkedHashMap<>();
 
@@ -63,5 +60,3 @@ public class DoctorRecommendationEngine {
         return DEFAULT_CATEGORY;
     }
 }
-
-
