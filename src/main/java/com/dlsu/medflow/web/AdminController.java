@@ -46,4 +46,23 @@ public class AdminController {
             return accountError(model, "That username is already taken.");
         }
 
+
+        User newUser;
+        switch (role) {
+            case DOCTOR -> {
+                if (specialization == null || specialization.isBlank()) {
+                    return accountError(model, "Please choose a specialization.");
+                }
+                newUser = new Doctor(store.generateUserId("DR"), name.trim(), username.trim(), password, specialization);
+            }
+            case LAB_STAFF -> {
+                if (section == null || section.isBlank()) {
+                    return accountError(model, "Please choose a laboratory section.");
+                }
+                newUser = new LabStaff(store.generateUserId("LB"), name.trim(), username.trim(), password, section);
+            }
+            case ADMIN -> newUser = new Admin(store.generateUserId("AD"), name.trim(), username.trim(), password);
+            default -> newUser = new Nurse(store.generateUserId("NS"), name.trim(), username.trim(), password);
+        }
+
 }
