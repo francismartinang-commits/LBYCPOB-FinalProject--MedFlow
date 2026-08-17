@@ -10,3 +10,17 @@ import java.util.HashMap;
 @Controller
 @RequestMapping("/nurse")
 public class NurseController {
+    private final HospitalDataStore store;
+
+    public NurseController(HospitalDataStore store) {
+        this.store = store;
+    }
+
+    @GetMapping("/walkin")
+    public String walkInForm(Model model) {
+        if (!model.containsAttribute("form")) {
+            model.addAttribute("form", new HashMap<String, String>());
+        }
+        return "nurse/walkin";
+    }
+}
