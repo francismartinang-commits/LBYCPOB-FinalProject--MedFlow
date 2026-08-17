@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>MedFlow - Doctor Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/medflow.css}"/>
+</head>
+<body>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+    <div class="main-content">
+        <div class="page-title" th:text="${user.name} + ' &mdash; Dashboard'">Dr. Reyes's Dashboard</div>
+        <div class="page-subtitle" th:text="${user.specialization} + ' &middot; Assigned patients, assessments, and laboratory requests.'">Specialization</div>
+
+        <div class="stat-grid">
+            <div class="stat-card"><div class="stat-value" th:text="${inProgress}">0</div><div class="stat-label">Active Patients</div></div>
+            <div class="stat-card"><div class="stat-value" th:text="${awaitingAssessment}">0</div><div class="stat-label">Awaiting Assessment</div></div>
+            <div class="stat-card"><div class="stat-value" th:text="${awaitingFindings}">0</div><div class="stat-label">Findings To Review</div></div>
+            <div class="stat-card"><div class="stat-value" th:text="${completed}">0</div><div class="stat-label">Completed</div></div>
+        </div>
+
+        <div class="section-title">Assigned Patients</div>
+
+        <div class="card" th:if="${#lists.isEmpty(visits)}">
+            <p class="body-text">No patients have been assigned to you yet.</p>
+        </div>
+
+        <div class="card" th:each="visit : ${visits}">
+            <div class="card-row">
+                <div class="section-title" style="margin-bottom:0;" th:text="${visit.patient.name}">Patient</div>
+                <div class="spacer"></div>
+                <span class="badge" th:classappend="'badge-' + ${visit.status.badgeTone}" th:text="${visit.status.label}">Status</span>
+            </div>
+            <p class="muted-text" th:text="${visit.reasonForVisit}">Reason</p>
+            <a class="btn btn-primary" th:href="@{'/doctor/visits/' + ${visit.visitId}}"
+               th:switch="${visit.status.name()}">
+                <span th:case="'ASSIGNED_TO_DOCTOR'">Begin Assessment</span>
+                <span th:case="'FINDINGS_SENT_TO_DOCTOR'">Review Findings</span>
+                <span th:case="'DOCTOR_REVIEWED'">Release to Patient</span>
+                <span th:case="'RELEASED_TO_PATIENT'">View Record</span>
+                <span th:case="*">Open</span>
+            </a>
+        </div>
+    </div>
+</div>
+</body>
+</html>
