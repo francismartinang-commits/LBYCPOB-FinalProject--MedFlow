@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 /**
  * Central in-memory data store for the whole system: every registered user,
  * every visit, and the admin-managed lookup lists (doctor categories and
@@ -16,7 +17,6 @@ import java.util.List;
  * <p>The store is also responsible for saving/loading itself to disk (Java
  * serialization) so demo data survives between runs, and for seeding a set
  * of ready-to-use demo accounts the first time the application launches.</p>
-
  */
 public class HospitalDataStore implements Serializable {
 
@@ -30,7 +30,6 @@ public class HospitalDataStore implements Serializable {
 
     private int userSequence = 0;
     private int visitSequence = 0;
-
 
     // ---------------------------------------------------------------------
     // Loading / saving
@@ -54,47 +53,41 @@ public class HospitalDataStore implements Serializable {
         return store;
     }
 
-   public void save() {
-      try {
-         File dir = new File(DATA_DIR);
-         if (!dir.exists()) {
-            dir.mkdirs();
-         }
-         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(DATA_FILE))) {
-            out.writeObject(this);
-         }
-      } catch (IOException ex) {
-         System.err.println("Could not save data: " + ex.getMessage());
-      }
-   }
+    public void save() {
+        try {
+            File dir = new File(DATA_DIR);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(DATA_FILE))) {
+                out.writeObject(this);
+            }
+        } catch (IOException ex) {
+            System.err.println("Could not save data: " + ex.getMessage());
+        }
+    }
 
+    // ---------------------------------------------------------------------
+    // Authentication
+    // ---------------------------------------------------------------------
 
+    public User authenticate(String username, String password) {
+        for (User user : users) {
+            if (user.getUsername().equalsIgnoreCase(username) && user.isActive() && user.checkPassword(password)) {
+                return user;
+            }
+        }
+        return null;
+    }
 
-
-   // ---------------------------------------------------------------------
-   // Authentication
-   // ---------------------------------------------------------------------
-
-   public User authenticate(String username, String password) {
-      for (User user : users) {
-         if (user.getUsername().equalsIgnoreCase(username) && user.isActive() && user.checkPassword(password)) {
-            return user;
-         }
-      }
-      return null;
-   }
-
-
-
-   public boolean usernameTaken(String username) {
-      for (User user : users) {
-         if (user.getUsername().equalsIgnoreCase(username)) {
-            return true;
-         }
-      }
-      return false;
-   }
-
+    public boolean usernameTaken(String username) {
+        for (User user : users) {
+            if (user.getUsername().equalsIgnoreCase(username)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     // ---------------------------------------------------------------------
     // Registration
@@ -106,7 +99,6 @@ public class HospitalDataStore implements Serializable {
         users.add(patient);
         return patient;
     }
-
 
     /**
      * Creates a new visit and immediately runs the Doctor Recommendation
@@ -139,6 +131,7 @@ public class HospitalDataStore implements Serializable {
         }
         return fallback;
     }
+
     // ---------------------------------------------------------------------
     // Queues used by the different dashboards
     // ---------------------------------------------------------------------
@@ -174,6 +167,7 @@ public class HospitalDataStore implements Serializable {
         }
         return result;
     }
+
     /** Lab requests still awaiting findings, routed to the given section, paired with their parent visit. */
     public List<LabQueueItem> getPendingLabRequests(String section) {
         List<LabQueueItem> result = new ArrayList<>();
@@ -189,6 +183,7 @@ public class HospitalDataStore implements Serializable {
         }
         return result;
     }
+
     // ---------------------------------------------------------------------
     // Admin-facing lists
     // ---------------------------------------------------------------------
@@ -207,8 +202,6 @@ public class HospitalDataStore implements Serializable {
         return result;
     }
 
-
-
     public List<Patient> getAllPatients() {
         List<Patient> result = new ArrayList<>();
         for (User user : users) {
@@ -221,6 +214,32 @@ public class HospitalDataStore implements Serializable {
 
     public List<Visit> getAllVisits() {
         return Collections.unmodifiableList(visits);
+    }
+
+    /**
+     * Looks up a visit by its ID. New in the Spring Boot edition: the
+     * JavaFX version never needed this because dashboards passed
+     * {@code Visit} object references directly in memory; a web UI
+     * navigates by URL, so controllers need to resolve a Visit from the
+     * ID in the path (e.g. {@code GET /doctor/visits/{visitId}}).
+     */
+    public Visit getVisitById(String visitId) {
+        for (Visit visit : visits) {
+            if (visit.getVisitId().equals(visitId)) {
+                return visit;
+            }
+        }
+        return null;
+    }
+
+    /** Same reasoning as {@link #getVisitById(String)}, for accounts (used by the Admin toggle-active action). */
+    public User getUserById(String userId) {
+        for (User user : users) {
+            if (user.getUserId().equals(userId)) {
+                return user;
+            }
+        }
+        return null;
     }
 
     public List<String> getDoctorCategories() {
@@ -392,6 +411,7 @@ public class HospitalDataStore implements Serializable {
         v4.getLabRequests().get(0).encodeFindings("Creatinine: 0.9 mg/dL - within normal limits.");
         v4.advance(labManalo, VisitStatus.FINDINGS_SENT_TO_DOCTOR, now.minusHours(2));
     }
+
     /** Pairs a lab request with the visit it belongs to, for display in a laboratory staff queue. */
     public static class LabQueueItem {
         private final Visit visit;
@@ -411,7 +431,3 @@ public class HospitalDataStore implements Serializable {
         }
     }
 }
-
-
-
-
