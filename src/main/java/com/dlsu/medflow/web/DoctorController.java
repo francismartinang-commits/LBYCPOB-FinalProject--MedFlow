@@ -20,3 +20,33 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/doctor")
 public class DoctorController {
+
+
+    private final HospitalDataStore store;
+
+    public DoctorController(HospitalDataStore store) {
+        this.store = store;
+    }
+
+    @GetMapping("/visits/{visitId}")
+    public String workspace(@PathVariable String visitId, HttpSession session, Model model) {
+        Doctor doctor = (Doctor) session.getAttribute(SessionKeys.CURRENT_USER);
+        Visit visit = store.getVisitById(visitId);
+        if (visit == null || visit.getAssignedDoctor() != doctor) {
+            return "redirect:/dashboard";
+        }
+        model.addAttribute("visit", visit);
+        model.addAttribute("doctor", doctor);
+        model.addAttribute("notes", visit.getMedicalRecord().getDoctorNotes(doctor));
+        return "doctor/workspace";
+    }
+
+    private Doctor requireDoctor(HttpSession session) {
+        return (Doctor) session.getAttribute(SessionKeys.CURRENT_USER);
+    }
+
+    private Visit requireOwnVisit(Doctor doctor, String visitId) {
+        Visit visit = store.getVisitById(visitId);
+        return (visit != null && visit.getAssignedDoctor() == doctor) ? visit : null;
+    }
+}
