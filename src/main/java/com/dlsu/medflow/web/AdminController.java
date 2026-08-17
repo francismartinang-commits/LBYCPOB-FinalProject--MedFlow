@@ -69,4 +69,11 @@ public class AdminController {
         return "redirect:/dashboard?tab=accounts";
     }
 
+    @PostMapping("/categories")
+    public String addCategory(@RequestParam String category) {
+        store.addDoctorCategory(category.trim());
+        store.save();
+        return "redirect:/dashboard?tab=categories";
+    }
+
 }
