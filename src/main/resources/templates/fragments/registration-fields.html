@@ -1,0 +1,47 @@
+<!-- Shared patient-registration fields - replaces PatientRegistrationDialog.java,
+     reused by both the public /register page and the Nurse "walk-in" page. -->
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="fields(form)">
+    <div class="field-group">
+        <label class="field-label" for="name">Full Name</label>
+        <input class="text-input" type="text" id="name" name="name" th:value="${form['name']}"/>
+    </div>
+    <div class="form-row">
+        <div class="field-group">
+            <label class="field-label" for="age">Age</label>
+            <input class="text-input" type="text" id="age" name="age" th:value="${form['age']}"/>
+        </div>
+        <div class="field-group">
+            <label class="field-label" for="gender">Gender</label>
+            <select class="text-input" id="gender" name="gender">
+                <option value="Male" th:selected="${form['gender'] == 'Male'}">Male</option>
+                <option value="Female" th:selected="${form['gender'] == 'Female'}">Female</option>
+                <option value="Other" th:selected="${form['gender'] == 'Other'}">Other</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="field-group">
+            <label class="field-label" for="contactNumber">Contact Number</label>
+            <input class="text-input" type="text" id="contactNumber" name="contactNumber" th:value="${form['contactNumber']}"/>
+        </div>
+        <div class="field-group">
+            <label class="field-label" for="address">Address</label>
+            <input class="text-input" type="text" id="address" name="address" th:value="${form['address']}"/>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="field-group">
+            <label class="field-label" for="username">Choose a Username</label>
+            <input class="text-input" type="text" id="username" name="username" th:value="${form['username']}"
+                   autocomplete="off"/>
+        </div>
+        <div class="field-group">
+            <label class="field-label" for="password">Choose a Password</label>
+            <input class="text-input" type="password" id="password" name="password" autocomplete="new-password"/>
+        </div>
+    </div>
+    <div class="field-group">
+        <label class="field-label" for="reason">Reason for Visit (symptoms, concerns, etc.)</label>
+        <textarea id="reason" name="reason" th:text="${form['reason']}"></textarea>
+    </div>
+</div>
