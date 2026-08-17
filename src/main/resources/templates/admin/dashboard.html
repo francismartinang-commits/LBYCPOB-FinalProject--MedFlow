@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>MedFlow - Admin Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/medflow.css}"/>
+</head>
+<body>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+    <div class="main-content">
+        <div class="page-title">Admin Dashboard</div>
+        <div class="page-subtitle">Manage accounts, doctor categories, and laboratory sections.</div>
+
+        <div class="tabs-bar">
+            <button type="button" class="tab-btn" data-tab-target="overview">Overview</button>
+            <button type="button" class="tab-btn" data-tab-target="accounts">Manage Accounts</button>
+            <button type="button" class="tab-btn" data-tab-target="categories">Doctor Categories</button>
+            <button type="button" class="tab-btn" data-tab-target="sections">Laboratory Sections</button>
+        </div>
+
+        <!-- Tab 1: Overview -->
+        <div class="tab-panel" data-tab-panel="overview">
+            <div class="stat-grid">
+                <div class="stat-card"><div class="stat-value" th:text="${patientCount}">0</div><div class="stat-label">Registered Patients</div></div>
+                <div class="stat-card"><div class="stat-value" th:text="${doctorCount}">0</div><div class="stat-label">Doctors</div></div>
+                <div class="stat-card"><div class="stat-value" th:text="${staffCount}">0</div><div class="stat-label">Nurses &amp; Lab Staff</div></div>
+                <div class="stat-card"><div class="stat-value" th:text="${activeVisits}">0</div><div class="stat-label">Active Visits</div></div>
+            </div>
+            <div class="card">
+                <div class="section-title">Visits by Stage</div>
+                <ul class="stage-list">
+                    <li th:each="entry : ${visitsByStage}">
+                        <span th:text="${entry.key.stageNumber} + '. ' + ${entry.key.label}">1. Registered</span>
+                        <span class="stage-count" th:text="${entry.value}">0</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Tab 2: Manage Accounts -->
+        <div class="tab-panel" data-tab-panel="accounts">
+            <div class="header-row" style="margin-bottom:14px;">
+                <div class="spacer"></div>
+                <a class="btn btn-primary" th:href="@{/admin/accounts/new}">+ Add Staff Account</a>
+            </div>
+            <div class="card" style="padding:0;">
+                <table class="data-table">
+                    <thead>
+                    <tr><th>Name</th><th>Role</th><th>Username</th><th>Status</th></tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="acc : ${allUsers}">
+                        <td th:text="${acc.name}">Name</td>
+                        <td th:text="${acc.roleDetail}">Role</td>
+                        <td th:text="${acc.username}">username</td>
+                        <td>
+                            <form th:action="@{'/admin/accounts/' + ${acc.userId} + '/toggle'}" method="post">
+                                <button type="submit" class="btn"
+                                        th:classappend="${acc.active} ? 'btn-danger' : 'btn-success'"
+                                        th:disabled="${acc.userId == user.userId}"
+                                        th:text="${acc.active} ? 'Deactivate' : 'Activate'">Toggle</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tab 3: Doctor Categories -->
+        <div class="tab-panel" data-tab-panel="categories">
+            <p class="muted-text">Used by the automatic Doctor Recommendation engine.</p>
+            <div class="card wide-card">
+                <ul class="stage-list">
+                    <li th:each="cat : ${categories}">
+                        <span th:text="${cat}">Category</span>
+                        <form th:action="@{/admin/categories/remove}" method="post" style="margin-left:auto;">
+                            <input type="hidden" name="category" th:value="${cat}"/>
+                            <button type="submit" class="btn-link">Remove</button>
+                        </form>
+                    </li>
+                </ul>
+                <form th:action="@{/admin/categories}" method="post" style="display:flex; gap:10px; margin-top:14px;">
+                    <input class="text-input" type="text" name="category" placeholder="New specialization, e.g., Endocrinology"/>
+                    <button class="btn btn-primary" type="submit" style="flex:none;">Add Category</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tab 4: Laboratory Sections -->
+        <div class="tab-panel" data-tab-panel="sections">
+            <p class="muted-text">Used by the automatic Lab Request Routing engine.</p>
+            <div class="card wide-card">
+                <ul class="stage-list">
+                    <li th:each="sec : ${sections}">
+                        <span th:text="${sec}">Section</span>
+                        <form th:action="@{/admin/sections/remove}" method="post" style="margin-left:auto;">
+                            <input type="hidden" name="section" th:value="${sec}"/>
+                            <button type="submit" class="btn-link">Remove</button>
