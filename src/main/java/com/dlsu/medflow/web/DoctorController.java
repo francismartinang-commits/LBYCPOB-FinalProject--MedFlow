@@ -49,4 +49,15 @@ public class DoctorController {
         Visit visit = store.getVisitById(visitId);
         return (visit != null && visit.getAssignedDoctor() == doctor) ? visit : null;
     }
+
+    @PostMapping("/visits/{visitId}/begin")
+    public String begin(@PathVariable String visitId, HttpSession session) {
+        Doctor doctor = requireDoctor(session);
+        Visit visit = requireOwnVisit(doctor, visitId);
+        if (visit != null) {
+            doctor.updateStatus(visit, VisitStatus.UNDER_DOCTOR_ASSESSMENT);
+            store.save();
+        }
+        return "redirect:/doctor/visits/" + visitId;
+    }
 }
