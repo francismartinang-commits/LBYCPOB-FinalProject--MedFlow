@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>MedFlow - Register a New Visit</title>
+    <link rel="stylesheet" th:href="@{/css/medflow.css}"/>
+</head>
+<body>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+    <div class="main-content">
+        <div class="page-title">Register a New Visit</div>
+        <div class="page-subtitle">Tell us why you're coming in - we'll recommend a doctor for you automatically.</div>
+
+        <div class="card wide-card">
+            <div class="alert alert-error" th:if="${errorMessage}" th:text="${errorMessage}">Error</div>
+            <form th:action="@{/patient/visits}" method="post">
+                <div class="field-group">
+                    <label class="field-label" for="reason">Reason for Visit (symptoms, concerns, etc.)</label>
+                    <textarea id="reason" name="reason" placeholder="e.g., Persistent cough and mild fever for 3 days"></textarea>
+                </div>
+                <div style="display:flex; gap:12px; justify-content:flex-end;">
+                    <a class="btn btn-secondary" th:href="@{/dashboard}">Cancel</a>
+                    <button class="btn btn-primary" type="submit">Register Visit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
