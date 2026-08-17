@@ -23,7 +23,9 @@ import java.util.Map;
 @Controller
 public class AuthController {
 
-    /** Mirrors LoginView's demo-account quick-fill panel. */
+    /**
+     * Mirrors LoginView's demo-account quick-fill panel.
+     */
     private static final List<String[]> DEMO_ACCOUNTS = List.of(
             new String[]{"Admin", "admin", "admin123"},
             new String[]{"Doctor - Dr. Ana Reyes (General Medicine)", "dr.reyes", "doctor123"},
@@ -63,25 +65,27 @@ public class AuthController {
         return "login";
     }
 
+
+    @PostMapping("/login")
+    public String login(@RequestParam String username, @RequestParam String password,
+                        HttpSession session, Model model) {
+        model.addAttribute("demoAccounts", DEMO_ACCOUNTS);
+        if (username.isBlank() || password.isBlank()) {
+            model.addAttribute("errorMessage", "Please enter both your username and password.");
+            model.addAttribute("prefillUsername", username);
+            return "login";
+        }
+        User user = store.authenticate(username, password);
+        if (user == null) {
+            model.addAttribute("errorMessage", "Incorrect username or password. Please try again.");
+            model.addAttribute("prefillUsername", username);
+            return "login";
+        }
+        session.setAttribute(SessionKeys.CURRENT_USER, user);
+        return "redirect:/dashboard";
+    }
 }
 
-@PostMapping("/login")
-public String login(@RequestParam String username, @RequestParam String password,
-                    HttpSession session, Model model) {
-    model.addAttribute("demoAccounts", DEMO_ACCOUNTS);
-    if (username.isBlank() || password.isBlank()) {
-        model.addAttribute("errorMessage", "Please enter both your username and password.");
-        model.addAttribute("prefillUsername", username);
-        return "login";
-    }
-    User user = store.authenticate(username, password);
-    if (user == null) {
-        model.addAttribute("errorMessage", "Incorrect username or password. Please try again.");
-        model.addAttribute("prefillUsername", username);
-        return "login";
-    }
-    session.setAttribute(SessionKeys.CURRENT_USER, user);
-    return "redirect:/dashboard";
-}
 
-}
+
+
