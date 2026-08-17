@@ -136,6 +136,10 @@ public class AuthController {
 
         return "redirect:/login?registered=true&username=" + username.trim();
     }
+    // Helper methods for registration
+    private boolean isBlank(String s) {
+        return s == null || s.isBlank();
+    }
 }
 
 
