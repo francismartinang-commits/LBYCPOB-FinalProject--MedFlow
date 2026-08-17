@@ -34,4 +34,11 @@ public class AuthController {
             new String[]{"Patient - Juan Dela Cruz", "patient.juan", "patient123"}
     );
 
+    private final HospitalDataStore store;
+
+    public AuthController(HospitalDataStore store) {
+        this.store = store;
+    }
+
+
 }
