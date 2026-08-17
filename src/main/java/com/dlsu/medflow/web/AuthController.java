@@ -84,6 +84,17 @@ public class AuthController {
         session.setAttribute(SessionKeys.CURRENT_USER, user);
         return "redirect:/dashboard";
     }
+
+    @GetMapping("/register")
+    public String registerForm(HttpSession session, Model model) {
+        if (session.getAttribute(SessionKeys.CURRENT_USER) != null) {
+            return "redirect:/dashboard";
+        }
+        if (!model.containsAttribute("form")) {
+            model.addAttribute("form", new HashMap<String, String>());
+        }
+        return "register";
+    }
 }
 
 
