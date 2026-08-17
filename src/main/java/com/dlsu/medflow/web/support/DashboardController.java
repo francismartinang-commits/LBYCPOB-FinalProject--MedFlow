@@ -1,7 +1,14 @@
 package com.dlsu.medflow.web;
 
+import com.dlsu.medflow.model.User;
 import com.dlsu.medflow.service.HospitalDataStore;
+import com.dlsu.medflow.web.support.SessionKeys;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.Map;
 
 /**
  * Replaces {@code MainShell}'s call to {@code user.displayDashboard(store)}.
@@ -20,4 +27,16 @@ public class DashboardController {
     public DashboardController(HospitalDataStore store) {
         this.store = store;
     }
+
+    @GetMapping("/dashboard")
+    public String dashboard(HttpSession session, Model model) {
+        User user = (User) session.getAttribute(SessionKeys.CURRENT_USER);
+        model.addAttribute("user", user);
+
+        Map<String, Object> data = user.buildDashboardModel(store); // POLYMORPHISM
+        data.forEach(model::addAttribute);
+
+        return user.getDashboardView(); // POLYMORPHISM
+    }
+
 }
