@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>MedFlow - Laboratory Queue</title>
+    <link rel="stylesheet" th:href="@{/css/medflow.css}"/>
+</head>
+<body>
+<div class="app-shell">
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+    <div class="main-content">
+        <div class="page-title" th:text="${user.section} + ' Queue'">Hematology Queue</div>
+        <div class="page-subtitle">Requests routed to your section, waiting to be encoded.</div>
+
+        <div class="stat-grid">
+            <div class="stat-card">
+                <div class="stat-value" th:text="${pendingCount}">0</div>
+                <div class="stat-label">Pending in Your Section</div>
+            </div>
+        </div>
+
+        <div class="section-title">Pending Requests</div>
+
+        <div class="card" th:if="${#lists.isEmpty(queueItems)}">
+            <p class="body-text" th:text="'No pending requests for ' + ${user.section} + ' right now.'">None</p>
+        </div>
+
+        <div class="card" th:each="item : ${queueItems}">
+            <div class="card-row">
+                <span class="section-title" style="margin-bottom:0;" th:text="${item.labRequest.testName}">Test</span>
+                <span class="spacer"></span>
+                <span class="badge" th:classappend="'badge-' + ${item.labRequest.priority.badgeTone}" th:text="${item.labRequest.priority.label}">Priority</span>
+            </div>
+            <p class="muted-text" th:text="'Patient: ' + ${item.visit.patient.name} + ' &middot; Visit ' + ${item.visit.visitId}">Patient line</p>
+            <p class="muted-text" th:text="${'Ordered by ' + (item.visit.assignedDoctor != null ? item.visit.assignedDoctor.name : '-')}">Ordered by</p>
+
+            <form th:action="@{'/labstaff/requests/' + ${item.visit.visitId} + '/' + ${item.labRequest.requestId} + '/submit'}" method="post">
+                <div class="field-group">
+                    <textarea name="findings" placeholder="Enter laboratory findings..."></textarea>
+                </div>
+                <button class="btn btn-primary" type="submit">Submit Findings</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
