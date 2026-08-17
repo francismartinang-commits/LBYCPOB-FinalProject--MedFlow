@@ -101,13 +101,28 @@ public class NurseController {
         }
         return "redirect:/dashboard";
     }
-    
+
     @PostMapping("/samples/{visitId}/confirm")
     public String confirmSample(@PathVariable String visitId, HttpSession session) {
         Nurse nurse = (Nurse) session.getAttribute(SessionKeys.CURRENT_USER);
         Visit visit = store.getVisitById(visitId);
         if (visit != null) {
             nurse.updateStatus(visit, VisitStatus.SAMPLE_COLLECTED);
+            store.save();
+        }
+        return "redirect:/dashboard";
+    }
+
+    // Added inside NurseController:
+
+    /** Sends to the laboratory AND immediately marks it under analysis, exactly like the JavaFX "Send" button did. */
+    @PostMapping("/send/{visitId}")
+    public String sendToLaboratory(@PathVariable String visitId, HttpSession session) {
+        Nurse nurse = (Nurse) session.getAttribute(SessionKeys.CURRENT_USER);
+        Visit visit = store.getVisitById(visitId);
+        if (visit != null) {
+            nurse.updateStatus(visit, VisitStatus.SENT_TO_LABORATORY);
+            nurse.updateStatus(visit, VisitStatus.UNDER_LABORATORY_ANALYSIS);
             store.save();
         }
         return "redirect:/dashboard";
