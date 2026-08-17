@@ -4,6 +4,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import com.dlsu.medflow.model.Doctor;
+import com.dlsu.medflow.model.Nurse;
+import com.dlsu.medflow.model.User;
+import com.dlsu.medflow.model.Visit;
+import com.dlsu.medflow.model.VisitStatus;
+import com.dlsu.medflow.web.support.SessionKeys;
+import jakarta.servlet.http.HttpSession;
 import java.util.HashMap;
 
 /** Replaces the three tabs of {@code NurseDashboard}, plus its walk-in registration dialog. */
@@ -78,6 +85,19 @@ public class NurseController {
         form.put("reason", reason);
         model.addAttribute("form", form);
         return "nurse/walkin";
+    }
+
+    @PostMapping("/registrations/{visitId}/confirm")
+    public String confirmAssignment(@PathVariable String visitId, @RequestParam String doctorId, HttpSession session) {
+        Nurse nurse = (Nurse) session.getAttribute(SessionKeys.CURRENT_USER);
+        Visit visit = store.getVisitById(visitId);
+        User chosen = store.getUserById(doctorId);
+        if (visit != null && chosen instanceof Doctor doctor) {
+            visit.setAssignedDoctor(doctor);
+            nurse.updateStatus(visit, VisitStatus.ASSIGNED_TO_DOCTOR);
+            store.save();
+        }
+        return "redirect:/dashboard";
     }
 
 }
