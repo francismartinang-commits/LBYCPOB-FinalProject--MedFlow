@@ -13,3 +13,12 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
+
+
+    private final HospitalDataStore store;
+
+    public AdminController(HospitalDataStore store) {
+        this.store = store;
+    }
+
+}
