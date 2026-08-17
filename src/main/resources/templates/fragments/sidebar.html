@@ -1,0 +1,16 @@
+<!-- Shared sidebar fragment - replaces MainShell's left-hand navigation column. -->
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="sidebar" class="sidebar">
+    <div class="sidebar-brand">MedFlow</div>
+    <hr class="sidebar-separator"/>
+    <div class="sidebar-identity">
+        <div class="avatar" th:text="${user.initials}">SA</div>
+        <div>
+            <div class="sidebar-name" th:text="${user.name}">Name</div>
+            <div class="sidebar-role" th:text="${user.role.displayName}">Role</div>
+        </div>
+    </div>
+    <div class="sidebar-spacer"></div>
+    <form th:action="@{/logout}" method="post">
+        <button class="sidebar-logout" type="submit">Log Out</button>
+    </form>
+</div>
