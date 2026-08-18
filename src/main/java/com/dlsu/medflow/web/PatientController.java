@@ -22,7 +22,8 @@ public class PatientController {
     }
 
     @GetMapping("/visits/new")
-    public String newVisitForm() {
+    public String newVisitForm(HttpSession session, Model model) {
+        model.addAttribute("user", session.getAttribute(SessionKeys.CURRENT_USER));
         return "patient/new-visit";
     }
 
@@ -30,6 +31,7 @@ public class PatientController {
     public String createVisit(@RequestParam String reason, HttpSession session, Model model) {
         Patient patient = (Patient) session.getAttribute(SessionKeys.CURRENT_USER);
         if (reason == null || reason.isBlank()) {
+            model.addAttribute("user", patient);
             model.addAttribute("errorMessage", "Please describe your reason for visit.");
             return "patient/new-visit";
         }
@@ -46,6 +48,7 @@ public class PatientController {
             return "redirect:/dashboard";
         }
         boolean released = visit.getStatus() == VisitStatus.RELEASED_TO_PATIENT;
+        model.addAttribute("user", patient);
         model.addAttribute("visit", visit);
         model.addAttribute("released", released);
         if (released) {
