@@ -69,6 +69,27 @@ public class AdminController {
         return "redirect:/dashboard?tab=accounts";
     }
 
+    @PostMapping("/accounts/{userId}/toggle")
+    public String toggleAccount(@PathVariable String userId, HttpSession session) {
+        User currentUser = (User) session.getAttribute(SessionKeys.USER);
+
+        if (currentUser != null && currentUser.getUserId().equals(userId)) {
+            return "redirect:/dashboard?tab=accounts";
+        }
+
+        User account = store.getAllUsers().stream()
+                .filter(user -> user.getUserId().equals(userId))
+                .findFirst()
+                .orElse(null);
+
+        if (account != null) {
+            account.setActive(!account.isActive());
+            store.save();
+        }
+
+        return "redirect:/dashboard?tab=accounts";
+    }
+
     @PostMapping("/categories")
     public String addCategory(@RequestParam String category) {
         store.addDoctorCategory(category.trim());
