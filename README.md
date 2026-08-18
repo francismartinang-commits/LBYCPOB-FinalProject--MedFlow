@@ -238,3 +238,54 @@ The main Spring MVC controllers used in the project are:
 - NurseController - Handles walk-in registration, doctor assignment, sample collection, and laboratory hand-off
 - LabStaffController - Handles laboratory findings submission
 - AdminController - Handles account creation, account activation, doctor categories, and laboratory sections
+
+### DEVELOPMENT HISTORY
+
+MedFlow originally started as a JavaFX desktop application.
+
+During development, the project was converted into a Spring Boot Maven web application. The original object-oriented models and hospital workflow were preserved while the JavaFX dashboards and interface components were replaced with Spring MVC controllers and Thymeleaf web pages.
+
+The conversion allowed the application to be accessed through a normal web browser while keeping the original OOP structure of the system.
+
+Spring Initializr was used to generate and configure the Spring Boot project during the conversion.
+
+### TECHNOLOGIES USED
+
+#### Programming Language
+- Java
+
+#### Framework
+- Spring Boot
+- Spring MVC
+
+#### Frontend
+- Thymeleaf
+- HTML
+- CSS
+
+#### Build and Development
+- IntelliJ IDEA
+
+#### Deployment
+- Docker
+- Render
+
+### LIVE APPLICATION
+
+Live Site:
+
+https://lbycpob-finalproject-medflow.onrender.com
+
+GitHub Repository:
+
+https://github.com/francismartinang-commits/LBYCPOB-FinalProject--MedFlow
+
+### REFERENCES AND RESOURCES
+
+- Java Documentation
+- Spring Boot Documentation
+- Spring Initializr
+- IntelliJ IDEA
+- GitHub
+- Render
+- Bro Code Java Programming Resources
