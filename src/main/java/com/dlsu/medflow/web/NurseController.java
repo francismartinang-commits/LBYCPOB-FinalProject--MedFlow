@@ -28,7 +28,8 @@ public class NurseController {
     }
 
     @GetMapping("/walkin")
-    public String walkInForm(Model model) {
+    public String walkInForm(Model model, HttpSession session) {
+        model.addAttribute("user", session.getAttribute(SessionKeys.CURRENT_USER));
         if (!model.containsAttribute("form")) {
             model.addAttribute("form", new HashMap<String, String>());
         }
@@ -39,12 +40,12 @@ public class NurseController {
     public String walkIn(@RequestParam String name, @RequestParam String age, @RequestParam String gender,
                          @RequestParam String contactNumber, @RequestParam String address,
                          @RequestParam String username, @RequestParam String password,
-                         @RequestParam String reason, Model model) {
+                         @RequestParam String reason, Model model, HttpSession session) {
 
         if (isBlank(name) || isBlank(age) || isBlank(contactNumber) || isBlank(address)
                 || isBlank(username) || isBlank(password) || isBlank(reason)) {
             return walkInError(model, "Please fill in every field before submitting.",
-                    name, age, gender, contactNumber, address, username, reason);
+                    name, age, gender, contactNumber, address, username, reason, session);
         }
         int parsedAge;
         try {
@@ -54,15 +55,15 @@ public class NurseController {
             }
         } catch (NumberFormatException ex) {
             return walkInError(model, "Please enter a valid age.",
-                    name, age, gender, contactNumber, address, username, reason);
+                    name, age, gender, contactNumber, address, username, reason, session);
         }
         if (password.length() < 4) {
             return walkInError(model, "Password must be at least 4 characters long.",
-                    name, age, gender, contactNumber, address, username, reason);
+                    name, age, gender, contactNumber, address, username, reason, session);
         }
         if (store.usernameTaken(username.trim())) {
             return walkInError(model, "That username is already taken - please choose another.",
-                    name, age, gender, contactNumber, address, username, reason);
+                    name, age, gender, contactNumber, address, username, reason, session);
         }
 
         Patient patient = store.registerPatient(name.trim(), parsedAge, gender, contactNumber.trim(),
@@ -77,7 +78,8 @@ public class NurseController {
     }
 
     private String walkInError(Model model, String message, String name, String age, String gender,
-                               String contactNumber, String address, String username, String reason) {
+                               String contactNumber, String address, String username, String reason, HttpSession session) {
+        model.addAttribute("user", session.getAttribute(SessionKeys.CURRENT_USER));
         model.addAttribute("errorMessage", message);
         var form = new HashMap<String, String>();
         form.put("name", name);
