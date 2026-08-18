@@ -1,111 +1,94 @@
 # PROJECT TITLE
-Hospital/Lab Information System
+MedFlow: Hospital and Laboratory Information System
 
 ## TEAM MEMBERS
-Paragas, Nash Breann C.- Nash Paragas
+Paragas, Nash Breann C. - Nash Paragas
 
 Ang, Francis Martin B. - Tin Ang
 
 Balingit, Joshua Andrei B. - Jandrei-cpe
 
 ### PROBLEM STATEMENT & GOALS
-To design, develop, and implement an Object-Oriented Medical and Laboratory Information System that streamlines patient care, automates clinical and laboratory workflows, and provides secure, role-based access to health data. 
+To design, develop, and implement an Object-Oriented Hospital and Laboratory Information System that organizes patient care, hospital visits, laboratory workflows, and role-based access into one connected web application.
 
-- To centralize patient and doctor identification along with their personal information and records
-- To automate the transition from visitation and consultation to a targeted Doctor Recommendation
-- To enforce role-based access control (Admins, Doctors, Patient UI)
-- To have centralized access to clinical documentation and medical papers
-- To enable real-time specimen tracking
-- To Automate Intelligent Laboratory Request Routing 
+- To centralize patient, doctor, nurse, laboratory staff, and administrator information
+- To automate the transition from patient registration to doctor recommendation and assignment
+- To enforce role-based access control for Patients, Doctors, Nurses/Staff, Laboratory Staff, and Administrators
+- To provide organized access to clinical notes, laboratory requests, findings, and released results
+- To track the current status and history of each patient visit
+- To automate intelligent laboratory request routing
+- To allow doctors to create single or multiple laboratory requests
+- To allow laboratory staff to encode findings based on their assigned laboratory section
+- To provide a browser-based system using Spring Boot, Spring MVC, and Thymeleaf
+- To maintain an organized and traceable hospital workflow from registration until the release of results
 
+### TARGET USERS
+The target users and beneficiaries of MedFlow are the people involved in the hospital workflow:
 
-### TARGET USER
-The target users and beneficiaries of the Hospital Information System are the people involved in the hospital:
-
-- Patients - Allows them to join the space with doctors and get updates on processes.
-- Doctors - Transfer updates and results in an organized way. 
-- Laboratory Staff - Reduce unclear requests and allow them to encode findings 
-- Staff - Traceability of the patient and updates
-- Administrators - Monitor the flow of the entire hospital
+- Patients - Register visits, track their current visit status, and view released results
+- Doctors - Assess patients, write clinical notes, create laboratory requests, review findings, and release results
+- Laboratory Staff - Receive laboratory requests routed to their assigned section and encode findings
+- Nurses / Staff - Handle doctor assignment, sample collection, laboratory hand-off, and walk-in patient registration
+- Administrators - Manage user accounts, doctor categories, laboratory sections, and monitor the overall hospital workflow
 
 ### BRIEF DESCRIPTION
-The Hospital and Laboratory Information System is a central platform designed to organize patient data, doctor check-ups, and lab workflows from start to finish. It replaces slow, manual paperwork by letting patients register, giving doctors a place to type notes and request tests, and allowing lab staff to track samples and input results directly. The program guides each patient through a clear, 10-step journey while keeping sensitive medical records secure based on who is logged in.
+MedFlow is a web-based Hospital and Laboratory Information System designed to organize patient information, doctor assessments, laboratory requests, laboratory findings, and visit tracking from start to finish.
 
-- Purpose: To make hospital workflows organized, traceable, and fast.
-- Key Actions: Automates doctor recommendations, lab request tracking, and result delivery.
-- Target Users: Patients, Doctors, Staff, Lab Staff, and Administrators.
+The system guides each patient through a clear 10-stage hospital workflow beginning from registration and ending with the release of results. Each hospital role is provided with its own dashboard and functions depending on its responsibilities.
 
-### CORE OOP CONCEPTS 
+MedFlow was originally developed as a JavaFX desktop application and was later converted into a Spring Boot Maven web application using Spring MVC and Thymeleaf while preserving the original OOP structure and hospital workflow.
+
+- Purpose: To make hospital workflows more organized, traceable, and easier to manage
+- Key Actions: Patient registration, doctor recommendation, laboratory request creation, automatic laboratory routing, findings submission, visit status tracking, and result release
+- Target Users: Patients, Doctors, Nurses/Staff, Laboratory Staff, and Administrators
+- Live Site: https://lbycpob-finalproject-medflow.onrender.com
+- Repository: https://github.com/francismartinang-commits/LBYCPOB-FinalProject--MedFlow
+
+### CORE OOP CONCEPTS
 
 #### Abstraction
+Abstraction is used through the abstract `User` class, which contains the common information and behavior shared by all hospital users.
 
-Abstraction will be used by creating general classes that represent the main parts of the Hospital/Lab Information System.
+The `User` class defines common attributes such as:
 
-##### Possible abstract or general classes include: 
-- User/Patient
-- Doctor/Medic
-- LaboratoryTest 
-- MedicalRecord 
+- User ID
+- Name
+- Username
+- Password
+- Role
+- Account status
 
-##### Ex:
-- User/Patient - name, ID
-- Laboratory Test - test name, specimen type, status
+Each specific user role then provides its own implementation of the required behaviors.
+
+Examples include:
+
+- Patient
+- Doctor
+- Nurse
+- LabStaff
+- Admin
+
+Some of the abstract methods used in the system include:
+
+- `getDashboardView()`
+- `buildDashboardModel()`
+- `updateStatus()`
+
+The project also uses service classes such as `DoctorRecommendationEngine` and `LabRoutingEngine` to hide the internal logic used for doctor recommendation and laboratory routing.
 
 #### Encapsulation
+Encapsulation is used to protect important patient, account, medical, and workflow information by keeping fields private and controlling access through methods.
 
-Encapsulation will be used to protect sensitive patient and medical information by keeping class attributes private and accessible only through public methods (getters and setters) that verify the requester's role before returning or modifying any data. 
+Applications include:
 
-Possible applications:
-- Patient - personal information, medical history (private fields, restricted getters)
-- MedicalRecord - diagnosis, doctor's notes, findings (private fields, visible only to the assigned doctor or the patient)
-- Visit - currentStatus (private field, changeable only through a validated method)
-- User (any role) - username, password (private, never directly exposed to other classes)
-- GUI - to hide unnecessary information and functions of the program
+- Patient - personal information and visit history
+- MedicalRecord - doctor's notes and diagnosis
+- Visit - current status, patient, assigned doctor, laboratory requests, and status history
+- LabRequest - test name, priority, assigned laboratory section, findings, and findings status
+- User - username, password, role, and active account status
 
-#### Inheritance
+The `Visit` status cannot be directly changed using a normal setter. Status changes are handled through validated workflow methods.
 
-Inheritance will be used to build a hierarchy of system user types. The abstract User/Patient class, already identified under Abstraction, can serve as a general parent class, with each specific role inheriting its shared attributes and methods, then adding its own specialized fields and behaviors. 
+The password field is also kept private and is checked through methods instead of being directly exposed.
 
-Possible utilization for this is
-- User (Parent/Base class) - shared attributes (userID, name, username, password) and shared methods (login(), logout())
-- Child classes: Patient, Doctor, Nurse/Staff, Laboratory Staff, Admin - each inherits the base User fields/methods, then extends them
-
-#### Polymorphism
-
-Polymorphism will be used to allow a single method name or action to behave differently depending on the object or data inputs being used. This will be implemented through method overriding (same method name with different behaviors per user role) and method overloading (same method name with different parameters).
-
-Possible polymorphic actions or behaviors include:
-- displayDashboard() (Method Overriding)
-- createRequest() (Method Overloading)
-- updateStatus() (Method Overriding)
-
-##### Example:
-- displayDashboard()
-- Doctor Object - displays assigned patients, clinical assessment fields, and laboratory order forms.
-- Laboratory Staff Object - displays pending specimen queues, routing tracking, and findings encoding sheets.
-- createRequest()
-- createRequest(String testName) - processes a single, standard laboratory request.
-- createRequest(String[] testNames, String priority) - processes a bundled batch of tests flagged with a specific priority level (e.g., Urgent/Stat).
-
-### INITIAL CLASS IDEAS:
-- User (Abstract class for general user info like Name, ID, and Role)
-- Patient (Subclass of User to hold patient medical history and current visit status)
-- Doctor (Subclass of User to manage assigned patients and write assessment notes)
-- LabRequest (Class to track the test name, specimen status, and laboratory findings)
-
-### USER STORIES (Recommended):
-- As a Patient, I want to track the real-time status of my lab sample so that I know exactly when my results will be ready.
-- As a Doctor, I want to create a laboratory request directly from my dashboard so that the lab staff can see it immediately without manual paperwork.
-- As a Laboratory Staff member, I want to encode test findings into the system so that the doctor can review them right away.
-
-### CORE FEATURES (Recommended):
-- Role-Based Access Control: A secure login system that shows a different dashboard interface depending on whether the user is an Admin, Doctor, Nurse, Lab Staff, or Patient.
-- Real-Time Visit Lifecycle Tracker: A step-by-step workflow tracking system that automatically updates a patient's status from "Registered" all the way to "Released".
-- Intelligent Lab Request Routing: A feature that sends doctor-made lab requests straight to the correct laboratory section for analysis and allows fast-track encoding of test results.
-
-
-## Example Picture:
-
-![Test Image](https://i.imgur.com/5jY0YUn.jpeg)
-![Test Image](https://i.imgur.com/wweElPN.jpeg)
-![Test Image](https://i.imgur.com/h6eTfUW.jpeg)
+The `MedicalRecord` class also controls access to diagnosis and clinical notes depending on the role of the user requesting the information.
