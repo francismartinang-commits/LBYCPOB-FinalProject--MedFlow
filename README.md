@@ -92,3 +92,90 @@ The `Visit` status cannot be directly changed using a normal setter. Status chan
 The password field is also kept private and is checked through methods instead of being directly exposed.
 
 The `MedicalRecord` class also controls access to diagnosis and clinical notes depending on the role of the user requesting the information.
+
+#### Inheritance
+Inheritance is used to build the hierarchy of hospital users.
+
+The abstract `User` class acts as the parent class while the specific hospital roles inherit its shared attributes and methods.
+
+- User - Parent/Base class
+- Patient - Child class
+- Doctor - Child class
+- Nurse - Child class
+- LabStaff - Child class
+- Admin - Child class
+
+Each child class inherits the common user information while adding its own role-specific fields and behavior.
+
+Examples:
+
+- Doctor adds specialization and laboratory request creation
+- LabStaff adds laboratory section
+- Patient adds age, gender, contact number, address, and visit history
+- Nurse and Admin specialize mainly through their role-specific behavior
+
+#### Polymorphism
+Polymorphism is used through method overriding and method overloading.
+
+Possible polymorphic actions and behaviors include:
+
+- `getDashboardView()` - Method Overriding
+- `buildDashboardModel()` - Method Overriding
+- `updateStatus()` - Method Overriding
+- `createRequest()` - Method Overloading
+
+##### Method Overriding
+Each hospital role provides its own version of methods such as `getDashboardView()`, `buildDashboardModel()`, and `updateStatus()`.
+
+For example:
+
+- Doctor - displays assigned patients, assessments, and laboratory request functions
+- Laboratory Staff - displays pending laboratory requests for the staff member's assigned section
+- Patient - displays visit history and current visit status
+- Nurse - displays registration, sample collection, and laboratory hand-off queues
+- Admin - displays system statistics and management functions
+
+##### Method Overloading
+The Doctor class uses two versions of `createRequest()`:
+
+- `createRequest(Visit visit, String testName)` - Creates a single routine laboratory request
+- `createRequest(Visit visit, String[] testNames, String priority)` - Creates multiple laboratory requests with a selected priority such as Routine, Urgent, or STAT
+
+### MAIN CLASSES
+
+- User - Abstract class containing shared user information and behavior
+- Patient - Stores patient information and visit history
+- Doctor - Handles patient assessment, laboratory requests, findings review, and result release
+- Nurse - Handles doctor assignment, sample collection, and laboratory hand-off
+- LabStaff - Handles laboratory requests assigned to a specific laboratory section
+- Admin - Handles user accounts, doctor categories, and laboratory sections
+- Visit - Tracks one patient's hospital visit and its current status
+- LabRequest - Stores laboratory test information, priority, routing, and findings
+- MedicalRecord - Stores clinical notes and diagnosis
+- Role - Defines the available hospital user roles
+- Priority - Defines Routine, Urgent, and STAT laboratory request priorities
+- VisitStatus - Defines the different stages of the hospital workflow
+- HospitalDataStore - Stores users, visits, categories, and laboratory sections
+- DoctorRecommendationEngine - Recommends a doctor category based on the patient's reason for visit
+- LabRoutingEngine - Routes laboratory requests to the correct laboratory section
+
+### USER STORIES
+
+- As a Patient, I want to register a hospital visit and track its current status so that I know what stage of the hospital process I am in
+- As a Doctor, I want to create laboratory requests directly from my dashboard so that the required tests can be processed for the patient
+- As a Nurse, I want to confirm doctor assignment and sample collection so that the patient can continue through the hospital workflow
+- As a Laboratory Staff member, I want to view requests assigned to my section and encode findings so that the doctor can review them
+- As an Administrator, I want to manage hospital accounts and laboratory information so that the system remains organized
+
+### CORE FEATURES
+
+- Role-Based Access Control: A login system that provides different dashboards and functions depending on whether the user is a Patient, Doctor, Nurse/Staff, Laboratory Staff, or Administrator
+- Patient Visit Lifecycle Tracker: A step-by-step workflow that tracks the patient's progress from registration until results are released
+- Doctor Recommendation: Suggests an appropriate doctor category based on the patient's reason for visit
+- Laboratory Request Creation: Allows doctors to create single or batch laboratory requests with different priorities
+- Intelligent Laboratory Request Routing: Automatically sends each laboratory request to the appropriate laboratory section
+- Laboratory Findings Encoding: Allows laboratory staff to encode findings for requests assigned to their section
+- Status History Tracking: Stores the different stages a visit passes through together with timestamps
+- Administrative Management: Allows administrators to create accounts, activate or deactivate users, and manage doctor categories and laboratory sections
+- Walk-In Registration: Allows nurses to register patients directly through the system
+- Doctor Findings Review: Allows doctors to review laboratory findings, enter a diagnosis, and release results to the patient
