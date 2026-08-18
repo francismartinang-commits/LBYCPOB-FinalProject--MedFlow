@@ -32,9 +32,11 @@ public class DoctorController {
     public String workspace(@PathVariable String visitId, HttpSession session, Model model) {
         Doctor doctor = (Doctor) session.getAttribute(SessionKeys.CURRENT_USER);
         Visit visit = store.getVisitById(visitId);
-        if (visit == null || visit.getAssignedDoctor() != doctor) {
+        if (visit == null || visit.getAssignedDoctor() == null ||
+                !visit.getAssignedDoctor().getUserId().equals(doctor.getUserId())) {
             return "redirect:/dashboard";
         }
+        model.addAttribute("user", doctor);
         model.addAttribute("visit", visit);
         model.addAttribute("doctor", doctor);
         model.addAttribute("notes", visit.getMedicalRecord().getDoctorNotes(doctor));
@@ -47,7 +49,8 @@ public class DoctorController {
 
     private Visit requireOwnVisit(Doctor doctor, String visitId) {
         Visit visit = store.getVisitById(visitId);
-        return (visit != null && visit.getAssignedDoctor() == doctor) ? visit : null;
+        return (visit != null && visit.getAssignedDoctor() != null &&
+                visit.getAssignedDoctor().getUserId().equals(doctor.getUserId())) ? visit : null;
     }
 
     @PostMapping("/visits/{visitId}/begin")
