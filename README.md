@@ -179,3 +179,62 @@ The Doctor class uses two versions of `createRequest()`:
 - Administrative Management: Allows administrators to create accounts, activate or deactivate users, and manage doctor categories and laboratory sections
 - Walk-In Registration: Allows nurses to register patients directly through the system
 - Doctor Findings Review: Allows doctors to review laboratory findings, enter a diagnosis, and release results to the patient
+
+### HOSPITAL VISIT WORKFLOW
+
+1. REGISTERED
+2. ASSIGNED_TO_DOCTOR
+3. UNDER_DOCTOR_ASSESSMENT
+4. LABORATORY_REQUESTED
+5. SAMPLE_COLLECTED
+6. SENT_TO_LABORATORY
+7. UNDER_LABORATORY_ANALYSIS
+8. FINDINGS_SENT_TO_DOCTOR
+9. DOCTOR_REVIEWED
+10. RELEASED_TO_PATIENT
+
+Each role can only perform the status transitions that belong to its responsibility.
+
+- Nurse / Staff - Handles doctor assignment, sample collection, and sending samples to the laboratory
+- Doctor - Handles assessment, laboratory request creation, findings review, and result release
+- Laboratory Staff - Handles laboratory findings and sends completed findings back to the doctor
+- Patient - Tracks the visit and views released information
+- Administrator - Manages the system and user accounts
+
+### LABORATORY REQUEST ROUTING
+
+The `LabRoutingEngine` automatically routes laboratory requests to the proper laboratory section depending on the test name.
+
+Examples:
+
+- CBC - Hematology
+- Urinalysis - Clinical Microscopy
+- X-ray - Radiology / Imaging
+- Creatinine - Chemistry / Biochemistry
+
+Laboratory Staff only see requests that belong to their assigned laboratory section and are currently waiting for findings.
+
+### APPLICATION ARCHITECTURE
+
+MedFlow follows a Spring Boot web application structure.
+
+The application is divided into different layers:
+
+- Presentation Layer - Thymeleaf HTML templates and CSS
+- Controller Layer - Spring MVC Controllers
+- Business Logic - User hierarchy, Visit, MedicalRecord, LabRequest, DoctorRecommendationEngine, and LabRoutingEngine
+- Data Management - HospitalDataStore
+- Build Tool - Maven
+- Deployment - Docker and Render
+
+### CONTROLLERS
+
+The main Spring MVC controllers used in the project are:
+
+- AuthController - Handles login, logout, and patient registration
+- DashboardController - Handles the shared dashboard route for all user roles
+- PatientController - Handles new visits and patient timelines
+- DoctorController - Handles doctor assessment, notes, laboratory requests, findings review, and result release
+- NurseController - Handles walk-in registration, doctor assignment, sample collection, and laboratory hand-off
+- LabStaffController - Handles laboratory findings submission
+- AdminController - Handles account creation, account activation, doctor categories, and laboratory sections
