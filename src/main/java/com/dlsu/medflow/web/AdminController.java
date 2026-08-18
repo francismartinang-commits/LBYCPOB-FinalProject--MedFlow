@@ -23,55 +23,96 @@ public class AdminController {
 
 
     @GetMapping("/accounts/new")
-    public String newAccountForm(Model model) {
+    public String newAccountForm(Model model, HttpSession session) {
+        User currentUser = (User) session.getAttribute(SessionKeys.CURRENT_USER);
+
+        model.addAttribute("user", currentUser);
         model.addAttribute("categories", store.getDoctorCategories());
         model.addAttribute("sections", store.getLabSections());
+
         return "admin/add-account";
     }
 
+
     @PostMapping("/accounts")
-    public String createAccount(@RequestParam Role role, @RequestParam String name, @RequestParam String username,
+    public String createAccount(@RequestParam Role role,
+                                @RequestParam String name,
+                                @RequestParam String username,
                                 @RequestParam String password,
                                 @RequestParam(required = false) String specialization,
                                 @RequestParam(required = false) String section,
-                                Model model) {
+                                Model model,
+                                HttpSession session) {
 
         if (name.isBlank() || username.isBlank() || password.isBlank()) {
-            return accountError(model, "Please fill in every field.");
+            return accountError(model, "Please fill in every field.", session);
         }
+
         if (password.length() < 4) {
-            return accountError(model, "Password must be at least 4 characters long.");
+            return accountError(model, "Password must be at least 4 characters long.", session);
         }
+
         if (store.usernameTaken(username.trim())) {
-            return accountError(model, "That username is already taken.");
+            return accountError(model, "That username is already taken.", session);
         }
 
 
         User newUser;
+
         switch (role) {
             case DOCTOR -> {
                 if (specialization == null || specialization.isBlank()) {
-                    return accountError(model, "Please choose a specialization.");
+                    return accountError(model, "Please choose a specialization.", session);
                 }
-                newUser = new Doctor(store.generateUserId("DR"), name.trim(), username.trim(), password, specialization);
+
+                newUser = new Doctor(
+                        store.generateUserId("DR"),
+                        name.trim(),
+                        username.trim(),
+                        password,
+                        specialization
+                );
             }
+
             case LAB_STAFF -> {
                 if (section == null || section.isBlank()) {
-                    return accountError(model, "Please choose a laboratory section.");
+                    return accountError(model, "Please choose a laboratory section.", session);
                 }
-                newUser = new LabStaff(store.generateUserId("LB"), name.trim(), username.trim(), password, section);
+
+                newUser = new LabStaff(
+                        store.generateUserId("LB"),
+                        name.trim(),
+                        username.trim(),
+                        password,
+                        section
+                );
             }
-            case ADMIN -> newUser = new Admin(store.generateUserId("AD"), name.trim(), username.trim(), password);
-            default -> newUser = new Nurse(store.generateUserId("NS"), name.trim(), username.trim(), password);
+
+            case ADMIN -> newUser = new Admin(
+                    store.generateUserId("AD"),
+                    name.trim(),
+                    username.trim(),
+                    password
+            );
+
+            default -> newUser = new Nurse(
+                    store.generateUserId("NS"),
+                    name.trim(),
+                    username.trim(),
+                    password
+            );
         }
+
         store.addUser(newUser);
         store.save();
+
         return "redirect:/dashboard?tab=accounts";
     }
 
+
     @PostMapping("/accounts/{userId}/toggle")
     public String toggleAccount(@PathVariable String userId, HttpSession session) {
-        User currentUser = (User) session.getAttribute(SessionKeys.USER);
+        User currentUser = (User) session.getAttribute(SessionKeys.CURRENT_USER);
 
         if (currentUser != null && currentUser.getUserId().equals(userId)) {
             return "redirect:/dashboard?tab=accounts";
@@ -90,10 +131,12 @@ public class AdminController {
         return "redirect:/dashboard?tab=accounts";
     }
 
+
     @PostMapping("/categories")
     public String addCategory(@RequestParam String category) {
         store.addDoctorCategory(category.trim());
         store.save();
+
         return "redirect:/dashboard?tab=categories";
     }
 
@@ -102,13 +145,16 @@ public class AdminController {
     public String removeCategory(@RequestParam String category) {
         store.removeDoctorCategory(category);
         store.save();
+
         return "redirect:/dashboard?tab=categories";
     }
+
 
     @PostMapping("/sections")
     public String addSection(@RequestParam String section) {
         store.addLabSection(section.trim());
         store.save();
+
         return "redirect:/dashboard?tab=sections";
     }
 
@@ -117,14 +163,19 @@ public class AdminController {
     public String removeSection(@RequestParam String section) {
         store.removeLabSection(section);
         store.save();
+
         return "redirect:/dashboard?tab=sections";
     }
 
 
-    private String accountError(Model model, String message) {
+    private String accountError(Model model, String message, HttpSession session) {
+        User currentUser = (User) session.getAttribute(SessionKeys.CURRENT_USER);
+
+        model.addAttribute("user", currentUser);
         model.addAttribute("errorMessage", message);
         model.addAttribute("categories", store.getDoctorCategories());
         model.addAttribute("sections", store.getLabSections());
+
         return "admin/add-account";
     }
 
